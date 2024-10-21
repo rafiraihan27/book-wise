@@ -2,4 +2,4 @@
 
 ### Anggota Kelompok:
 1. Gagas Surya Laksana - 1301223164
-2. 
+2. Azrian Rifqi Radhitya - 1301223292
