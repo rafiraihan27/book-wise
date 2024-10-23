@@ -5,4 +5,5 @@
 2. Azrian Rifqi Radhitya - 1301223292
 3. Yustinus Dwi Adyra - 1301223129
 4. Zuhair Nashif Abdurrohim - 1301223102
+5. Maulana Cahya Magista - 1301223240
 
