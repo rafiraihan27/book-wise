@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { Book, Menu, Sunset, Trees, Zap } from 'lucide-react';
 
 import {
@@ -191,8 +193,12 @@ export default function Navbar() {
             </div>
           </div>
           <div className="flex gap-2">
-            <Button variant={'outline'}>Log in</Button>
-            <Button>Sign up</Button>
+            <Button variant={'outline'}>
+                <Link href="/auth/signin">Log in</Link>
+                </Button>
+            <Button>
+                <Link href="/auth/signup">Sign Up</Link>
+                </Button>
           </div>
         </nav>
         <div className="block lg:hidden">

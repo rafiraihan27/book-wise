@@ -49,6 +49,16 @@ const config: Config = {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
+  			},
+  			sidebar: {
+  				DEFAULT: 'hsl(var(--sidebar-background))',
+  				foreground: 'hsl(var(--sidebar-foreground))',
+  				primary: 'hsl(var(--sidebar-primary))',
+  				'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+  				accent: 'hsl(var(--sidebar-accent))',
+  				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+  				border: 'hsl(var(--sidebar-border))',
+  				ring: 'hsl(var(--sidebar-ring))'
   			}
   		},
   		borderRadius: {
@@ -73,35 +83,35 @@ const config: Config = {
   					height: '0'
   				}
   			},
-			typewriter: {
-				to: {
-					left: '100%',
-				},
-			},
-			blink: {
-				'0%': {
-					opacity: '0',
-				},
-				'0.1%': {
-					opacity: '1',
-				},
-				'50%': {
-					opacity: '1',
-				},
-				'50.1%': {
-					opacity: '0',
-				},
-				'100%': {
-					opacity: '0',
-				},
-			},
+  			typewriter: {
+  				to: {
+  					left: '100%'
+  				}
+  			},
+  			blink: {
+  				'0%': {
+  					opacity: '0'
+  				},
+  				'0.1%': {
+  					opacity: '1'
+  				},
+  				'50%': {
+  					opacity: '1'
+  				},
+  				'50.1%': {
+  					opacity: '0'
+  				},
+  				'100%': {
+  					opacity: '0'
+  				}
+  			}
   		},
   		animation: {
-			typewriter: 'typewriter 2s steps(11) infinite',
-			caret: 'typewriter 2s steps(11) infinite, blink 1s steps(11) infinite 2s',
+  			typewriter: 'typewriter 2s steps(11) infinite',
+  			caret: 'typewriter 2s steps(11) infinite, blink 1s steps(11) infinite 2s',
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out',
-  		},
+  			'accordion-up': 'accordion-up 0.2s ease-out'
+  		}
   	}
   },
   plugins: [require("tailwindcss-animate")],
