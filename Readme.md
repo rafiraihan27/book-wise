@@ -6,4 +6,4 @@
 3. Yustinus Dwi Adyra - 1301223129
 4. Zuhair Nashif Abdurrohim - 1301223102
 5. Maulana Cahya Magista - 1301223240
-
+6. Muhamad Rafi Raihan Akbar - 1301223219
