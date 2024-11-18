@@ -1,6 +1,8 @@
+'use client'
+import React, { useState, useRef } from "react";
 import Link from 'next/link';
 
-import { Book, Menu, Sunset, Trees, Zap, Bell } from 'lucide-react';
+import { Book, Menu, Sunset, Trees, Zap, Bell, User, Settings, LogOut, Search } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Accordion,
@@ -34,6 +36,8 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
+import { assets } from '@/app/config';
+import { Input } from './ui/input';
 
 const webName = "BookWise"
 
@@ -90,7 +94,150 @@ const notifications = [
   { id: 3, message: "Sale starts tomorrow!" },
 ]
 
-export default function Navbar({ isLoggedIn = true }: { isLoggedIn?: boolean }) {
+function SearchBar() {
+  const [isFocused, setIsFocused] = useState(false);
+  const [suggestions, setSuggestions] = useState([
+    "Harry Potter",
+    "The Great Gatsby",
+    "1984",
+    "Moby Dick",
+    "Pride and Prejudice",
+  ]);
+  const [categories] = useState(["Fiction", "Non-fiction", "Sci-fi", "Fantasy", "Biography"]);
+  const [years] = useState(["2024", "2023", "2022", "2021", "2020", "Before 2020"]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedYear, setSelectedYear] = useState("");
+
+  // Explicitly type the ref as an HTMLDivElement or null
+  const dropdownRef = useRef<any>(null);
+
+  const filteredSuggestions = suggestions.filter((item) => {
+    const categoryMatch = selectedCategory ? item.toLowerCase().includes(selectedCategory.toLowerCase()) : true;
+    const yearMatch = selectedYear ? item.includes(selectedYear) : true;
+    return categoryMatch && yearMatch;
+  });
+
+  const handleClickOutside = (e: MouseEvent) => {
+    if (dropdownRef.current && !dropdownRef?.current?.contains(e.target as Node)) {
+      setIsFocused(false);
+    }
+  };
+
+  React.useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Make your API call here with the selectedCategory, selectedYear, and any input query
+    console.log("Searching with filters:", {
+      category: selectedCategory,
+      year: selectedYear,
+      query: filteredSuggestions,
+    });
+  };
+
+  return (
+      <div className="flex items-center flex-col w-full max-w-lg mx-auto">
+          <div className="relative w-full">
+              <Search
+                  className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  size={20}
+              />
+              <input
+                  type="text"
+                  placeholder="Search your book here..."
+                  className="rounded-full h-10 px-5 w-full transition-all duration-300 focus:h-12 ring-1 ring-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                  onFocus={() => setIsFocused(true)}
+                  onChange={(e) => {
+                      const query = e.target.value.toLowerCase();
+                      setSuggestions([
+                          "Harry Potter",
+                          "The Great Gatsby",
+                          "1984",
+                          "Moby Dick",
+                          "Pride and Prejudice",
+                      ].filter((item) => item.toLowerCase().includes(query)));
+                  }}
+              />
+
+              {isFocused && (
+                  <form
+                      ref={dropdownRef}
+                      onSubmit={handleSubmit}
+                      className="absolute top-full mt-2 w-full bg-white shadow-lg rounded-lg z-50 grid grid-cols-1 md:grid-cols-2 divide-x divide-gray-200"
+                  >
+                      {/* Left Column: Suggestions */}
+                      <div className="p-4">
+                          <h3 className="font-semibold text-gray-700 mb-2">Suggestions</h3>
+                          {filteredSuggestions.length > 0 ? (
+                              filteredSuggestions.map((suggestion, index) => (
+                                  <div
+                                      key={index}
+                                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                      onMouseDown={() => {
+                                          setIsFocused(false);
+                                          setSuggestions([]);
+                                      }}
+                                  >
+                                      {suggestion}
+                                  </div>
+                              ))
+                          ) : (
+                              <div className="text-gray-500">No suggestions found</div>
+                          )}
+                      </div>
+
+                      {/* Right Column: Advanced Search */}
+                      <div className="p-4">
+                          <h3 className="font-semibold text-gray-700 mb-2">Advanced Search</h3>
+                          <select
+                              value={selectedCategory}
+                              onChange={(e) => setSelectedCategory(e.target.value)}
+                              className="w-full px-4 py-2 mb-4 rounded-lg border border-gray-300 focus:outline-none focus:ring focus:ring-gray-300"
+                          >
+                              <option value="">All Categories</option>
+                              {categories.map((category, index) => (
+                                  <option key={index} value={category}>
+                                      {category}
+                                  </option>
+                              ))}
+                          </select>
+
+                          <select
+                              value={selectedYear}
+                              onChange={(e) => setSelectedYear(e.target.value)}
+                              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring focus:ring-gray-300"
+                          >
+                              <option value="">All Years</option>
+                              {years.map((year, index) => (
+                                  <option key={index} value={year}>
+                                      {year}
+                                  </option>
+                              ))}
+                          </select>
+
+                          {/* Search Button */}
+                          {(selectedCategory || selectedYear) && (
+                              <Button
+                                  type="submit"
+                                  className="w-full mt-4"
+                              >
+                                  Search
+                              </Button>
+                          )}
+                      </div>
+                  </form>
+              )}
+          </div>
+      </div>
+  );
+}
+
+export default function Navbar({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
   return (
     <section className="flex border-b bg-background p-4">
       <div className="container mx-auto">
@@ -98,37 +245,35 @@ export default function Navbar({ isLoggedIn = true }: { isLoggedIn?: boolean }) 
           <div className="flex items-center gap-6">
             <Link href="/" className="flex items-center gap-2">
               <img
-                src="https://www.shadcnblocks.com/images/block/block-1.svg"
+                src={assets.logoUrl}
                 className="w-8"
                 alt="logo"
               />
               <span className="text-xl font-bold uppercase">{webName}</span>
             </Link>
           </div>
-          <div className="flex items-center">
-            test
-          </div>
+          <SearchBar/>
           <div className="flex gap-2">
             {isLoggedIn ? (
               <>
-                <a
-                  className={cn(
-                    'text-muted-foreground',
-                    navigationMenuTriggerStyle,
-                    buttonVariants({
-                      variant: 'ghost',
-                    }),
-                  )}
-                  href="/loans"
-                >
-                  History
-                </a>
-                <NavigationMenu>
-                  <NavigationMenuList className="gap-4 flex items-center">
+                <NavigationMenu className='flex gap-2'>
+                  <a
+                    className={cn(
+                      'text-muted-foreground',
+                      navigationMenuTriggerStyle,
+                      buttonVariants({
+                        variant: 'ghost',
+                      }),
+                    )}
+                    href="/loans"
+                  >
+                    History
+                  </a>
+                  <NavigationMenuList className="mr-5 gap-4 flex items-center">
                     <NavigationMenuItem>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="outline" size="icon">
+                          <Button variant="ghost" size="icon">
                             <Bell className="h-4 w-4" />
                             <span className="sr-only">Notifications</span>
                           </Button>
@@ -172,156 +317,160 @@ export default function Navbar({ isLoggedIn = true }: { isLoggedIn?: boolean }) 
                 </NavigationMenu>
               </>
             ) : (
-              <>
+              <div className="mt-2 flex flex-row gap-3">
                 <Button variant={'outline'}>
                   <Link href="/auth/signin">Log in</Link>
                 </Button>
                 <Button>
                   <Link href="/auth/signup">Sign Up</Link>
                 </Button>
-              </>
+              </div>
             )}
           </div>
         </nav>
         {/* mobile */}
         <div className="block lg:hidden">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <img
-                src="https://www.shadcnblocks.com/images/block/block-1.svg"
-                className="w-8"
-                alt="logo"
-              />
-              <span className="text-xl font-bold">{webName}</span>
+              <Link href="/" className="flex items-center gap-2">
+                <img
+                  src={assets.logoUrl}
+                  className="w-8"
+                  alt="logo"
+                />
+              </Link>
             </div>
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant={'outline'} size={'icon'}>
-                  <Menu className="size-4" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent className="overflow-y-auto">
-                <SheetHeader>
-                  <SheetTitle>
-                    <div className="flex items-center gap-2">
-                      <img
-                        src="https://www.shadcnblocks.com/images/block/block-1.svg"
-                        className="w-8"
-                        alt="logo"
-                      />
-                      <span className="text-xl font-bold">{webName}</span>
-                    </div>
-                  </SheetTitle>
-                </SheetHeader>
-                <div className="my-8 flex flex-col gap-4">
-                  <a href="#" className="font-semibold">
-                    Home
-                  </a>
-                  <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem value="products" className="border-b-0">
-                      <AccordionTrigger className="mb-4 py-0 font-semibold hover:no-underline">
-                        Products
-                      </AccordionTrigger>
-                      <AccordionContent className="mt-2">
-                        {subMenuItemsOne.map((item, idx) => (
-                          <a
-                            key={idx}
-                            className={cn(
-                              'flex select-none gap-4 rounded-md p-3 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
-                            )}
-                            href="#"
-                          >
-                            {item.icon}
-                            <div>
-                              <div className="text-sm font-semibold">
-                                {item.title}
+            <SearchBar/>
+            {isLoggedIn ? (
+              // LOGGED IN
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant={'outline'} size={'icon'}>
+                    <Menu className="size-4" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent className="overflow-y-auto">
+                  <SheetHeader>
+                    <SheetTitle>
+                      <div className="flex items-center gap-2">
+                        <img
+                          src={assets.logoUrl}
+                          className="w-8"
+                          alt="logo"
+                        />
+                        <span className="text-xl font-bold">{webName}</span>
+                      </div>
+                    </SheetTitle>
+                  </SheetHeader>
+                  <div className="my-8 flex flex-col gap-4">
+                    <a href="/" className="font-semibold">
+                      Home
+                    </a>
+                    <Accordion type="single" collapsible className="w-full">
+                      <AccordionItem value="products" className="border-b-0">
+                        <AccordionTrigger className="mb-4 py-0 font-semibold hover:no-underline">
+                          Products
+                        </AccordionTrigger>
+                        <AccordionContent className="mt-2">
+                          {subMenuItemsOne.map((item, idx) => (
+                            <a
+                              key={idx}
+                              className={cn(
+                                'flex select-none gap-4 rounded-md p-3 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
+                              )}
+                              href="#"
+                            >
+                              {item.icon}
+                              <div>
+                                <div className="text-sm font-semibold">
+                                  {item.title}
+                                </div>
+                                <p className="text-sm leading-snug text-muted-foreground">
+                                  {item.description}
+                                </p>
                               </div>
-                              <p className="text-sm leading-snug text-muted-foreground">
-                                {item.description}
-                              </p>
-                            </div>
-                          </a>
-                        ))}
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
-                </div>
-                <div className="border-t pt-4">
-                  <div className="grid grid-cols-2 justify-start">
-                    <a
-                      className={cn(
-                        buttonVariants({
-                          variant: 'ghost',
-                        }),
-                        'justify-start text-muted-foreground',
-                      )}
-                      href="#"
-                    >
-                      Press
-                    </a>
-                    <a
-                      className={cn(
-                        buttonVariants({
-                          variant: 'ghost',
-                        }),
-                        'justify-start text-muted-foreground',
-                      )}
-                      href="#"
-                    >
-                      Contact
-                    </a>
-                    <a
-                      className={cn(
-                        buttonVariants({
-                          variant: 'ghost',
-                        }),
-                        'justify-start text-muted-foreground',
-                      )}
-                      href="#"
-                    >
-                      Imprint
-                    </a>
-                    <a
-                      className={cn(
-                        buttonVariants({
-                          variant: 'ghost',
-                        }),
-                        'justify-start text-muted-foreground',
-                      )}
-                      href="#"
-                    >
-                      Sitemap
-                    </a>
-                    <a
-                      className={cn(
-                        buttonVariants({
-                          variant: 'ghost',
-                        }),
-                        'justify-start text-muted-foreground',
-                      )}
-                      href="#"
-                    >
-                      Legal
-                    </a>
-                    <a
-                      className={cn(
-                        buttonVariants({
-                          variant: 'ghost',
-                        }),
-                        'justify-start text-muted-foreground',
-                      )}
-                      href="#"
-                    >
-                      Cookie Settings
-                    </a>
+                            </a>
+                          ))}
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
                   </div>
-                  <div className="mt-2 flex flex-col gap-3">
-                    <Button variant={'outline'}>Log in</Button>
-                    <Button>Sign up</Button>
+                  <div className="border-t pt-4">
+                    <div className="mt-2 flex flex-col gap-3">
+                      <Button>
+                        <Link href="#">Logout</Link>
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </SheetContent>
-            </Sheet>
+                </SheetContent>
+              </Sheet>
+            ) : (
+              // NOT LOGGED
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant={'outline'} size={'icon'}>
+                    <Menu className="size-4" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent className="overflow-y-auto">
+                  <SheetHeader>
+                    <SheetTitle>
+                      <div className="flex items-center gap-2">
+                        <img
+                          src={assets.logoUrl}
+                          className="w-8"
+                          alt="logo"
+                        />
+                        <span className="text-xl font-bold">{webName}</span>
+                      </div>
+                    </SheetTitle>
+                  </SheetHeader>
+                  <div className="my-8 flex flex-col gap-4">
+                    <a href="/" className="font-semibold">
+                      Home
+                    </a>
+                    <Accordion type="single" collapsible className="w-full">
+                      <AccordionItem value="products" className="border-b-0">
+                        <AccordionTrigger className="mb-4 py-0 font-semibold hover:no-underline">
+                          Products
+                        </AccordionTrigger>
+                        <AccordionContent className="mt-2">
+                          {subMenuItemsOne.map((item, idx) => (
+                            <a
+                              key={idx}
+                              className={cn(
+                                'flex select-none gap-4 rounded-md p-3 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
+                              )}
+                              href="#"
+                            >
+                              {item.icon}
+                              <div>
+                                <div className="text-sm font-semibold">
+                                  {item.title}
+                                </div>
+                                <p className="text-sm leading-snug text-muted-foreground">
+                                  {item.description}
+                                </p>
+                              </div>
+                            </a>
+                          ))}
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                  </div>
+                  <div className="border-t pt-4">
+                    <div className="mt-2 flex flex-col gap-3">
+                      <Button variant={'outline'}>
+                        <Link href="/auth/signin">Log in</Link>
+                      </Button>
+                      <Button>
+                        <Link href="/auth/signup">Sign Up</Link>
+                      </Button>
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            )}
           </div>
         </div>
       </div>
