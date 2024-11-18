@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
-import { Book, Menu, Sunset, Trees, Zap } from 'lucide-react';
-
+import { Book, Menu, Sunset, Trees, Zap, Bell } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Accordion,
   AccordionContent,
@@ -19,6 +19,14 @@ import {
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import {
   Sheet,
   SheetContent,
   SheetHeader,
@@ -26,6 +34,8 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
+
+const webName = "BookWise"
 
 const subMenuItemsOne = [
   {
@@ -74,133 +84,106 @@ const subMenuItemsTwo = [
   },
 ];
 
-export default function Navbar() {
+const notifications = [
+  { id: 1, message: "Your order has been shipped!" },
+  { id: 2, message: "New product available" },
+  { id: 3, message: "Sale starts tomorrow!" },
+]
+
+export default function Navbar({ isLoggedIn = true }: { isLoggedIn?: boolean }) {
   return (
     <section className="flex border-b bg-background p-4">
       <div className="container mx-auto">
         <nav className="hidden justify-between lg:flex">
           <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2">
               <img
                 src="https://www.shadcnblocks.com/images/block/block-1.svg"
                 className="w-8"
                 alt="logo"
               />
-              <span className="text-xl font-bold uppercase">Book Wise</span>
-            </div>
-            <div className="flex items-center">
-              <a
-                className={cn(
-                  'text-muted-foreground',
-                  navigationMenuTriggerStyle,
-                  buttonVariants({
-                    variant: 'ghost',
-                  }),
-                )}
-                href="#"
-              >
-                Home
-              </a>
-              <NavigationMenu>
-                <NavigationMenuList>
-                  <NavigationMenuItem className="text-muted-foreground">
-                    <NavigationMenuTrigger>
-                      <span>Products</span>
-                    </NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <ul className="w-80 p-3">
-                        <NavigationMenuLink>
-                          {subMenuItemsOne.map((item, idx) => (
-                            <li key={idx}>
-                              <a
-                                className={cn(
-                                  'flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
-                                )}
-                                href="#"
-                              >
-                                {item.icon}
-                                <div>
-                                  <div className="text-sm font-semibold">
-                                    {item.title}
-                                  </div>
-                                  <p className="text-sm leading-snug text-muted-foreground">
-                                    {item.description}
-                                  </p>
-                                </div>
-                              </a>
-                            </li>
-                          ))}
-                        </NavigationMenuLink>
-                      </ul>
-                    </NavigationMenuContent>
-                  </NavigationMenuItem>
-                  <NavigationMenuItem className="text-muted-foreground">
-                    <NavigationMenuTrigger>Resources</NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <ul className="w-80 p-3">
-                        <NavigationMenuLink>
-                          {subMenuItemsTwo.map((item, idx) => (
-                            <li key={idx}>
-                              <a
-                                className={cn(
-                                  'flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
-                                )}
-                                href="#"
-                              >
-                                {item.icon}
-                                <div>
-                                  <div className="text-sm font-semibold">
-                                    {item.title}
-                                  </div>
-                                  <p className="text-sm leading-snug text-muted-foreground">
-                                    {item.description}
-                                  </p>
-                                </div>
-                              </a>
-                            </li>
-                          ))}
-                        </NavigationMenuLink>
-                      </ul>
-                    </NavigationMenuContent>
-                  </NavigationMenuItem>
-                </NavigationMenuList>
-              </NavigationMenu>
-
-              <a
-                className={cn(
-                  'text-muted-foreground',
-                  navigationMenuTriggerStyle,
-                  buttonVariants({
-                    variant: 'ghost',
-                  }),
-                )}
-                href="#"
-              >
-                Pricing
-              </a>
-              <a
-                className={cn(
-                  'text-muted-foreground',
-                  navigationMenuTriggerStyle,
-                  buttonVariants({
-                    variant: 'ghost',
-                  }),
-                )}
-                href="#"
-              >
-                Blog
-              </a>
-            </div>
+              <span className="text-xl font-bold uppercase">{webName}</span>
+            </Link>
+          </div>
+          <div className="flex items-center">
+            test
           </div>
           <div className="flex gap-2">
-            <Button variant={'outline'}>
-                <Link href="/auth/signin">Log in</Link>
+            {isLoggedIn ? (
+              <>
+                <a
+                  className={cn(
+                    'text-muted-foreground',
+                    navigationMenuTriggerStyle,
+                    buttonVariants({
+                      variant: 'ghost',
+                    }),
+                  )}
+                  href="/loans"
+                >
+                  History
+                </a>
+                <NavigationMenu>
+                  <NavigationMenuList className="gap-4 flex items-center">
+                    <NavigationMenuItem>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="outline" size="icon">
+                            <Bell className="h-4 w-4" />
+                            <span className="sr-only">Notifications</span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          {notifications.map((notification) => (
+                            <DropdownMenuItem key={notification.id}>{notification.message}</DropdownMenuItem>
+                          ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </NavigationMenuItem>
+                  </NavigationMenuList>
+
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Avatar>
+                        <AvatarImage src="/placeholder-avatar.jpg" alt="User" />
+                        <AvatarFallback>U</AvatarFallback>
+                      </Avatar>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>
+                        <User className="mr-2 h-4 w-4" />
+                        Profile
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <Settings className="mr-2 h-4 w-4" />
+                        Settings
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Logout
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </NavigationMenu>
+              </>
+            ) : (
+              <>
+                <Button variant={'outline'}>
+                  <Link href="/auth/signin">Log in</Link>
                 </Button>
-            <Button>
-                <Link href="/auth/signup">Sign Up</Link>
+                <Button>
+                  <Link href="/auth/signup">Sign Up</Link>
                 </Button>
+              </>
+            )}
           </div>
         </nav>
+        {/* mobile */}
         <div className="block lg:hidden">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -209,7 +192,7 @@ export default function Navbar() {
                 className="w-8"
                 alt="logo"
               />
-              <span className="text-xl font-bold">Shadcn Blocks</span>
+              <span className="text-xl font-bold">{webName}</span>
             </div>
             <Sheet>
               <SheetTrigger asChild>
@@ -226,7 +209,7 @@ export default function Navbar() {
                         className="w-8"
                         alt="logo"
                       />
-                      <span className="text-xl font-bold">Shadcn Blocks</span>
+                      <span className="text-xl font-bold">{webName}</span>
                     </div>
                   </SheetTitle>
                 </SheetHeader>
@@ -261,39 +244,7 @@ export default function Navbar() {
                         ))}
                       </AccordionContent>
                     </AccordionItem>
-                    <AccordionItem value="resources" className="border-b-0">
-                      <AccordionTrigger className="py-0 font-semibold hover:no-underline">
-                        Resources
-                      </AccordionTrigger>
-                      <AccordionContent className="mt-2">
-                        {subMenuItemsTwo.map((item, idx) => (
-                          <a
-                            key={idx}
-                            className={cn(
-                              'flex select-none gap-4 rounded-md p-3 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
-                            )}
-                            href="#"
-                          >
-                            {item.icon}
-                            <div>
-                              <div className="text-sm font-semibold">
-                                {item.title}
-                              </div>
-                              <p className="text-sm leading-snug text-muted-foreground">
-                                {item.description}
-                              </p>
-                            </div>
-                          </a>
-                        ))}
-                      </AccordionContent>
-                    </AccordionItem>
                   </Accordion>
-                  <a href="#" className="font-semibold">
-                    Pricing
-                  </a>
-                  <a href="#" className="font-semibold">
-                    Blog
-                  </a>
                 </div>
                 <div className="border-t pt-4">
                   <div className="grid grid-cols-2 justify-start">
