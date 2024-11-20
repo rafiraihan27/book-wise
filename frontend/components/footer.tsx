@@ -2,7 +2,7 @@ import { appInfo, assets, footerContents } from "@/app/config";
 
 const Footer = () => {
     return (
-        <section className="py-32 w-full border-t">
+        <section className="relative bottom-0 left-0 py-32 w-full border-t bg-white z-[101]">
             <div className="container mx-auto px-10">
                 <footer>
                     <div className="grid grid-cols-2 gap-8 lg:grid-cols-6">

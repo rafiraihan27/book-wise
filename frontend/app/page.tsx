@@ -3,6 +3,7 @@ import React from 'react';
 import { Star } from 'lucide-react';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from "@/components/ui/button"
+import { assets } from './config';
 
 export default function Home() {
   return (
@@ -18,18 +19,27 @@ export default function Home() {
 
 const Hero = () => {
   return (
-    <section className="h-screen flex items-center justify-center">
+    <section
+      className="h-screen flex items-center justify-center w-full"
+      style={{
+        backgroundImage: `url(${assets.bgHero})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
       <div className="container text-center">
         <div className="mx-auto flex max-w-screen-lg flex-col gap-6">
           <h1 className="text-3xl font-extrabold lg:text-6xl">
-          Your AI-Powered Digital Library.
+            Your AI-Powered Digital Library.
           </h1>
           <p className="text-balance text-muted-foreground lg:text-lg">
           Finely crafted with love and hate. Give us ayam geprek <span className='underline'>paha atas</span>, and we’ll change the world!
           </p>
         </div>
         <Button size="lg" className="mt-10">
-          Register to discover all books
+          <Link href="/collections">
+            Register to discover all books
+          </Link>
         </Button>
         <div className="mx-auto mt-10 flex w-fit flex-col items-center gap-4 sm:flex-row">
           <span className="mx-4 inline-flex items-center -space-x-4">
@@ -262,6 +272,7 @@ const Contact = () => {
 }
 
 import { AvatarFallback } from '@/components/ui/avatar';
+import Link from 'next/link';
 
 const people = [
   {
@@ -306,7 +317,7 @@ const people = [
     avatar: "https://www.shadcnblocks.com/images/block/avatar-5.webp",
     image: "/teams/azrian.jpeg",
   },
-  
+
 ];
 
 const Aboutus = () => {

@@ -38,6 +38,7 @@ import {
 import { cn } from '@/lib/utils';
 import { assets } from '@/app/config';
 import { Input } from './ui/input';
+import { useRouter } from 'next/navigation';
 
 const webName = "BookWise"
 
@@ -95,6 +96,8 @@ const notifications = [
 ]
 
 function SearchBar() {
+  const router = useRouter();
+  const [search, setSearch] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [suggestions, setSuggestions] = useState([
     "Harry Potter",
@@ -133,11 +136,12 @@ function SearchBar() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Make your API call here with the selectedCategory, selectedYear, and any input query
-    console.log("Searching with filters:", {
-      category: selectedCategory,
-      year: selectedYear,
-      query: filteredSuggestions,
-    });
+    // console.log("Searching with filters:", {
+    //   category: selectedCategory,
+    //   year: selectedYear,
+    //   query: filteredSuggestions,
+    // });
+    router.push(`/collections?search=${search}&category=${selectedCategory}&year=${selectedYear}`);
   };
 
   return (
@@ -146,7 +150,7 @@ function SearchBar() {
               <Search
                   className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-400"
                   size={20}
-              />
+              /> 
               <input
                   type="text"
                   placeholder="Search your book here..."
@@ -154,6 +158,7 @@ function SearchBar() {
                   onFocus={() => setIsFocused(true)}
                   onChange={(e) => {
                       const query = e.target.value.toLowerCase();
+                      setSearch(query);
                       setSuggestions([
                           "Harry Potter",
                           "The Great Gatsby",
@@ -162,6 +167,13 @@ function SearchBar() {
                           "Pride and Prejudice",
                       ].filter((item) => item.toLowerCase().includes(query)));
                   }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      setIsFocused(false);
+                      router.push(`/collections?search=${search}`);
+                    }
+                  }}
+                  value={search}
               />
 
               {isFocused && (
@@ -181,6 +193,8 @@ function SearchBar() {
                                       onMouseDown={() => {
                                           setIsFocused(false);
                                           setSuggestions([]);
+                                          setSearch(suggestion);
+                                          router.push(`/collections?search=${encodeURIComponent(suggestion)}`);
                                       }}
                                   >
                                       {suggestion}
@@ -237,9 +251,9 @@ function SearchBar() {
   );
 }
 
-export default function Navbar({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
+export default function Navbar({ isLoggedIn = true }: { isLoggedIn?: boolean }) {
   return (
-    <section className="flex border-b bg-background p-4">
+    <section className="flex border-b bg-background p-4 sticky top-0 z-50">
       <div className="container mx-auto">
         <nav className="hidden justify-between lg:flex">
           <div className="flex items-center gap-6">
@@ -267,7 +281,7 @@ export default function Navbar({ isLoggedIn = false }: { isLoggedIn?: boolean })
                     )}
                     href="/loans"
                   >
-                    History
+                    Peminjaman
                   </a>
                   <NavigationMenuList className="mr-5 gap-4 flex items-center">
                     <NavigationMenuItem>
@@ -291,7 +305,7 @@ export default function Navbar({ isLoggedIn = false }: { isLoggedIn?: boolean })
 
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Avatar>
+                      <Avatar className="cursor-pointer">
                         <AvatarImage src="/placeholder-avatar.jpg" alt="User" />
                         <AvatarFallback>U</AvatarFallback>
                       </Avatar>
@@ -299,16 +313,16 @@ export default function Navbar({ isLoggedIn = false }: { isLoggedIn?: boolean })
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>My Account</DropdownMenuLabel>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem>
+                      <DropdownMenuItem className="cursor-pointer">
                         <User className="mr-2 h-4 w-4" />
                         Profile
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem className="cursor-pointer">
                         <Settings className="mr-2 h-4 w-4" />
                         Settings
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem>
+                      <DropdownMenuItem className="cursor-pointer">
                         <LogOut className="mr-2 h-4 w-4" />
                         Logout
                       </DropdownMenuItem>
