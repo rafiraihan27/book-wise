@@ -27,6 +27,8 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { Button } from "../ui/button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
 import { appInfo, assets } from "@/app/config"
 
 const data = {
@@ -165,10 +167,22 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent className='bg-white'>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+      <SidebarContent className="bg-white">
+        <Tabs defaultValue="book" className="w-full mt-3">
+          <TabsList className="mx-auto flex items-center w-fit rounded-full gap-2 p-2 h-10">
+            <TabsTrigger value="book" className="rounded-full">Book</TabsTrigger>
+            <TabsTrigger value="non-book" className="rounded-full">Non Book</TabsTrigger>
+          </TabsList>
+          <TabsContent value="book">
+            <NavMain items={data.navMain} />
+            <NavProjects projects={data.projects} />
+          </TabsContent>
+          <TabsContent value="non-book">
+            <NavMain items={data.navMain} />
+          </TabsContent>
+        </Tabs>
       </SidebarContent>
+
       <SidebarFooter className="border-t p-4 bg-white">
         <div className="rounded-lg bg-gray-100 p-4">
           <div className="flex items-center gap-4">

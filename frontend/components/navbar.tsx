@@ -145,113 +145,113 @@ function SearchBar() {
   };
 
   return (
-      <div className="flex items-center flex-col w-full max-w-lg mx-auto">
-          <div className="relative w-full">
-              <Search
-                  className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-400"
-                  size={20}
-              /> 
-              <input
-                  type="text"
-                  placeholder="Search your book here..."
-                  className="rounded-full h-10 px-5 w-full transition-all duration-300 focus:h-12 ring-1 ring-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300"
-                  onFocus={() => setIsFocused(true)}
-                  onChange={(e) => {
-                      const query = e.target.value.toLowerCase();
-                      setSearch(query);
-                      setSuggestions([
-                          "Harry Potter",
-                          "The Great Gatsby",
-                          "1984",
-                          "Moby Dick",
-                          "Pride and Prejudice",
-                      ].filter((item) => item.toLowerCase().includes(query)));
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
+    <div className="flex items-center flex-col w-full max-w-lg mx-auto">
+      <div className="relative w-full">
+        <Search
+          className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-400"
+          size={20}
+        />
+        <input
+          type="text"
+          placeholder="Search your book here..."
+          className="rounded-full h-10 px-5 w-full transition-all duration-300 focus:h-12 ring-1 ring-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300"
+          onFocus={() => setIsFocused(true)}
+          onChange={(e) => {
+            const query = e.target.value.toLowerCase();
+            setSearch(query);
+            setSuggestions([
+              "Harry Potter",
+              "The Great Gatsby",
+              "1984",
+              "Moby Dick",
+              "Pride and Prejudice",
+            ].filter((item) => item.toLowerCase().includes(query)));
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              setIsFocused(false);
+              router.push(`/collections?search=${search}`);
+            }
+          }}
+          value={search}
+        />
+
+        {isFocused && (
+          <form
+            ref={dropdownRef}
+            onSubmit={handleSubmit}
+            className="absolute top-full mt-2 w-full bg-white shadow-lg rounded-lg z-50 grid grid-cols-1 md:grid-cols-2 divide-x divide-gray-200"
+          >
+            {/* Left Column: Suggestions */}
+            <div className="p-4">
+              <h3 className="font-semibold text-gray-700 mb-2">Suggestions</h3>
+              {filteredSuggestions.length > 0 ? (
+                filteredSuggestions.map((suggestion, index) => (
+                  <div
+                    key={index}
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    onMouseDown={() => {
                       setIsFocused(false);
-                      router.push(`/collections?search=${search}`);
-                    }
-                  }}
-                  value={search}
-              />
-
-              {isFocused && (
-                  <form
-                      ref={dropdownRef}
-                      onSubmit={handleSubmit}
-                      className="absolute top-full mt-2 w-full bg-white shadow-lg rounded-lg z-50 grid grid-cols-1 md:grid-cols-2 divide-x divide-gray-200"
+                      setSuggestions([]);
+                      setSearch(suggestion);
+                      router.push(`/collections?search=${encodeURIComponent(suggestion)}`);
+                    }}
                   >
-                      {/* Left Column: Suggestions */}
-                      <div className="p-4">
-                          <h3 className="font-semibold text-gray-700 mb-2">Suggestions</h3>
-                          {filteredSuggestions.length > 0 ? (
-                              filteredSuggestions.map((suggestion, index) => (
-                                  <div
-                                      key={index}
-                                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                      onMouseDown={() => {
-                                          setIsFocused(false);
-                                          setSuggestions([]);
-                                          setSearch(suggestion);
-                                          router.push(`/collections?search=${encodeURIComponent(suggestion)}`);
-                                      }}
-                                  >
-                                      {suggestion}
-                                  </div>
-                              ))
-                          ) : (
-                              <div className="text-gray-500">No suggestions found</div>
-                          )}
-                      </div>
-
-                      {/* Right Column: Advanced Search */}
-                      <div className="p-4">
-                          <h3 className="font-semibold text-gray-700 mb-2">Advanced Search</h3>
-                          <select
-                              value={selectedCategory}
-                              onChange={(e) => setSelectedCategory(e.target.value)}
-                              className="w-full px-4 py-2 mb-4 rounded-lg border border-gray-300 focus:outline-none focus:ring focus:ring-gray-300"
-                          >
-                              <option value="">All Categories</option>
-                              {categories.map((category, index) => (
-                                  <option key={index} value={category}>
-                                      {category}
-                                  </option>
-                              ))}
-                          </select>
-
-                          <select
-                              value={selectedYear}
-                              onChange={(e) => setSelectedYear(e.target.value)}
-                              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring focus:ring-gray-300"
-                          >
-                              <option value="">All Years</option>
-                              {years.map((year, index) => (
-                                  <option key={index} value={year}>
-                                      {year}
-                                  </option>
-                              ))}
-                          </select>
-
-                          {/* Search Button */}
-                          {(selectedCategory || selectedYear) && (
-                              <Button
-                                  type="submit"
-                                  className="w-full mt-4"
-                              >
-                                  Search
-                              </Button>
-                          )}
-                      </div>
-                  </form>
+                    {suggestion}
+                  </div>
+                ))
+              ) : (
+                <div className="text-gray-500">No suggestions found</div>
               )}
-          </div>
+            </div>
+
+            {/* Right Column: Advanced Search */}
+            <div className="p-4">
+              <h3 className="font-semibold text-gray-700 mb-2">Advanced Search</h3>
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="w-full px-4 py-2 mb-4 rounded-lg border border-gray-300 focus:outline-none focus:ring focus:ring-gray-300"
+              >
+                <option value="">All Categories</option>
+                {categories.map((category, index) => (
+                  <option key={index} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring focus:ring-gray-300"
+              >
+                <option value="">All Years</option>
+                {years.map((year, index) => (
+                  <option key={index} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+
+              {/* Search Button */}
+              {(selectedCategory || selectedYear) && (
+                <Button
+                  type="submit"
+                  className="w-full mt-4"
+                >
+                  Search
+                </Button>
+              )}
+            </div>
+          </form>
+        )}
       </div>
+    </div>
   );
 }
 
-export default function Navbar({ isLoggedIn = true }: { isLoggedIn?: boolean }) {
+export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa" }: { isLoggedIn?: boolean, loggedAs?: string }) {
   return (
     <section className="flex border-b bg-background p-4 sticky top-0 z-50">
       <div className="container mx-auto">
@@ -264,9 +264,10 @@ export default function Navbar({ isLoggedIn = true }: { isLoggedIn?: boolean }) 
                 alt="logo"
               />
               <span className="text-xl font-bold uppercase">{webName}</span>
+              {isLoggedIn ? <span className="text-sm font-regular uppercase">| {loggedAs}</span> : null}
             </Link>
           </div>
-          <SearchBar/>
+          <SearchBar />
           <div className="flex gap-2">
             {isLoggedIn ? (
               <>
@@ -354,7 +355,7 @@ export default function Navbar({ isLoggedIn = true }: { isLoggedIn?: boolean }) 
                 />
               </Link>
             </div>
-            <SearchBar/>
+            <SearchBar />
             {isLoggedIn ? (
               // LOGGED IN
               <Sheet>
