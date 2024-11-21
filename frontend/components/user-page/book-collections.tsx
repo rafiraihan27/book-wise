@@ -13,7 +13,7 @@ export default function BookCollection({ search = "", category = "", years = "" 
                 "Learn how emotions, behaviors, and psychology influence financial decisions and discover timeless lessons for managing money effectively.",
             image:
                 "https://images-na.ssl-images-amazon.com/images/I/81cpDaCJJCL.jpg",
-                quota: 5,
+            quota: 5,
         },
         {
             id: 2,
@@ -25,7 +25,7 @@ export default function BookCollection({ search = "", category = "", years = "" 
                 "A guide to building good habits, breaking bad ones, and achieving remarkable results in everyday life.",
             image:
                 "https://images-na.ssl-images-amazon.com/images/I/91bYsX41DVL.jpg",
-                quota: 5,
+            quota: 5,
         },
         {
             id: 3,
@@ -37,7 +37,7 @@ export default function BookCollection({ search = "", category = "", years = "" 
                 "A brief history of humankind, exploring the journey of humans from the Stone Age to the modern world.",
             image:
                 "https://images-na.ssl-images-amazon.com/images/I/713jIoMO3UL.jpg",
-                quota: 0,
+            quota: 0,
         },
         {
             id: 4,
@@ -49,7 +49,7 @@ export default function BookCollection({ search = "", category = "", years = "" 
                 "A guide for entrepreneurs on how to innovate, test ideas, and build sustainable businesses in a rapidly changing world.",
             image:
                 "https://images-na.ssl-images-amazon.com/images/I/81-QB7nDh4L.jpg",
-                quota: 5,
+            quota: 5,
         },
         {
             id: 5,
@@ -61,7 +61,7 @@ export default function BookCollection({ search = "", category = "", years = "" 
                 "A dystopian novel exploring themes of surveillance, government control, and individual freedom in a totalitarian state.",
             image:
                 "https://images-na.ssl-images-amazon.com/images/I/81t2CVWEsUL.jpg",
-                quota: 5,
+            quota: 5,
         },
         {
             id: 6,
@@ -170,62 +170,60 @@ export default function BookCollection({ search = "", category = "", years = "" 
                 </h2>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-  {filteredBooks.length > 0 ? (
-    filteredBooks.map((book) => (
-      <div
-        key={book.id}
-        className="relative bg-white shadow-md rounded-lg overflow-hidden max-w-sm hover:shadow-lg hover:-translate-y-1 transition duration-300"
-      >
-        {/* Book Image */}
-        <div className="relative group">
-          <img
-            src={book.image}
-            alt={`${book.title} Cover`}
-            className="w-full h-48 md:h-96 object-cover group-hover:opacity-90 transition duration-300"
-          />
-          {/* Years Badge */}
-          <Link href={`/collections?year=${book.year}`}>
-            <span className="absolute bottom-10 left-2 bg-red-100 text-red-600 text-xs font-medium px-2 py-1 rounded-lg">
-              {book.year}
-            </span>
-          </Link>
-          {/* Category Badge */}
-          <Link href={`/collections?category=${book.category}`}>
-            <span className="absolute bottom-2 left-2 bg-blue-100 text-blue-600 text-xs font-medium px-2 py-1 rounded-lg">
-              {book.category}
-            </span>
-          </Link>
-          {/* Overlay for Out of Quota */}
-          {book.quota === 0 && (
-            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center backdrop-blur-sm">
-              <p className="text-white text-lg font-bold">Maaf (｡•́︿•̀｡) <br/> bukunya lagi banyak <br/> yang baca</p>
+                {filteredBooks.length > 0 ? (
+                    filteredBooks.map((book) => (
+                        <div
+                            key={book.id}
+                            className="relative bg-white shadow-md rounded-lg overflow-hidden max-w-sm hover:shadow-lg hover:-translate-y-1 transition duration-300"
+                        >
+                            {/* Book Image */}
+                            <div className="relative group">
+                                <img
+                                    src={book.image}
+                                    alt={`${book.title} Cover`}
+                                    className="w-full h-48 md:h-96 object-cover group-hover:opacity-90 transition duration-300"
+                                />
+                                {/* Years Badge */}
+                                <Link href={`/collections?year=${book.year}`}>
+                                    <span className="absolute bottom-10 left-2 bg-red-100 text-red-600 text-xs font-medium px-2 py-1 rounded-lg">
+                                        {book.year}
+                                    </span>
+                                </Link>
+                                {/* Category Badge */}
+                                <Link href={`/collections?category=${book.category}`}>
+                                    <span className="absolute bottom-2 left-2 bg-blue-100 text-blue-600 text-xs font-medium px-2 py-1 rounded-lg">
+                                        {book.category}
+                                    </span>
+                                </Link>
+                                {/* Overlay for Out of Quota */}
+                                {book.quota === 0 && (
+                                    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center backdrop-blur-sm">
+                                        <p className="text-white text-lg font-bold">Maaf (｡•́︿•̀｡) <br /> bukunya lagi banyak <br /> yang baca</p>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Card Content */}
+                            <div className="p-4">
+                                <Link href={`/collections/${book.id}`}>
+                                    {/* Title */}
+                                    <h2 className="text-lg font-bold text-gray-900 truncate hover:text-green-500 transition duration-300">
+                                        {book.title}
+                                    </h2>
+                                    {/* Author */}
+                                    <p className="text-sm text-gray-600 mt-1">by {book.author}</p>
+                                    {/* Description */}
+                                    <p className="text-sm text-gray-600 mt-3">{book.description}</p>
+                                </Link>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <p className="text-gray-500 text-center col-span-full">
+                        No books match your criteria.
+                    </p>
+                )}
             </div>
-          )}
-        </div>
-
-        {/* Card Content */}
-        <div className="p-4">
-          <Link href={`/collections/${book.id}`}>
-            {/* Title */}
-            <h2 className="text-lg font-bold text-gray-900 truncate hover:text-green-500 transition duration-300">
-              {book.title}
-            </h2>
-            {/* Author */}
-            <p className="text-sm text-gray-600 mt-1">by {book.author}</p>
-            {/* Description */}
-            <p className="text-sm text-gray-600 mt-3">{book.description}</p>
-          </Link>
-        </div>
-      </div>
-    ))
-  ) : (
-    <p className="text-gray-500 text-center col-span-full">
-      No books match your criteria.
-    </p>
-  )}
-</div>
-
-
         </>
     );
 }
