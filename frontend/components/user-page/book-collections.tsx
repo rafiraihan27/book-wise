@@ -150,10 +150,10 @@ export default function BookCollection({ search = "", category = "", years = "" 
         <>
             <div className="flex">
                 <h2 className="text-lg text-gray-700">
-                    Menampilkan hasil{" "}
+                    Menampilkan hasil untuk {" "}
                     {search || category || years
-                        ? `${search ? `"untuk ${search}"` : ""}${category ? `untuk kategori "${category}"` : ""
-                        }${years ? ` pada tahun ${years}` : ""}`
+                        ? `${search ? `"${search}"` : ""}${category ? `kategori "${category}"` : ""
+                        }${years ? `tahun ${years}` : ""}`
                         : "semua buku"}
                 </h2>
             </div>
