@@ -70,7 +70,7 @@ export default function Page({ searchParams }: { searchParams: { [key: string]: 
 
             {/* Right Section */}
             <Breadcrumb>
-              <BreadcrumbList className="hidden md:block">
+              <BreadcrumbList className="hidden md:flex">
                 {recomendations.map((breadcrumb, index) => (
                   <React.Fragment key={index}>
                     <BreadcrumbLink href={breadcrumb.href}>
