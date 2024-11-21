@@ -38,15 +38,15 @@ export default function Page({ searchParams }: { searchParams: { [key: string]: 
               <Separator orientation="vertical" className="mr-2 h-4" />
               <Breadcrumb>
                 <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
+                <BreadcrumbItem>
                     <BreadcrumbLink
                       href={`/collections`}
                     >
                       Collections
                     </BreadcrumbLink>
                   </BreadcrumbItem>
-                  <BreadcrumbSeparator className="hidden md:block" />
-                  <BreadcrumbItem className="hidden md:block">
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
                     <BreadcrumbLink
                       href={`/collections${category
                         ? `?category=${encodeURIComponent(category)}`
@@ -58,7 +58,7 @@ export default function Page({ searchParams }: { searchParams: { [key: string]: 
                       {toTitleCase(category || search)}
                     </BreadcrumbLink>
                   </BreadcrumbItem>
-                  {search || category ? <BreadcrumbSeparator className="hidden md:block" /> : ""}
+                  {search || category ? <BreadcrumbSeparator /> : ""}
                   <BreadcrumbItem>
                     <BreadcrumbPage>
                       {category ? toTitleCase(search || '') : ''}
@@ -70,7 +70,7 @@ export default function Page({ searchParams }: { searchParams: { [key: string]: 
 
             {/* Right Section */}
             <Breadcrumb>
-              <BreadcrumbList className="">
+              <BreadcrumbList className="hidden md:block">
                 {recomendations.map((breadcrumb, index) => (
                   <React.Fragment key={index}>
                     <BreadcrumbLink href={breadcrumb.href}>
