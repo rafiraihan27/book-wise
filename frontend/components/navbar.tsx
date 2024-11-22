@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useRef } from "react";
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 import { Book, Menu, Sunset, Trees, Zap, Bell, User, Bookmark, LogOut, Search, History } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -252,6 +253,7 @@ function SearchBar() {
 }
 
 export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa" }: { isLoggedIn?: boolean, loggedAs?: string }) {
+  const pathname = usePathname();
   return (
     <section className="flex border-b bg-background p-4 sticky top-0 z-50">
       <div className="container mx-auto">
@@ -267,6 +269,21 @@ export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa" }: { 
               <span className="text-xl font-bold uppercase">{webName}</span>
               {isLoggedIn ? <span className="text-sm font-regular uppercase">| {loggedAs}</span> : null}
             </Link>
+
+            {pathname !== '/collections' && (
+              <a
+                className={cn(
+                  'text-muted-foreground',
+                  navigationMenuTriggerStyle,
+                  buttonVariants({
+                    variant: 'ghost',
+                  }),
+                )}
+                href="/collections"
+              >
+                Back to collections
+              </a>
+            )}
           </div>
           <SearchBar />
           <div className="flex gap-2">
