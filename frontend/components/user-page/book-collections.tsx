@@ -1,5 +1,8 @@
+'use client'
 import Link from "next/link";
-import { Separator } from "../ui/separator";
+import { toast } from "sonner";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
 
 export default function BookCollection({ search = "", category = "", years = "" }) {
     const books = [
@@ -158,9 +161,13 @@ export default function BookCollection({ search = "", category = "", years = "" 
         return matchesSearch && matchesCategory && matchesYear;
     });
 
+    const handleBookmark = (bookTitle: string) => {
+        toast.success(`${bookTitle} has been bookmarked!`);
+    };
+
     return (
         <>
-            <div className="flex">
+            <div className="flex mb-5">
                 <h2 className="text-lg text-gray-700">
                     Menampilkan hasil untuk {" "}
                     {search || category || years
@@ -169,7 +176,7 @@ export default function BookCollection({ search = "", category = "", years = "" 
                         : "semua buku"}
                 </h2>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-6">
                 {filteredBooks.length > 0 ? (
                     filteredBooks.map((book) => (
                         <div
@@ -178,34 +185,60 @@ export default function BookCollection({ search = "", category = "", years = "" 
                         >
                             {/* Book Image */}
                             <div className="relative group">
+                                {/* Bookmark Button */}
+                                <Button className="absolute top-2 right-2 z-10 bg-white rounded-full shadow p-2 hover:bg-gray-100 transition"
+                                    onClick={() => handleBookmark(book.title)} >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth={2}
+                                        stroke="currentColor"
+                                        className="w-6 h-6 text-gray-500 group-hover:text-gray-900"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M5 3v18l7-5.197L19 21V3H5z"
+                                        />
+                                    </svg>
+                                </Button>
+
+                                {/* Book Image */}
                                 <img
                                     src={book.image}
                                     alt={`${book.title} Cover`}
                                     className="w-full h-48 md:h-96 object-cover group-hover:opacity-90 transition duration-300"
                                 />
-                                {/* Years Badge */}
+
+                                {/* Year Badge */}
                                 <Link href={`/collections?year=${book.year}`}>
-                                    <span className="absolute bottom-10 left-2 bg-red-100 text-red-600 text-xs font-medium px-2 py-1 rounded-lg">
+                                    <Badge className="absolute bottom-10 left-2" variant="secondary">
                                         {book.year}
-                                    </span>
+                                    </Badge>
                                 </Link>
+
                                 {/* Category Badge */}
                                 <Link href={`/collections?category=${book.category}`}>
-                                    <span className="absolute bottom-2 left-2 bg-blue-100 text-blue-600 text-xs font-medium px-2 py-1 rounded-lg">
+                                    <Badge className="absolute bottom-2 left-2">
                                         {book.category}
-                                    </span>
+                                    </Badge>
                                 </Link>
+
                                 {/* Overlay for Out of Quota */}
                                 {book.quota === 0 && (
                                     <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center backdrop-blur-sm">
-                                        <p className="text-white text-lg font-bold">Maaf (｡•́︿•̀｡) <br /> bukunya lagi banyak <br /> yang baca</p>
+                                        <p className="text-white text-lg font-bold">
+                                            Maaf (｡•́︿•̀｡) <br /> bukunya lagi banyak <br /> yang baca
+                                        </p>
                                     </div>
                                 )}
                             </div>
 
+
                             {/* Card Content */}
                             <div className="p-4">
-                                <Link href={`/collections/${book.id}`}>
+                                <Link href={`/collections/book/${book.id}`}>
                                     {/* Title */}
                                     <h2 className="text-lg font-bold text-gray-900 truncate hover:text-green-500 transition duration-300">
                                         {book.title}
