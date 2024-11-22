@@ -2,7 +2,7 @@
 import React, { useState, useRef } from "react";
 import Link from 'next/link';
 
-import { Book, Menu, Sunset, Trees, Zap, Bell, User, Settings, LogOut, Search } from 'lucide-react';
+import { Book, Menu, Sunset, Trees, Zap, Bell, User, Bookmark, LogOut, Search, History } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Accordion,
@@ -255,6 +255,7 @@ export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa" }: { 
   return (
     <section className="flex border-b bg-background p-4 sticky top-0 z-50">
       <div className="container mx-auto">
+        {/* Desktop */}
         <nav className="hidden justify-between lg:flex">
           <div className="flex items-center gap-6">
             <Link href="/" className="flex items-center gap-2">
@@ -299,6 +300,12 @@ export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa" }: { 
                           {notifications.map((notification) => (
                             <DropdownMenuItem key={notification.id}>{notification.message}</DropdownMenuItem>
                           ))}
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem asChild>
+                            <Link href="/settings/notifications">
+                              <span className="w-full text-center cursor-pointer">See All</span>
+                            </Link>
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </NavigationMenuItem>
@@ -314,18 +321,36 @@ export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa" }: { 
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>My Account</DropdownMenuLabel>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem className="cursor-pointer">
-                        <User className="mr-2 h-4 w-4" />
-                        Profile
+                      <DropdownMenuItem asChild>
+                        <Link href="/settings/account" className="flex items-center cursor-pointer">
+                          <User className="mr-2 h-4 w-4" />
+                          Profile
+                        </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="cursor-pointer">
-                        <Settings className="mr-2 h-4 w-4" />
-                        Settings
+                      <DropdownMenuItem asChild>
+                        <Link href="/settings/transaction-history" className="flex items-center cursor-pointer">
+                          <History className="mr-2 h-4 w-4" />
+                          Transaction History
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href="/settings/bookmark" className="flex items-center cursor-pointer">
+                          <Bookmark className="mr-2 h-4 w-4" />
+                          Bookmarks
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href="/settings/notifications" className="flex items-center cursor-pointer">
+                          <Bell className="mr-2 h-4 w-4" />
+                          Notifications
+                        </Link>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem className="cursor-pointer">
-                        <LogOut className="mr-2 h-4 w-4" />
-                        Logout
+                      <DropdownMenuItem asChild>
+                        <button className="flex items-center cursor-pointer w-full" onClick={() => {/* Add your logout logic here */ }}>
+                          <LogOut className="mr-2 h-4 w-4" />
+                          Logout
+                        </button>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -343,7 +368,7 @@ export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa" }: { 
             )}
           </div>
         </nav>
-        {/* mobile */}
+        {/* Mobile */}
         <div className="block lg:hidden">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
@@ -441,7 +466,7 @@ export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa" }: { 
                     </SheetTitle>
                   </SheetHeader>
                   <div className="my-8 flex flex-col gap-4">
-                    <a href="/" className="font-semibold">
+                    <a href="/collections" className="font-semibold">
                       Home
                     </a>
                     <Accordion type="single" collapsible className="w-full">
