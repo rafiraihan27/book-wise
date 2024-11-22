@@ -3,6 +3,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
+import Image from "next/image"
 
 export default function BookCollection({ search = "", category = "", years = "" }) {
     const books = [
@@ -253,7 +254,15 @@ export default function BookCollection({ search = "", category = "", years = "" 
                     ))
                 ) : (
                     <p className="text-gray-500 text-center col-span-full">
+                        <Image src="/assets/dino.png" alt="dino" width={50} height={50} className="mx-auto mt-10 mb-3" />
                         No books match your criteria.
+                    </p>
+                )}
+
+                {filteredBooks.length > 0 && (
+                    <p className="text-gray-500 text-center col-span-full text-sm">
+                        <Image src="/assets/dino.png" alt="dino" width={40} height={40} className="mx-auto mt-10 mb-3" />
+                        "Roar! That’s all, folks.<br />I ate the rest of the data... NyamNyam!🍴"
                     </p>
                 )}
             </div>
