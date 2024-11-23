@@ -13,6 +13,7 @@ import BookCollection from '@/components/user-page/book-collections';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 
 import { recomendations } from '@/app/config';
+import toTitleCase from '@/common/to-title-case';
 
 export default function Page({ searchParams }: { searchParams: { [key: string]: string } }) {
   const search = searchParams.search || '';
@@ -72,12 +73,4 @@ export default function Page({ searchParams }: { searchParams: { [key: string]: 
       <BookCollection search={search} category={category} years={year} />
     </SidebarLayout>
   );
-}
-
-function toTitleCase(text: string | undefined): string {
-  if (!text) return '';
-  return text
-    .split(' ')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(' ');
 }

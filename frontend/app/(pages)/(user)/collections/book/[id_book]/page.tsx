@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { BookOpen, User, Building, Calendar, MapPin, Star } from "lucide-react";
+import { BookOpen, User, Building, Calendar, MapPin, Star, Bookmark } from "lucide-react";
 import { BookReview } from "@/components/user-page/book-review";
 import { RecomendationBook } from "@/components/user-page/book-recommendation";
 import {
@@ -18,7 +18,7 @@ import {
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import SidebarLayout from "@/components/user-page/sidebar-layout";
 import { ShareDrawer } from "@/components/user-page/share-drawer"
-import { toast } from "sonner";
+import BookmarkButton from "@/common/bookmark-button";
 
 // Sample book data (replace with actual fetch logic later)
 const book = {
@@ -104,7 +104,7 @@ export default function BookDetailPage() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/collections/book/${book.id}`}>
+              <BreadcrumbLink href={`/collections/book/${book.id}`} className="inline-block hidden lg:max-w-full md:max-w-[200px] truncate">
                 {book.title}
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -113,10 +113,6 @@ export default function BookDetailPage() {
       </div>
     </header>
   );
-
-  const handleBookmark = (bookTitle: string) => {
-    toast.success(`${bookTitle} has been bookmarked!`);
-  };
 
   return (
     <SidebarLayout header={header} defaultOpen={false}>
@@ -133,35 +129,19 @@ export default function BookDetailPage() {
               />
               {/* Overlay for Out of Quota */}
               {!book.canBorrow && (
-                                    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center backdrop-blur-sm">
-                                        <p className="text-white text-lg font-bold">
-                                            Maaf (｡•́︿•̀｡) <br /> bukunya lagi banyak <br /> yang baca
-                                        </p>
-                                    </div>
-                                )}
+                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center backdrop-blur-sm">
+                  <p className="text-white text-lg font-bold">
+                    Maaf (｡•́︿•̀｡) <br /> bukunya lagi banyak <br /> yang baca
+                  </p>
+                </div>
+              )}
               <div className="absolute top-2 right-2 flex gap-2">
                 <ShareDrawer
                   title={book.title}
                   url={typeof window !== 'undefined' ? window.location.href : ''}
                 />
                 {/* Bookmark Button */}
-                <Button className="bg-white border shadow p-2 hover:bg-gray-100 transition"
-                  onClick={() => handleBookmark(book.title)} >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="w-6 h-6 text-gray-500 group-hover:text-gray-900"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 3v18l7-5.197L19 21V3H5z"
-                    />
-                  </svg>
-                </Button>
+                <BookmarkButton bookId={book.id} bookTitle={book.title} customClass="bg-white border shadow p-2 hover:bg-gray-100 transition flex items-center"/>
               </div>
             </div>
             <div className="mt-4 flex items-center justify-center">
@@ -170,8 +150,8 @@ export default function BookDetailPage() {
                   <Star
                     key={i}
                     className={`w-5 h-5 ${i < Math.floor(book.rating)
-                        ? "text-yellow-400 fill-yellow-400"
-                        : "text-gray-300"
+                      ? "text-yellow-400 fill-yellow-400"
+                      : "text-gray-300"
                       }`}
                   />
                 ))}
@@ -223,7 +203,7 @@ export default function BookDetailPage() {
                 </span>
               </div>
               {book.canBorrow && (
-              <Button size="lg">Borrow Book</Button>
+                <Button size="lg">Borrow Book</Button>
               )}
             </div>
           </div>

@@ -58,7 +58,7 @@ const books: Book[] = [
 
 export function RecomendationBook({ title = "Recommended Books" }: RecommendedBooksProps) {
   return (
-    <div className="w-full mt-10">
+    <div className="w-full mt-10 hidden md:block">
       <h2 className="text-2xl font-bold mb-4">{title}</h2>
       <div className="overflow-x-auto whitespace-nowrap">
         {books.map((book) => (

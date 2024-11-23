@@ -1,9 +1,8 @@
 'use client'
 import Link from "next/link";
-import { toast } from "sonner";
 import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
 import Image from "next/image"
+import BookmarkButton from "@/common/bookmark-button";
 
 export default function BookCollection({ search = "", category = "", years = "" }) {
     const books = [
@@ -162,10 +161,6 @@ export default function BookCollection({ search = "", category = "", years = "" 
         return matchesSearch && matchesCategory && matchesYear;
     });
 
-    const handleBookmark = (bookTitle: string) => {
-        toast.success(`${bookTitle} has been bookmarked!`);
-    };
-
     return (
         <>
             <div className="flex mb-5">
@@ -187,23 +182,7 @@ export default function BookCollection({ search = "", category = "", years = "" 
                             {/* Book Image */}
                             <div className="relative group">
                                 {/* Bookmark Button */}
-                                <Button className="absolute top-2 right-2 z-10 bg-white rounded-full shadow p-2 hover:bg-gray-100 transition"
-                                    onClick={() => handleBookmark(book.title)} >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth={2}
-                                        stroke="currentColor"
-                                        className="w-6 h-6 text-gray-500 group-hover:text-gray-900"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M5 3v18l7-5.197L19 21V3H5z"
-                                        />
-                                    </svg>
-                                </Button>
+                                <BookmarkButton bookId={book.id} bookTitle={book.title}/>
 
                                 {/* Book Image */}
                                 <img
