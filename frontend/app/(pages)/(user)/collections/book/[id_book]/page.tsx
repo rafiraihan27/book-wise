@@ -141,7 +141,7 @@ export default function BookDetailPage() {
                   url={typeof window !== 'undefined' ? window.location.href : ''}
                 />
                 {/* Bookmark Button */}
-                <BookmarkButton bookId={book.id} bookTitle={book.title} customClass="bg-white border shadow p-2 hover:bg-gray-100 transition flex items-center"/>
+                <BookmarkButton bookId={book.id} bookTitle={book.title}/>
               </div>
             </div>
             <div className="mt-4 flex items-center justify-center">

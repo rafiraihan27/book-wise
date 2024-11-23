@@ -1,15 +1,20 @@
 'use client'
 import Link from "next/link";
 import { toast } from "sonner";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Bookmark } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const BookmarkButton = ({ bookId, bookTitle, customClass }: { bookId: number; bookTitle: string, customClass?: string }) => {
-    const [isBookmarked, setIsBookmarked] = useState(() => {
-      // Check localStorage to initialize bookmark state
-      const storedBookmarks = JSON.parse(localStorage.getItem("bookmarkedBooks") || "[]");
-      return storedBookmarks.includes(bookId);
-    });
+    const [isBookmarked, setIsBookmarked] = useState(false);
+
+    useEffect(() => {
+        // Check localStorage only on the client
+        if (typeof window !== "undefined") {
+        const storedBookmarks = JSON.parse(localStorage.getItem("bookmarkedBooks") || "[]");
+        setIsBookmarked(storedBookmarks.includes(bookId));
+        }
+    }, [bookId]);
   
     const handleBookmark = () => {
       setIsBookmarked(!isBookmarked);
@@ -53,15 +58,15 @@ const BookmarkButton = ({ bookId, bookTitle, customClass }: { bookId: number; bo
     };
   
     return (
-      <button
-        className={customClass || "absolute top-2 right-2 z-10 bg-white rounded-full shadow p-2 hover:bg-gray-100 transition"}
+      <Button
+        className="bg-white border shadow p-2 hover:bg-gray-100 transition flex items-center"
         onClick={handleBookmark}
       >
         <Bookmark
           className="w-6 h-6 text-gray-500"
           fill={isBookmarked ? "currentColor" : "none"}
         />
-      </button>
+      </Button>
     );
   };
 

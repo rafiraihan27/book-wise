@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Badge } from "../ui/badge";
 import Image from "next/image"
 import BookmarkButton from "@/common/bookmark-button";
+import { ShareDrawer } from "./share-drawer";
 
 export default function BookCollection({ search = "", category = "", years = "" }) {
     const books = [
@@ -181,8 +182,14 @@ export default function BookCollection({ search = "", category = "", years = "" 
                         >
                             {/* Book Image */}
                             <div className="relative group">
-                                {/* Bookmark Button */}
-                                <BookmarkButton bookId={book.id} bookTitle={book.title}/>
+                                <div className="absolute top-2 right-2 flex flex-col gap-2 z-10">
+                                    <BookmarkButton bookId={book.id} bookTitle={book.title} />
+                                    <ShareDrawer
+                                        title={book.title}
+                                        url={typeof window !== 'undefined' ? window.location.href+"/book/"+book.id : ''}
+                                    />
+                                </div>
+
 
                                 {/* Book Image */}
                                 <img
@@ -220,7 +227,7 @@ export default function BookCollection({ search = "", category = "", years = "" 
                             <div className="p-4">
                                 <Link href={`/collections/book/${book.id}`}>
                                     {/* Title */}
-                                    <h2 className="text-lg font-bold text-gray-900 truncate hover:text-green-500 transition duration-300">
+                                    <h2 className="text-lg font-bold text-gray-900 truncate hover:underline transition duration-300">
                                         {book.title}
                                     </h2>
                                     {/* Author */}

@@ -67,7 +67,7 @@ export function ShareDrawer({ title, url }: ShareDrawerProps) {
     <Drawer>
       <DrawerTrigger asChild>
         <Button variant="outline" size="icon">
-          <Share2 className="h-4 w-4" />
+          <Share2 className="h-4 w-4 text-gray-500" />
         </Button>
       </DrawerTrigger>
       <DrawerContent>
