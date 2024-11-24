@@ -104,7 +104,7 @@ export default function BookDetailPage() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/collections/book/${book.id}`} className="inline-block hidden lg:max-w-full md:max-w-[200px] truncate">
+              <BreadcrumbLink href={`/collections/book/${book.id}`} className="inline-block lg:max-w-full max-w-[200px] truncate">
                 {book.title}
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -138,7 +138,7 @@ export default function BookDetailPage() {
               <div className="absolute top-2 right-2 flex gap-2">
                 <ShareDrawer
                   title={book.title}
-                  url={typeof window !== 'undefined' ? window.location.href : ''}
+                  url={typeof window !== 'undefined' ? window.location.href+"/book/"+book.id : ''}
                 />
                 {/* Bookmark Button */}
                 <BookmarkButton bookId={book.id} bookTitle={book.title}/>
