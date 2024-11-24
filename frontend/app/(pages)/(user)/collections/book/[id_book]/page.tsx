@@ -194,19 +194,21 @@ export default function BookDetailPage() {
               <h2 className="text-xl font-semibold mb-2">Abstract</h2>
               <p className="text-muted-foreground">{book.abstract}</p>
             </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center text-sm text-muted-foreground">
+            <div className="md:flex items-center justify-between">
+              <div className="flex items-center text-sm text-muted-foreground mb-5 md:mb-0">
                 <BookOpen className="mr-2" size={16} />
                 <span>
                   {book.availableCopies} of {book.totalCopies} available
                 </span>
               </div>
-              <div className="flex gap-2 md:gap-4">
+              <div className="flex gap-2 md:gap-4 items-center justify-between">
+                <div className="flex gap-2">
                 <ShareDrawer
                   title={book.title}
                   url={typeof window !== 'undefined' ? window.location.href : ''}
                 />
                 <BookmarkButton bookId={book.id} bookTitle={book.title} mark="Bookmarked"/>
+                </div>
                 {book.canBorrow && (
                   <Button size="lg">Borrow Book</Button>
                 )}
