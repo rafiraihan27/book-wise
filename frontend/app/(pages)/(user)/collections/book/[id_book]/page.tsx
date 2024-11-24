@@ -104,7 +104,7 @@ export default function BookDetailPage() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/collections/book/${book.id}`} className="inline-block lg:max-w-full max-w-[200px] truncate">
+              <BreadcrumbLink href={`/collections/book/${book.id}`} className="inline-block md:max-w-full max-w-[130px] truncate">
                 {book.title}
               </BreadcrumbLink>
             </BreadcrumbItem>
