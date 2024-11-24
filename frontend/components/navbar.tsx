@@ -252,7 +252,7 @@ function SearchBar() {
   );
 }
 
-export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa" }: { isLoggedIn?: boolean, loggedAs?: string }) {
+export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa", userName = "Mahasiswa" }: { isLoggedIn?: boolean, loggedAs?: string, userName?: string }) {
   const pathname = usePathname();
   return (
     <section className="flex border-b bg-background p-4 sticky top-0 z-50">
@@ -331,8 +331,8 @@ export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa" }: { 
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Avatar className="cursor-pointer">
-                        <AvatarImage src="/placeholder-avatar.jpg" alt="User" />
-                        <AvatarFallback>U</AvatarFallback>
+                      <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${userName}`} alt={userName} />
+                      <AvatarFallback>{userName}</AvatarFallback>
                       </Avatar>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">

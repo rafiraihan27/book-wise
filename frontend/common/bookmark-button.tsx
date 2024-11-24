@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Bookmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const BookmarkButton = ({ bookId, bookTitle, customClass }: { bookId: number; bookTitle: string, customClass?: string }) => {
+const BookmarkButton = ({ bookId, bookTitle, customClass, mark }: { bookId: number; bookTitle: string, customClass?: string, mark?: string }) => {
     const [isBookmarked, setIsBookmarked] = useState(false);
 
     useEffect(() => {
@@ -66,6 +66,9 @@ const BookmarkButton = ({ bookId, bookTitle, customClass }: { bookId: number; bo
           className="w-6 h-6 text-gray-500"
           fill={isBookmarked ? "currentColor" : "none"}
         />
+        {mark && isBookmarked && (
+            <span className="text-sm text-gray-500 font-bold hidden sm:flex">{mark}</span>
+        )}
       </Button>
     );
   };

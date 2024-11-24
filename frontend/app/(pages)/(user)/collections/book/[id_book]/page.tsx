@@ -135,14 +135,13 @@ export default function BookDetailPage() {
                   </p>
                 </div>
               )}
-              <div className="absolute top-2 right-2 flex gap-2">
+              {/* <div className="absolute top-2 right-2 flex gap-2">
                 <ShareDrawer
                   title={book.title}
                   url={typeof window !== 'undefined' ? window.location.href+"/book/"+book.id : ''}
                 />
-                {/* Bookmark Button */}
                 <BookmarkButton bookId={book.id} bookTitle={book.title}/>
-              </div>
+              </div> */}
             </div>
             <div className="mt-4 flex items-center justify-center">
               <div className="flex items-center">
@@ -202,9 +201,16 @@ export default function BookDetailPage() {
                   {book.availableCopies} of {book.totalCopies} available
                 </span>
               </div>
-              {book.canBorrow && (
-                <Button size="lg">Borrow Book</Button>
-              )}
+              <div className="flex gap-2 md:gap-4">
+                <ShareDrawer
+                  title={book.title}
+                  url={typeof window !== 'undefined' ? window.location.href : ''}
+                />
+                <BookmarkButton bookId={book.id} bookTitle={book.title} mark="Bookmarked"/>
+                {book.canBorrow && (
+                  <Button size="lg">Borrow Book</Button>
+                )}
+              </div>
             </div>
           </div>
         </div>
