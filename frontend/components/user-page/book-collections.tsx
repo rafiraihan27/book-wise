@@ -8,7 +8,7 @@ import { ShareDrawer } from "./share-drawer";
 export default function BookCollection({ search = "", category = "", years = "" }) {
     const books = [
         {
-            id: 1,
+            id: "1",
             title: "The Psychology of Money",
             author: "Morgan Housel",
             category: "finance",
@@ -20,7 +20,7 @@ export default function BookCollection({ search = "", category = "", years = "" 
             quota: 5,
         },
         {
-            id: 2,
+            id: "2",
             title: "Atomic Habits",
             author: "James Clear",
             category: "self-help",
@@ -32,7 +32,7 @@ export default function BookCollection({ search = "", category = "", years = "" 
             quota: 5,
         },
         {
-            id: 3,
+            id: "3",
             title: "Sapiens",
             author: "Yuval Noah Harari",
             category: "history",
@@ -44,7 +44,7 @@ export default function BookCollection({ search = "", category = "", years = "" 
             quota: 0,
         },
         {
-            id: 4,
+            id: "4",
             title: "The Lean Startup",
             author: "Eric Ries",
             category: "business",
@@ -56,7 +56,7 @@ export default function BookCollection({ search = "", category = "", years = "" 
             quota: 5,
         },
         {
-            id: 5,
+            id: "5",
             title: "1984",
             author: "George Orwell",
             category: "fiction",
@@ -68,7 +68,7 @@ export default function BookCollection({ search = "", category = "", years = "" 
             quota: 5,
         },
         {
-            id: 6,
+            id: "6",
             title: "The Alchemist",
             author: "Paulo Coelho",
             category: "fiction",
@@ -79,7 +79,7 @@ export default function BookCollection({ search = "", category = "", years = "" 
             quota: 0,
         },
         {
-            id: 7,
+            id: "7",
             title: "Deep Work",
             author: "Cal Newport",
             category: "productivity",
@@ -90,7 +90,7 @@ export default function BookCollection({ search = "", category = "", years = "" 
             quota: 5,
         },
         {
-            id: 8,
+            id: "8",
             title: "Educated",
             author: "Tara Westover",
             category: "memoir",
@@ -101,7 +101,7 @@ export default function BookCollection({ search = "", category = "", years = "" 
             quota: 5,
         },
         {
-            id: 9,
+            id: "9",
             title: "The Art of War",
             author: "Sun Tzu",
             category: "philosophy",
@@ -112,7 +112,7 @@ export default function BookCollection({ search = "", category = "", years = "" 
             quota: 0,
         },
         {
-            id: 10,
+            id: "10",
             title: "The Great Gatsby",
             author: "F. Scott Fitzgerald",
             category: "fiction",
@@ -123,7 +123,7 @@ export default function BookCollection({ search = "", category = "", years = "" 
             quota: 5,
         },
         {
-            id: 11,
+            id: "11",
             title: "Man's Search for Meaning",
             author: "Viktor E. Frankl",
             category: "philosophy",
@@ -134,7 +134,7 @@ export default function BookCollection({ search = "", category = "", years = "" 
             quota: 5,
         },
         {
-            id: 12,
+            id: "12",
             title: "Becoming",
             author: "Michelle Obama",
             category: "memoir",

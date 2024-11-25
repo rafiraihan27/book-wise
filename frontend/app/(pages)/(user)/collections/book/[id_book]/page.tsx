@@ -19,10 +19,11 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import SidebarLayout from "@/components/user-page/sidebar-layout";
 import { ShareDrawer } from "@/components/user-page/share-drawer"
 import BookmarkButton from "@/common/bookmark-button";
+import { Cart } from "@/components/user-page/borrow/cart";
 
 // Sample book data (replace with actual fetch logic later)
 const book = {
-  "id": 1,
+  "id": "1",
   "title": "The Psychology of Money: Timeless Lessons on Wealth, Greed, and Happiness",
   "coverImage": "https://images-na.ssl-images-amazon.com/images/I/81cpDaCJJCL.jpg",
   "catalogNumber": "332.024 HOU",
@@ -209,8 +210,15 @@ export default function BookDetailPage() {
                 />
                 <BookmarkButton bookId={book.id} bookTitle={book.title} mark="Bookmarked"/>
                 </div>
-                {book.canBorrow && (
+                {/* {book.canBorrow && (
                   <Button size="lg">Borrow Book</Button>
+                )} */}
+                {book.canBorrow && (
+                  <Cart
+                  isAdd={true}
+                  book={book}
+                />
+                
                 )}
               </div>
             </div>

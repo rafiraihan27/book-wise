@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Bookmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const BookmarkButton = ({ bookId, bookTitle, customClass, mark }: { bookId: number; bookTitle: string, customClass?: string, mark?: string }) => {
+const BookmarkButton = ({ bookId, bookTitle, customClass, mark }: { bookId: string; bookTitle: string, customClass?: string, mark?: string }) => {
     const [isBookmarked, setIsBookmarked] = useState(false);
 
     useEffect(() => {
@@ -40,7 +40,7 @@ const BookmarkButton = ({ bookId, bookTitle, customClass, mark }: { bookId: numb
         );
       } else {
         // Remove the book ID from localStorage
-        const updatedBookmarks = storedBookmarks.filter((id: number) => id !== bookId);
+        const updatedBookmarks = storedBookmarks.filter((id: string) => id !== bookId);
         localStorage.setItem("bookmarkedBooks", JSON.stringify(updatedBookmarks));
   
         toast.success(

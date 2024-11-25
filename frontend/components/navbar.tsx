@@ -40,6 +40,7 @@ import { cn } from '@/lib/utils';
 import { assets } from '@/app/config';
 import { Input } from './ui/input';
 import { useRouter } from 'next/navigation';
+import { Cart } from "./user-page/borrow/cart";
 
 const webName = "BookWise"
 
@@ -290,7 +291,7 @@ export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa", user
             {isLoggedIn ? (
               <>
                 <NavigationMenu className='flex gap-2'>
-                  <a
+                  {/* <a
                     className={cn(
                       'text-muted-foreground',
                       navigationMenuTriggerStyle,
@@ -301,12 +302,13 @@ export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa", user
                     href="/borrow"
                   >
                     Peminjaman
-                  </a>
+                  </a> */}
+                  <Cart />
                   <NavigationMenuList className="mr-5 gap-4 flex items-center">
                     <NavigationMenuItem>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
+                          <Button variant="outline" size="icon">
                             <Bell className="h-4 w-4" />
                             <span className="sr-only">Notifications</span>
                           </Button>
