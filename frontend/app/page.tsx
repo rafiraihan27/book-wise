@@ -4,9 +4,11 @@ import { Star } from 'lucide-react';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from "@/components/ui/button"
 import { assets } from './config';
+import Footer from '@/components/footer';
 
 export default function Home() {
   return (
+    <>
     <div className="flex flex-col items-center justify-center">
       <Hero />
       <Features />
@@ -14,6 +16,8 @@ export default function Home() {
       <Aboutus />
       <Contact />
     </div>
+    <Footer/>
+    </>
   );
 }
 
