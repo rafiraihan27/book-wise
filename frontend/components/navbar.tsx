@@ -286,7 +286,10 @@ export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa", user
               </a>
             )}
           </div>
-          <SearchBar />
+          <div className="flex items-center w-full max-w-lg gap-4">
+            <SearchBar />
+            <Cart />
+          </div>
           <div className="flex gap-2">
             {isLoggedIn ? (
               <>
@@ -303,7 +306,7 @@ export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa", user
                   >
                     Peminjaman
                   </a> */}
-                  <Cart />
+
                   <NavigationMenuList className="mr-5 gap-4 flex items-center">
                     <NavigationMenuItem>
                       <DropdownMenu>
@@ -333,8 +336,8 @@ export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa", user
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Avatar className="cursor-pointer">
-                      <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${userName}`} alt={userName} />
-                      <AvatarFallback>{userName}</AvatarFallback>
+                        <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${userName}`} alt={userName} />
+                        <AvatarFallback>{userName}</AvatarFallback>
                       </Avatar>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
