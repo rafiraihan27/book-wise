@@ -298,7 +298,7 @@ export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa", user
                         variant: 'ghost',
                       }),
                     )}
-                    href="/loans"
+                    href="/borrow"
                   >
                     Peminjaman
                   </a>
