@@ -99,7 +99,7 @@ export function Cart({ isAdd = false, book }: { isAdd?: boolean; book?: CartItem
           <Button variant="outline" size="icon" className="relative" onClick={refreshData}>
             <ShoppingCart className="w-4 h-4" />
             {items.length > 0 && (
-              <span className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-[#E02954] text-primary-foreground text-xs flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-[#E02954] text-primary-foreground text-xs flex items-center justify-center">
                 {items.length}
               </span>
             )}

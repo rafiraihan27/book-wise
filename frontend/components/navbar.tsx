@@ -272,18 +272,13 @@ export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa", user
             </Link>
 
             {pathname !== '/collections' && (
-              <a
-                className={cn(
-                  'text-muted-foreground',
-                  navigationMenuTriggerStyle,
-                  buttonVariants({
-                    variant: 'ghost',
-                  }),
-                )}
-                href="/collections"
+              <Button
+                className='text-muted-foreground hidden md:flex'
+                variant='ghost'
+                onClick={(e) => { e.preventDefault(); window.location.href = '/collections'; }}
               >
-                Back to collections
-              </a>
+                Collections
+              </Button>
             )}
           </div>
           <div className="flex items-center w-full max-w-lg gap-4">
@@ -313,7 +308,11 @@ export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa", user
                         <DropdownMenuTrigger asChild>
                           <Button variant="outline" size="icon">
                             <Bell className="h-4 w-4" />
-                            <span className="sr-only">Notifications</span>
+                            {notifications.length > 0 && (
+                              <span className="absolute -top-2 right-3 w-5 h-5 rounded-full bg-[#E02954] text-primary-foreground text-xs flex items-center justify-center">
+                                {notifications.length}
+                              </span>
+                            )}
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
