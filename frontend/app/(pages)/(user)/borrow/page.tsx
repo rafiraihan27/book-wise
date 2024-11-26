@@ -10,7 +10,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Separator } from "@/components/ui/separator"
 import { Trash2, AlertCircle, CopyIcon } from 'lucide-react'
 import { toast } from 'sonner'
-import { DateRange } from "react-day-picker"
 
 interface CartItem {
     id: string;
