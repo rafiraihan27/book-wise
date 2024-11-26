@@ -152,7 +152,7 @@ export function Cart({ isAdd = false, book }: { isAdd?: boolean; book?: CartItem
             disabled={items.length === 0}
             onClick={handleCheckout}
           >
-            Proceed to Payment
+            Proceed to Checkout
           </Button>
         </div>
       </SheetContent>
