@@ -27,7 +27,7 @@ const invoiceData: Invoice = {
     id: 'INV-2023-001',
     date: '2023-05-01',
     dueDate: '2023-05-15',
-    status: 'pending',
+    status: 'paid',
     items: [
         { id: 1, title: 'Introduction to React', author: 'Jane Doe', fee: 5.99 },
         { id: 2, title: 'Advanced TypeScript', author: 'John Smith', fee: 5.99 },
