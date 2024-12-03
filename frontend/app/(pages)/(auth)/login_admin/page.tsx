@@ -1,15 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import Link from "next/link"
-import Cookies from "js-cookie";
-import { toast } from "sonner";
 import { Loader2 } from 'lucide-react'
-import Navbar from "@/components/navbar-user"
+
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -27,6 +24,10 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { toast } from "sonner";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation"
+import NavbarAdmin from "@/components/navbar-admin"
 import { verifyToken } from "@/common/tokenizer"
 
 const loginFormSchema = z.object({
@@ -39,7 +40,6 @@ const loginFormSchema = z.object({
 })
 
 export default function LoginPage() {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
@@ -50,10 +50,9 @@ export default function LoginPage() {
     },
   })
 
+  const router = useRouter();
   function onSubmit(values: z.infer<typeof loginFormSchema>) {
     setIsLoading(true)
-
-    // API
     setTimeout(() => {
       setIsLoading(false);
 
@@ -63,22 +62,22 @@ export default function LoginPage() {
       const dummyToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
       Cookies.set("authToken", dummyToken, { expires: 7, secure: false, path: "/" });
       toast.success("Login Successful");
-      router.push("/collections");
-    }, 2000);
+      router.push("/admin");
+    }, 2000)
   }
 
   if (verifyToken()) {
-    router.push("/collections")
+    router.push("/admin")
   }
 
   return (
     <>
-      <Navbar />
+      <NavbarAdmin />
       <div className="min-h-screen flex items-center justify-center p-4">
         <div className="w-full max-w-md">
           <Card className="mx-auto max-w-sm">
             <CardHeader>
-              <CardTitle className="text-2xl">Login</CardTitle>
+              <CardTitle className="text-2xl">Login as Admin</CardTitle>
               <CardDescription>
                 Enter your email below to login to your account
               </CardDescription>
@@ -125,14 +124,8 @@ export default function LoginPage() {
                 </form>
               </Form>
               <p className="mt-6 text-center text-sm text-gray-600">
-                Don't have an account?{" "}
-                <Link href="/register" className="font-medium underline">
-                  Register here
-                </Link>
-              </p>
-              <p className="mt-2 text-center text-sm text-gray-600">
-                You're admin?{" "}
-                <Link href="/login_admin" className="font-medium underline">
+                Login with user account?{" "}
+                <Link href="/login" className="font-medium underline">
                   Login here
                 </Link>
               </p>
