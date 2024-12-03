@@ -380,10 +380,10 @@ export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa", user
             ) : (
               <div className="mt-2 flex flex-row gap-3">
                 <Button variant={'outline'}>
-                  <Link href="/auth/signin">Log in</Link>
+                  <Link href="/login">Log in</Link>
                 </Button>
                 <Button>
-                  <Link href="/auth/signup">Sign Up</Link>
+                  <Link href="/register">Sign Up</Link>
                 </Button>
               </div>
             )}
