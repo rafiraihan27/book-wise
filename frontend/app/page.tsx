@@ -41,7 +41,7 @@ const Hero = () => {
           </p>
         </div>
         <Button size="lg" className="mt-10">
-          <Link href="/auth/signup">
+          <Link href="/register">
             Register to discover all books
           </Link>
         </Button>
