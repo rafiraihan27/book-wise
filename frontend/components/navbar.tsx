@@ -1,7 +1,9 @@
 'use client'
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { toast } from "sonner";
+import {verifyToken, deleteToken} from "@/common/tokenizer";
 
 import { Book, Menu, Sunset, Trees, Zap, Bell, User, Bookmark, LogOut, Search, History } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -39,7 +41,6 @@ import {
 import { cn } from '@/lib/utils';
 import { assets } from '@/app/config';
 import { Input } from './ui/input';
-import { useRouter } from 'next/navigation';
 import { Cart } from "./user-page/borrow/cart";
 
 const webName = "BookWise"
@@ -253,8 +254,21 @@ function SearchBar() {
   );
 }
 
-export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa", userName = "Mahasiswa" }: { isLoggedIn?: boolean, loggedAs?: string, userName?: string }) {
+export default function Navbar({ loggedAs = "Mahasiswa", userName = "Mahasiswa" }: { loggedAs?: string, userName?: string }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  const onLogout = () => {
+    deleteToken()
+    toast.success("Logged out successfully");
+    router.push("/")
+  }
+
+  useEffect(() => {
+    setIsLoggedIn(verifyToken())
+  })
+
   return (
     <section className="flex border-b bg-background p-4 sticky top-0 z-50">
       <div className="container mx-auto">
@@ -283,7 +297,7 @@ export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa", user
           </div>
           <div className="flex items-center w-full max-w-lg gap-4">
             <SearchBar />
-            <Cart />
+            { isLoggedIn && <Cart /> }
           </div>
           <div className="flex gap-2">
             {isLoggedIn ? (
@@ -368,7 +382,7 @@ export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa", user
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem asChild>
-                        <button className="flex items-center cursor-pointer w-full" onClick={() => {/* Add your logout logic here */ }}>
+                        <button className="flex items-center cursor-pointer w-full" onClick={() => onLogout()}>
                           <LogOut className="mr-2 h-4 w-4" />
                           Logout
                         </button>
@@ -458,8 +472,8 @@ export default function Navbar({ isLoggedIn = true, loggedAs = "Mahasiswa", user
                   </div>
                   <div className="border-t pt-4">
                     <div className="mt-2 flex flex-col gap-3">
-                      <Button>
-                        <Link href="#">Logout</Link>
+                      <Button onClick={() => onLogout()}>
+                        Logout
                       </Button>
                     </div>
                   </div>

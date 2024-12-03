@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +20,9 @@ import SidebarLayout from "@/components/user-page/sidebar-layout";
 import { ShareDrawer } from "@/components/user-page/share-drawer"
 import BookmarkButton from "@/common/bookmark-button";
 import { Cart } from "@/components/user-page/borrow/cart";
+import { useAuthGuard, verifyToken } from "@/common/tokenizer";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 // Sample book data (replace with actual fetch logic later)
 const book = {
@@ -116,6 +119,15 @@ export default function BookDetailPage() {
     </header>
   );
 
+  const { isLoading } = useAuthGuard();
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+  
   return (
     <SidebarLayout header={header} defaultOpen={false}>
       <div className="container mx-auto px-4 py-8 max-w-4xl">

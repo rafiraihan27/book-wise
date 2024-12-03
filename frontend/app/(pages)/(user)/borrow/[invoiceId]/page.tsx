@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { AlertCircle, Download, Loader2 } from 'lucide-react'
+import { useAuthGuard } from '@/common/tokenizer'
 
 interface InvoiceItem {
     id: number
@@ -44,6 +45,15 @@ export default function InvoicePage() {
     useEffect(() => {
         setIsDialogOpen(true)
     }, []);
+
+    const { isLoading } = useAuthGuard();
+    if (isLoading) {
+        return (
+        <div className="flex items-center justify-center h-screen">
+            <p>Loading...</p>
+        </div>
+        );
+    }
 
     return (
         <div className="container mx-auto p-4">

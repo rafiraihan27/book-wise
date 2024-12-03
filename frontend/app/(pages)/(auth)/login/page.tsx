@@ -1,10 +1,13 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import Link from "next/link"
+import Cookies from "js-cookie";
+import { toast } from "sonner";
 import { Loader2 } from 'lucide-react'
 
 import { Button } from "@/components/ui/button"
@@ -24,7 +27,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { toast } from "sonner";
 
 const loginFormSchema = z.object({
   email: z.string().email({
@@ -36,6 +38,7 @@ const loginFormSchema = z.object({
 })
 
 export default function LoginPage() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
@@ -48,11 +51,19 @@ export default function LoginPage() {
 
   function onSubmit(values: z.infer<typeof loginFormSchema>) {
     setIsLoading(true)
-    // Simulate API call
+    
+    // API
     setTimeout(() => {
-      setIsLoading(false)
-      toast.success("Login Successful")
-    }, 2000)
+      setIsLoading(false);
+      
+      // API HERE
+      // ....
+      
+      const dummyToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
+      Cookies.set("authToken", dummyToken, { expires: 7, secure: false, path: "/" });
+      toast.success("Login Successful");
+      router.push("/collections");
+    }, 2000);
   }
 
   return (
