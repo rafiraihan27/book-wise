@@ -25,6 +25,8 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation"
 
 const loginFormSchema = z.object({
   email: z.string().email({
@@ -46,12 +48,19 @@ export default function LoginPage() {
     },
   })
 
+  const router = useRouter();
   function onSubmit(values: z.infer<typeof loginFormSchema>) {
     setIsLoading(true)
-    // Simulate API call
     setTimeout(() => {
-      setIsLoading(false)
-      toast.success("Login Successful")
+      setIsLoading(false);
+      
+      // API HERE
+      // ....
+      
+      const dummyToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
+      Cookies.set("authToken", dummyToken, { expires: 7, secure: false, path: "/" });
+      toast.success("Login Successful");
+      router.push("/admin");
     }, 2000)
   }
 

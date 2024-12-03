@@ -4,11 +4,13 @@ import { Star } from 'lucide-react';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from "@/components/ui/button"
 import { assets } from './config';
+import Navbar from '@/components/navbar-user';
 import Footer from '@/components/footer';
 
 export default function Home() {
   return (
     <>
+    <Navbar/>
     <div className="flex flex-col items-center justify-center">
       <Hero />
       <Features />
@@ -23,6 +25,7 @@ export default function Home() {
 
 const Hero = () => {
   return (
+
     <section
       className="h-screen flex items-center justify-center w-full"
       style={{
