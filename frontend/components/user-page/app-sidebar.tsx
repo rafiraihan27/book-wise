@@ -356,7 +356,10 @@ function TabsComponent({ data }: { data: any }) {
   // State untuk tab aktif
   const [activeTab, setActiveTab] = useState(() => {
     // Ambil dari session storage atau default ke "book"
-    return sessionStorage.getItem("activeTab") || "book";
+    if (typeof window !== "undefined") {
+      return sessionStorage.getItem("activeTab") || "book";
+    }
+    return "";
   });
 
   // Simpan tab aktif ke session storage saat berubah
