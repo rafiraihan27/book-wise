@@ -17,10 +17,11 @@ import {
 } from "@/components/ui/sidebar"
 
 interface UserLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode,
+  page?: string
 }
 
-export default function AdminLayout({ children }: UserLayoutProps) {
+export default function AdminLayout({ children, page }: UserLayoutProps) {
   return (
     <>
       <SidebarProvider
@@ -38,12 +39,16 @@ export default function AdminLayout({ children }: UserLayoutProps) {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">All Inboxes</BreadcrumbLink>
+                  <BreadcrumbLink href="/admin">Admin</BreadcrumbLink>
                 </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Inbox</BreadcrumbPage>
-                </BreadcrumbItem>
+                {page && 
+                  <>
+                    <BreadcrumbSeparator className="hidden md:block" />
+                    <BreadcrumbItem>
+                      <BreadcrumbPage>{page}</BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </>
+                }
               </BreadcrumbList>
             </Breadcrumb>
           </header>
