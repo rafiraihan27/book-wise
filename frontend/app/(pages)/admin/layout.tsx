@@ -16,14 +16,14 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { Sun, Moon, Cloud } from "lucide-react" // Example icons, adjust as needed
+import { Sun, Moon, Cloud } from 'lucide-react'
 
-interface UserLayoutProps {
+interface AdminLayoutProps {
   children: React.ReactNode,
   page?: string
 }
 
-export default function AdminLayout({ children, page }: UserLayoutProps) {
+export default function AdminLayout({ children, page }: AdminLayoutProps) {
   const [currentDate, setCurrentDate] = useState<string>("")
   const [greeting, setGreeting] = useState<string>("")
   const [icon, setIcon] = useState<React.ReactNode>(<Cloud />)
@@ -32,7 +32,6 @@ export default function AdminLayout({ children, page }: UserLayoutProps) {
     const updateDate = () => {
       const now = new Date()
 
-      // Update date in the desired format
       const formattedDate = now.toLocaleDateString("id-ID", {
         weekday: "long",
         year: "numeric",
@@ -42,7 +41,6 @@ export default function AdminLayout({ children, page }: UserLayoutProps) {
 
       setCurrentDate(formattedDate)
 
-      // Determine greeting and icon based on the time
       const hour = now.getHours()
       if (hour >= 5 && hour < 12) {
         setGreeting("Selamat Pagi")
@@ -63,17 +61,17 @@ export default function AdminLayout({ children, page }: UserLayoutProps) {
   }, [])
 
   return (
-    <>
-      <SidebarProvider
-        style={
-          {
-            "--sidebar-width": "350px",
-          } as React.CSSProperties
-        }
-      >
+    <SidebarProvider
+      style={
+        {
+          "--sidebar-width": "350px",
+        } as React.CSSProperties
+      }
+    >
+      <div className="flex overflow-hidden w-full">
         <AppSidebar />
-        <SidebarInset>
-          <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4">
+        <SidebarInset className="flex flex-col flex-1 overflow-hidden">
+          <header className="sticky top-0 z-10 flex shrink-0 items-center gap-2 border-b bg-background p-4">
             <div className="flex flex-1 items-center gap-2 px-3">
               <SidebarTrigger className="-ml-1" />
               <Separator orientation="vertical" className="mr-2 h-4" />
@@ -100,11 +98,11 @@ export default function AdminLayout({ children, page }: UserLayoutProps) {
               </span>
             </div>
           </header>
-          <div className="flex flex-1 flex-col gap-4 p-4">
+          <main className="flex-1 overflow-auto p-4">
             {children}
-          </div>
+          </main>
         </SidebarInset>
-      </SidebarProvider>
-    </>
+      </div>
+    </SidebarProvider>
   )
 }
