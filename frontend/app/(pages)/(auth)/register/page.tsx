@@ -28,6 +28,7 @@ import { toast } from "sonner"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useRouter } from "next/navigation"
 import { verifyToken } from "@/common/tokenizer"
+import { appInfo, assets } from "@/app/config"
 
 const studentFormSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -88,9 +89,23 @@ export default function RegisterPage() {
 
   return (
     <>
-      <Navbar />
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <Card className="mx-auto w-full max-w-xl">
+      {/* <Navbar /> */}
+      <div className="min-h-screen grid grid-cols-1 lg:grid-cols-12 gap-2 p-4">
+  {/* Logo Section */}
+  <div className="lg:col-span-4 flex flex-col items-center lg:items-end justify-end lg:justify-center text-center">
+    <Link href="/" className="flex flex-col items-center gap-2">
+      <img
+        src={assets.logoUrl}
+        className="w-12 lg:w-16"
+        alt="logo"
+      />
+      <span className="text-2xl lg:text-3xl font-bold uppercase">{appInfo.appName}</span>
+    </Link>
+  </div>
+
+  {/* Card Section */}
+  <div className="lg:col-span-8 flex items-center justify-center">
+        <Card className="w-full max-w-xl mx-auto">
           <CardHeader>
             <CardTitle className="text-2xl">Create an account</CardTitle>
             <CardDescription>
@@ -303,6 +318,7 @@ export default function RegisterPage() {
             </p>
           </CardContent>
         </Card>
+      </div>
       </div>
     </>
   )
