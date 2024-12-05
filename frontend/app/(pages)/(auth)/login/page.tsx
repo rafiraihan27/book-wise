@@ -63,6 +63,8 @@ export default function LoginPage() {
 
       const dummyToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
       Cookies.set("authToken", dummyToken, { expires: 7, secure: false, path: "/" });
+      const userId = "1"
+      localStorage.setItem("userId", userId);
       toast.success("Login Successful");
       router.push("/collections");
     }, 2000);

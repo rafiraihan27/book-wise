@@ -42,6 +42,8 @@ import { cn } from '@/lib/utils';
 import { assets } from '@/app/config';
 import { Input } from './ui/input';
 import { Cart } from "./user-page/borrow/cart";
+import { fetchNotificationsByUserId } from "@/lib/api/notifications";
+import { Notification } from "@/types/interfaces";
 
 const webName = "BookWise"
 
@@ -91,12 +93,6 @@ const subMenuItemsTwo = [
     icon: <Book className="size-5 shrink-0" />,
   },
 ];
-
-const notifications = [
-  { id: 1, message: "Your order has been shipped!" },
-  { id: 2, message: "New product available" },
-  { id: 3, message: "Sale starts tomorrow!" },
-]
 
 function SearchBar() {
   const router = useRouter();
@@ -254,6 +250,83 @@ function SearchBar() {
   );
 }
 
+const NotificationComponent = () => {
+  const [notifications, setNotifications] = useState<Notification[]>()
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
+  
+  // Fetch Notifications
+  useEffect(() => {
+    async function loadNotifications() {
+      setLoading(true);
+      try {
+        const userIDFromLocal: string = localStorage.getItem("userId") ?? '';
+        const data = await fetchNotificationsByUserId(userIDFromLocal);
+        setNotifications(data);
+        setError('');
+      } catch (err) {
+        setError(`Failed to load books: ${err}`);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadNotifications();
+  }, []);
+
+  if (!notifications) {
+    return <></>
+  }
+
+  if (loading) {
+    return <div className="loading"></div>;
+  }
+
+  if (error) {
+    return <div className="error"></div>;
+  }
+  return(
+    <NavigationMenuList className="mr-5 gap-4 flex items-center">
+      <NavigationMenuItem>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="icon">
+              <Bell className="h-4 w-4" />
+              {notifications?.filter(n => !n.read).length > 0 && (
+                <span className="absolute -top-2 right-3 w-5 h-5 rounded-full bg-[#E02954] text-primary-foreground text-xs flex items-center justify-center">
+                  {notifications?.filter(n => !n.read).length}
+                </span>
+              )}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {notifications?.filter(n => !n.read).map(( notification: Notification ) => (
+              <DropdownMenuItem key={notification.id} asChild>
+                <Link href="/settings/notifications">
+                  <span className="w-full text-center cursor-pointer">{notification.title}</span>
+                </Link>
+              </DropdownMenuItem>
+            ))}
+            {notifications?.filter(n => !n.read).length <= 0 && (
+              <DropdownMenuItem asChild>
+                <span className="w-full text-center cursor-pointer">Kosong</span>
+              </DropdownMenuItem>
+            )}
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link href="/settings/notifications">
+                <span className="w-full text-center cursor-pointer">See All</span>
+              </Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </NavigationMenuItem>
+    </NavigationMenuList>
+  )
+}
+
 export default function Navbar({ loggedAs = "Mahasiswa", userName = "Mahasiswa" }: { loggedAs?: string, userName?: string }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -316,35 +389,7 @@ export default function Navbar({ loggedAs = "Mahasiswa", userName = "Mahasiswa" 
                     Peminjaman
                   </a> */}
 
-                  <NavigationMenuList className="mr-5 gap-4 flex items-center">
-                    <NavigationMenuItem>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="outline" size="icon">
-                            <Bell className="h-4 w-4" />
-                            {notifications.length > 0 && (
-                              <span className="absolute -top-2 right-3 w-5 h-5 rounded-full bg-[#E02954] text-primary-foreground text-xs flex items-center justify-center">
-                                {notifications.length}
-                              </span>
-                            )}
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-                          <DropdownMenuSeparator />
-                          {notifications.map((notification) => (
-                            <DropdownMenuItem key={notification.id}>{notification.message}</DropdownMenuItem>
-                          ))}
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem asChild>
-                            <Link href="/settings/notifications">
-                              <span className="w-full text-center cursor-pointer">See All</span>
-                            </Link>
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </NavigationMenuItem>
-                  </NavigationMenuList>
+                  <NotificationComponent/>
 
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

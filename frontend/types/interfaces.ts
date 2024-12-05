@@ -36,3 +36,13 @@ export interface SimpleBook {
     image: string;
     quota: number;
 }
+
+export interface Notification {
+    id: string
+    userId: string
+    title: string
+    message: string
+    type: "info" | "reminder" | "alert"
+    date: string
+    read: boolean
+  }

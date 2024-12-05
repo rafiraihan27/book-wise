@@ -13,6 +13,7 @@ export const verifyToken = (): boolean => {
 
 export const deleteToken = () => {
   Cookies.remove("authToken");
+  localStorage.removeItem("userId");
 }
 
 export function useAuthGuard() {

@@ -1,7 +1,6 @@
 "use client"
 
-import { useState } from "react"
-import { format } from "date-fns"
+import { useEffect, useState } from "react"
 import { Bell, Book, Calendar, Check, Trash2 } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import {
@@ -16,108 +15,54 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { toast } from "sonner"
-
-interface Notification {
-  id: string
-  title: string
-  message: string
-  type: "info" | "reminder" | "alert"
-  date: Date
-  read: boolean
-}
-
-const initialNotifications: Notification[] = [
-  {
-    id: "1",
-    title: "New Book Available",
-    message: "The book 'The Midnight Library' by Matt Haig is now available in our library.",
-    type: "info",
-    date: new Date(2023, 10, 15, 9, 30),
-    read: false,
-  },
-  {
-    id: "2",
-    title: "Due Date Reminder",
-    message: "The book 'To Kill a Mockingbird' is due tomorrow. Please return or renew it.",
-    type: "reminder",
-    date: new Date(2023, 10, 14, 14, 0),
-    read: true,
-  },
-  {
-    id: "3",
-    title: "Late Return Alert",
-    message: "Your book 'The Great Gatsby' is overdue. Please return it as soon as possible.",
-    type: "alert",
-    date: new Date(2023, 10, 13, 11, 45),
-    read: false,
-  },
-  {
-    id: "4",
-    title: "Book Recommendation",
-    message: "Based on your reading history, we think you might enjoy 'The Catcher in the Rye' by J.D. Salinger.",
-    type: "info",
-    date: new Date(2023, 10, 12, 10, 15),
-    read: false,
-  },
-  {
-    id: "5",
-    title: "Library Event",
-    message: "Join us for a book discussion on 'Pride and Prejudice' this Saturday at 3 PM.",
-    type: "info",
-    date: new Date(2023, 10, 11, 16, 0),
-    read: true,
-  },
-]
+import { fetchNotificationsByUserId, updateNotificationsStatusById } from "@/lib/api"
+import { Notification } from "@/types/interfaces"
 
 export default function NotificationsPage() {
-  const [notifications, setNotifications] = useState<Notification[]>(initialNotifications)
-  const [selectedNotifications, setSelectedNotifications] = useState<string[]>([])
+  const [notifications, setNotifications] = useState<Notification[]>()
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
 
-  const markAsRead = (id: string) => {
-    setNotifications(prevNotifications =>
-      prevNotifications.map(notification =>
-        notification.id === id ? { ...notification, read: true } : notification
-      )
-    )
-    toast.success("Notification marked as read")
+  const markAsRead = async (id: string) => {
+    try {
+      await updateNotificationsStatusById(id);
+      // Jika berhasil, perbarui status di antarmuka
+      setNotifications(prevNotifications =>
+        prevNotifications?.map(notification =>
+          notification.id === id ? { ...notification, read: true } : notification
+        )
+      );
+      toast.success("Notifikasi berhasil ditandai sebagai telah dibaca.");
+    } catch (error) {
+      toast.error("Gagal memperbarui status notifikasi.");
+    }
+  };
+
+  // Fetch Notifications
+  useEffect(() => {
+    async function loadNotifications() {
+      setLoading(true);
+      try {
+        const userIDFromLocal: string = localStorage.getItem("userId") ?? '';
+        const data = await fetchNotificationsByUserId(userIDFromLocal);
+        setNotifications(data);
+        setError('');
+      } catch (err) {
+        setError(`Failed to load books: ${err}`);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadNotifications();
+  }, []);
+
+  if (loading) {
+    return <div className="loading">Tunggu bentar, bukunya lagi diambil dari database...</div>;
   }
 
-  const deleteNotification = (id: string) => {
-    setNotifications(prevNotifications =>
-      prevNotifications.filter(notification => notification.id !== id)
-    )
-    setSelectedNotifications(prevSelected =>
-      prevSelected.filter(selectedId => selectedId !== id)
-    )
-    toast.success("Notification deleted")
-  }
-
-  const toggleSelectNotification = (id: string) => {
-    setSelectedNotifications(prevSelected =>
-      prevSelected.includes(id)
-        ? prevSelected.filter(selectedId => selectedId !== id)
-        : [...prevSelected, id]
-    )
-  }
-
-  const markSelectedAsRead = () => {
-    setNotifications(prevNotifications =>
-      prevNotifications.map(notification =>
-        selectedNotifications.includes(notification.id)
-          ? { ...notification, read: true }
-          : notification
-      )
-    )
-    setSelectedNotifications([])
-    toast.success("Selected notifications marked as read")
-  }
-
-  const deleteSelectedNotifications = () => {
-    setNotifications(prevNotifications =>
-      prevNotifications.filter(notification => !selectedNotifications.includes(notification.id))
-    )
-    setSelectedNotifications([])
-    toast.success("Selected notifications deleted")
+  if (error) {
+    return <div className="error">{error}</div>;
   }
 
   const getIconForNotificationType = (type: Notification["type"]) => {
@@ -148,7 +93,7 @@ export default function NotificationsPage() {
         </CardHeader>
         <CardContent>
           <div className="flex justify-between mb-4">
-            <Button
+            {/* <Button
               variant="outline"
               size="sm"
               onClick={markSelectedAsRead}
@@ -163,17 +108,17 @@ export default function NotificationsPage() {
               disabled={selectedNotifications.length === 0}
             >
               Delete Selected
-            </Button>
+            </Button> */}
           </div>
           <ScrollArea className="h-[400px] pr-4">
-            {notifications.map((notification, index) => (
+            {notifications?.map((notification, index) => (
               <div key={notification.id}>
                 {index > 0 && <Separator className="my-4" />}
                 <div className="flex items-start space-x-4">
-                  <Checkbox
+                  {/* <Checkbox
                     checked={selectedNotifications.includes(notification.id)}
                     onCheckedChange={() => toggleSelectNotification(notification.id)}
-                  />
+                  /> */}
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
@@ -183,7 +128,7 @@ export default function NotificationsPage() {
                         </h3>
                       </div>
                       <span className="text-sm text-muted-foreground">
-                        {format(notification.date, "MMM d, yyyy 'at' h:mm a")}
+                        {notification.date}
                       </span>
                     </div>
                     <p className={`mt-1 text-sm ${notification.read ? 'text-muted-foreground' : ''}`}>
@@ -199,13 +144,13 @@ export default function NotificationsPage() {
                           <Check className="h-4 w-4 mr-1" /> Mark as Read
                         </Button>
                       )}
-                      <Button
+                      {/* <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => deleteNotification(notification.id)}
                       >
                         <Trash2 className="h-4 w-4 mr-1" /> Delete
-                      </Button>
+                      </Button> */}
                     </div>
                   </div>
                 </div>
@@ -215,7 +160,7 @@ export default function NotificationsPage() {
         </CardContent>
         <CardFooter>
           <p className="text-sm text-muted-foreground">
-            You have {notifications.filter(n => !n.read).length} unread notifications.
+            You have {notifications?.filter(n => !n.read).length} unread notifications.
           </p>
         </CardFooter>
       </Card>
