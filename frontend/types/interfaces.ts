@@ -32,7 +32,7 @@ export interface SimpleBook {
     author: string;
     category: string;
     year: number;
-    description: string;
+    description?: string;
     image: string;
     quota: number;
 }

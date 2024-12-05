@@ -19,7 +19,18 @@ export async function fetchBookById(id: string) {
     });
 
     if (!response.ok) {
-        throw new Error('Failed to fetch book');
+        throw new Error('Failed to fetch book by id');
+    }
+    return response.json();
+}
+
+export async function fetchBooksRecommendation(max: number) {
+    const response = await fetch(`${API_BASE_URL}/books/recommended?max=${max}`, {
+        method: 'GET',
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch book recommendation');
     }
     return response.json();
 }

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
-import {books} from './data'
+import { books } from '@/app/api/books/data'
+import { SimpleBook } from '@/types/interfaces';
 
 export async function GET(req: Request) {
     const url = new URL(req.url);
@@ -7,7 +8,7 @@ export async function GET(req: Request) {
     const category = url.searchParams.get('category') || "";
     const years = url.searchParams.get('years') || "";
 
-    const filteredBooks = books.filter((book) => {
+    const filteredBooks = books.filter((book: SimpleBook) => {
         const matchesSearch =
             search === "" ||
             book.title.toLowerCase().includes(search.toLowerCase()) ||

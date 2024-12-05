@@ -2,61 +2,40 @@ import Image from "next/image"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { SimpleBook } from "@/types/interfaces"
+import { useEffect, useState } from "react"
+import { fetchBooksRecommendation } from "@/lib/api/books"
 
-interface Book {
-  id: number
-  title: string
-  author: string
-  category: string
-  year: number
-  image: string
-  quota: number
-}
+export function RecomendationBook({ title = "Recommended Books" }) {
+  const [books, setBooks] = useState<SimpleBook[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
 
-interface RecommendedBooksProps {
-  title?: string
-}
+  // Fetch Books
+  useEffect(() => {
+      async function loadBooks() {
+          setLoading(true);
+          try {
+              const data = await fetchBooksRecommendation(4);
+              setBooks(data);
+              setError(''); 
+          } catch (err) {
+              setError(`Failed to load books: ${err}`);
+          } finally {
+              setLoading(false); 
+          }
+      }
 
-const books: Book[] = [
-  {
-    id: 1,
-    title: "The Psychology of Money",
-    author: "Morgan Housel",
-    category: "finance",
-    year: 2020,
-    image: "https://images-na.ssl-images-amazon.com/images/I/81cpDaCJJCL.jpg",
-    quota: 5,
-  },
-  {
-    id: 2,
-    title: "Atomic Habits",
-    author: "James Clear",
-    category: "self-help",
-    year: 2018,
-    image: "https://images-na.ssl-images-amazon.com/images/I/91bYsX41DVL.jpg",
-    quota: 5,
-  },
-  {
-    id: 3,
-    title: "Sapiens",
-    author: "Yuval Noah Harari",
-    category: "history",
-    year: 2015,
-    image: "https://images-na.ssl-images-amazon.com/images/I/713jIoMO3UL.jpg",
-    quota: 0,
-  },
-  {
-    id: 4,
-    title: "The Lean Startup",
-    author: "Eric Ries",
-    category: "business",
-    year: 2011,
-    image: "https://images-na.ssl-images-amazon.com/images/I/81-QB7nDh4L.jpg",
-    quota: 5,
+      loadBooks();
+  }, []);
+
+  if (loading) {
+      return <div className="loading">Tunggu bentar, bukunya lagi diambil dari database...</div>; 
   }
-];
 
-export function RecomendationBook({ title = "Recommended Books" }: RecommendedBooksProps) {
+  if (error) {
+      return <div className="error">{error}</div>;
+  }
   return (
     <div className="w-full mt-10 hidden md:block">
       <h2 className="text-2xl font-bold mb-4">{title}</h2>
