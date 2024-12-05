@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { BookOpen, User, Building, Calendar, MapPin, Star, Bookmark } from "lucide-react";
+import { BookOpen, User, Server, Calendar, HandCoins, Star, Dna } from "lucide-react";
 import { BookReview } from "@/components/user-page/book-review";
 import { RecomendationBook } from "@/components/user-page/book-recommendation";
 import {
@@ -21,72 +21,57 @@ import { ShareDrawer } from "@/components/user-page/share-drawer"
 import BookmarkButton from "@/common/bookmark-button";
 import { Cart } from "@/components/user-page/borrow/cart";
 import { useAuthGuard } from "@/common/tokenizer";
+import { fetchBookById } from "@/lib/api/books";
+import { Book } from "@/types/interfaces";
 
-// Sample book data (replace with actual fetch logic later)
-const book = {
-  id: "1",
-  title: "The Psychology of Money: Timeless Lessons on Wealth, Greed, and Happiness",
-  author: "Morgan Housel",
-  image: "https://images-na.ssl-images-amazon.com/images/I/81cpDaCJJCL.jpg",
-  year: 2020,
-  quota: 5,
-  category:"finance",
-  catalogNumber: "332.024 HOU",
-  classification: "332.024",
-  type: "Book - Circulation (Available for Borrowing)",
-  rackNumber: "33",
-  abstract: "In 'The Psychology of Money,' award-winning author Morgan Housel explores the complex relationship individuals have with money. Through 19 short stories, he delves into the psychological factors that influence financial decisions, offering timeless lessons on wealth, greed, and happiness.",
-  mainSubject: "Finance",
-  isbn: "978-0857197689",
-  pages: "256 pages; illustrations; 21 cm",
-  language: "English",
-  authorType: "Individual",
-  publisher: "Harriman House",
-  publishCity: "Petersfield, UK",
-  availableCopies: 5,
-  borrowPrice: "Rp. 0",
-  lateFee: "Rp. 1,000 per day",
-  canBorrow: true,
-  rating: 4.9,
-  reviewCount: 4,
-  reviews: [
-    {
-      id: "1",
-      author: "John Doe",
-      date: "2023-11-15",
-      rating: 5,
-      content: "An insightful book that provides a great introduction to the psychological aspects of financial decision-making. Highly recommended for anyone interested in personal finance."
-    },
-    {
-      id: "2",
-      author: "Jane Smith",
-      date: "2023-10-30",
-      rating: 4,
-      content: "Well-written and informative. I enjoyed learning about the various psychological factors that influence our relationship with money."
-    },
-    {
-      id: "3",
-      author: "Alice Johnson",
-      date: "2023-10-15",
-      rating: 5,
-      content: "This book offers a comprehensive overview of how psychology affects financial behavior. A must-read for anyone looking to improve their financial habits."
-    },
-    {
-      id: "4",
-      author: "Jane Smith",
-      date: "2023-10-30",
-      rating: 4,
-      content: "Well-written and informative. I enjoyed learning about the various psychological factors that influence our relationship with money."
-    },
-  ]
-};
+export default function BookDetailPage({ params }: { params: { id_book: string } }) {
+  const { id_book } = params;
+  const [bookData, setBookData] = useState<Book | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
+  const [visibleReviews, setVisibleReviews] = useState<number>(3);
+  const { isLoading } = useAuthGuard();
 
-export default function BookDetailPage() {
-  const [visibleReviews, setVisibleReviews] = useState(3);
+  useEffect(() => {
+    async function loadBook() {
+      setLoading(true);
+      try {
+        const data = await fetchBookById(id_book);
+        setBookData(data || null);
+        setError("");
+      } catch (err) {
+        setError(`Failed to load book: ${err}`);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadBook();
+  }, [id_book]);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return <div className="flex items-center justify-center h-screen">Tunggu bentar, bukunya lagi diambil dari database...</div>;
+  }
+
+  if (error) {
+    return <div className="flex items-center justify-center h-screen">{error}</div>;
+  }
+
+  if (!bookData) {
+    return <div className="text-center text-xl font-semibold">Data not found</div>;
+  }
 
   const loadMoreReviews = () => {
     setVisibleReviews((prevVisible) =>
-      Math.min(prevVisible + 5, book.reviews.length)
+      Math.min(prevVisible + 5, bookData.reviews.length)
     );
   };
 
@@ -107,8 +92,8 @@ export default function BookDetailPage() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/collections/book/${book.id}`} className="inline-block md:max-w-full max-w-[130px] truncate">
-                {book.title}
+              <BreadcrumbLink href={`/collections/book/${bookData.id}`} className="inline-block md:max-w-full max-w-[130px] truncate">
+                {bookData.title}
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
@@ -116,16 +101,7 @@ export default function BookDetailPage() {
       </div>
     </header>
   );
-  
-  const { isLoading } = useAuthGuard();
-    if (isLoading) {
-        return (
-        <div className="flex items-center justify-center h-screen">
-            <p>Loading...</p>
-        </div>
-        );
-    }
-  
+
   return (
     <SidebarLayout header={header} defaultOpen={false}>
       <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -133,14 +109,14 @@ export default function BookDetailPage() {
           <div className="md:w-1/3">
             <div className="relative">
               <Image
-                src={book.image}
-                alt={book.title}
+                src={bookData.image}
+                alt={bookData.title}
                 width={300}
                 height={450}
                 className="rounded-lg shadow-lg w-full h-auto"
               />
               {/* Overlay for Out of Quota */}
-              {!book.canBorrow && (
+              {!bookData.canBorrow && (
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center backdrop-blur-sm">
                   <p className="text-white text-lg font-bold">
                     Maaf (｡•́︿•̀｡) <br /> bukunya lagi banyak <br /> yang baca
@@ -149,10 +125,10 @@ export default function BookDetailPage() {
               )}
               {/* <div className="absolute top-2 right-2 flex gap-2">
                 <ShareDrawer
-                  title={book.title}
-                  url={typeof window !== 'undefined' ? window.location.href+"/book/"+book.id : ''}
+                  title={bookData.title}
+                  url={typeof window !== 'undefined' ? window.location.href+"/book/"+bookData.id : ''}
                 />
-                <BookmarkButton bookId={book.id} bookTitle={book.title}/>
+                <BookmarkButton bookId={bookData.id} bookTitle={bookData.title}/>
               </div> */}
             </div>
             <div className="mt-4 flex items-center justify-center">
@@ -160,7 +136,7 @@ export default function BookDetailPage() {
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className={`w-5 h-5 ${i < Math.floor(book.rating)
+                    className={`w-5 h-5 ${i < Math.floor(bookData.rating)
                       ? "text-yellow-400 fill-yellow-400"
                       : "text-gray-300"
                       }`}
@@ -168,66 +144,66 @@ export default function BookDetailPage() {
                 ))}
               </div>
               <span className="ml-2 text-sm font-medium">
-                {book.rating.toFixed(1)}
+                {bookData.rating.toFixed(1)}
               </span>
               <span className="ml-1 text-sm text-muted-foreground">
-                ({book.reviewCount} reviews)
+                ({bookData.reviews.length} reviews)
               </span>
             </div>
           </div>
           <div className="md:w-2/3 space-y-6">
             <div>
-              <h1 className="text-3xl font-bold mb-2">{book.title}</h1>
+              <h1 className="text-3xl font-bold mb-2">{bookData.title}</h1>
               <p className="text-xl text-muted-foreground mb-4">
-                by {book.author}
+                by {bookData.author}
               </p>
               <div className="flex flex-wrap gap-2 mb-4">
-                <Badge variant="secondary">{book.mainSubject}</Badge>
-                <Badge variant="outline">{book.language}</Badge>
-                {book.canBorrow && <Badge variant="default">Available</Badge>}
+                <Badge variant="secondary">{bookData.category}</Badge>
+                <Badge variant="outline">{bookData.language}</Badge>
+                {bookData.canBorrow && <Badge variant="default">Available</Badge>}
               </div>
             </div>
             <div className="space-y-2">
               <p className="flex items-center text-sm text-muted-foreground">
-                <User className="mr-2" size={16} /> {book.authorType}
+                <Dna className="mr-2" size={16} /> ISBN: {bookData.isbn}
               </p>
               <p className="flex items-center text-sm text-muted-foreground">
-                <Building className="mr-2" size={16} /> {book.publisher}
+                <Calendar className="mr-2" size={16} /> Publikasi: {bookData.year}
               </p>
               <p className="flex items-center text-sm text-muted-foreground">
-                <MapPin className="mr-2" size={16} /> {book.publishCity}
+                <HandCoins className="mr-2" size={16} /> Denda: Rp{bookData.lateFee}
               </p>
               <p className="flex items-center text-sm text-muted-foreground">
-                <Calendar className="mr-2" size={16} /> {book.year}
+                <Server className="mr-2" size={16} /> Rak: {bookData.rackNumber}
               </p>
             </div>
             <Separator />
             <div>
               <h2 className="text-xl font-semibold mb-2">Abstract</h2>
-              <p className="text-muted-foreground">{book.abstract}</p>
+              <p className="text-muted-foreground">{bookData.description}</p>
             </div>
             <div className="md:flex items-center justify-between">
               <div className="flex items-center text-sm text-muted-foreground mb-5 md:mb-0">
                 <BookOpen className="mr-2" size={16} />
                 <span>
-                  {book.availableCopies} of {book.quota} available
+                  {bookData.availableCopies} of {bookData.quota} available
                 </span>
               </div>
               <div className="flex gap-2 md:gap-4 items-center justify-between">
                 <div className="flex gap-2">
                   <ShareDrawer
-                    title={book.title}
+                    title={bookData.title}
                     url={typeof window !== 'undefined' ? window.location.href : ''}
                   />
-                  <BookmarkButton book={book} mark="Bookmarked" />
+                  <BookmarkButton book={bookData} mark="Bookmarked" />
                 </div>
-                {/* {book.canBorrow && (
+                {/* {bookData.canBorrow && (
                   <Button size="lg">Borrow Book</Button>
                 )} */}
-                {book.canBorrow && (
+                {bookData.canBorrow && (
                   <Cart
                     isAdd={true}
-                    book={book}
+                    book={bookData}
                   />
 
                 )}
@@ -239,11 +215,11 @@ export default function BookDetailPage() {
         <div>
           <h2 className="text-2xl font-semibold mb-4">Reviews</h2>
           <div className="space-y-6">
-            {book.reviews.slice(0, visibleReviews).map((review) => (
+            {bookData.reviews.slice(0, visibleReviews).map((review) => (
               <BookReview key={review.id} {...review} />
             ))}
           </div>
-          {visibleReviews < book.reviews.length && (
+          {visibleReviews < bookData.reviews.length && (
             <div className="mt-6 text-center">
               <Button onClick={loadMoreReviews} variant="outline">
                 Load More Reviews
