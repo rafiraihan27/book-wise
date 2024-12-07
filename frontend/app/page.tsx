@@ -13,10 +13,10 @@ export default function Home() {
     <Navbar/>
     <div className="flex flex-col items-center justify-center">
       <Hero />
-      <Features />
       <Hero2 />
+      <Features />
       <Aboutus />
-      <Contact />
+      
     </div>
     <Footer/>
     </>
@@ -45,7 +45,7 @@ const Hero = () => {
         </div>
         <Button size="lg" className="mt-10">
           <Link href="/register">
-            Register to discover all books
+            Masuk Untuk Lihat Semua Koleksi Buku
           </Link>
         </Button>
         <div className="mx-auto mt-10 flex w-fit flex-col items-center gap-4 sm:flex-row">
@@ -101,72 +101,74 @@ const Hero = () => {
 };
 
 import {
-  DollarSign,
-  MessagesSquare,
-  PersonStanding,
-  Timer,
-  Zap,
-  ZoomIn,
+  BookOpen,
+  Bookmark,
+  Library,
+  Clock,
+  UserCheck,
+  Headphones,
 } from 'lucide-react';
 
 const features = [
   {
-    title: 'Performance',
+    title: 'Vast Collection',
     description:
-      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt, accusantium quam. Temporibus quae quos deserunt!',
-    icon: <Timer className="size-4 md:size-6" />,
+      'Access thousands of books across various genres and categories, from fiction to educational resources.',
+    icon: <Library className="size-4 md:size-6 text-white" />,
   },
   {
-    title: 'Innovation',
+    title: 'Personalized Recommendations',
     description:
-      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt, accusantium quam. Temporibus quae quos deserunt!',
-    icon: <Zap className="size-4 md:size-6" />,
+      'Receive book suggestions tailored to your reading history and preferences.',
+    icon: <Bookmark className="size-4 md:size-6 text-white" />,
   },
   {
-    title: 'Quality',
+    title: 'Flexible Lending Periods',
     description:
-      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt, accusantium quam. Temporibus quae quos deserunt!',
-    icon: <ZoomIn className="size-4 md:size-6" />,
+      'Enjoy flexible borrowing durations that fit your schedule, with easy extensions available.',
+    icon: <Clock className="size-4 md:size-6 text-white" />,
   },
   {
-    title: 'Accessibility',
+    title: 'Community Reviews',
     description:
-      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt, accusantium quam. Temporibus quae quos deserunt!',
-    icon: <PersonStanding className="size-4 md:size-6" />,
+      'Read and contribute to community reviews to discover what other readers love about a book.',
+    icon: <UserCheck className="size-4 md:size-6 text-white" />,
   },
   {
-    title: 'Affordability',
+    title: 'Audio Book Access',
     description:
-      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt, accusantium quam. Temporibus quae quos deserunt!',
-    icon: <DollarSign className="size-4 md:size-6" />,
+      'Immerse yourself in stories with our growing collection of audiobooks available for all members.',
+    icon: <Headphones className="size-4 md:size-6 text-white" />,
   },
   {
-    title: 'Customer Support',
+    title: 'Mobile-Friendly Platform',
     description:
-      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt, accusantium quam. Temporibus quae quos deserunt!',
-    icon: <MessagesSquare className="size-4 md:size-6" />,
+      'Seamlessly browse, borrow, and read books on any device, wherever you are.',
+    icon: <BookOpen className="size-4 md:size-6 text-white" />,
   },
 ];
 
 const Features = () => {
   return (
-    <section className="py-32">
-      <div className="container mx-auto max-w-screen-xl">
-        <p className="mb-4 text-xs text-muted-foreground md:pl-5">Features</p>
-        <h2 className="text-3xl font-medium md:pl-5 lg:text-4xl">
-          Our Core Features
+    <section>
+      <div className="container mx-auto max-w-screen-xl text-white">
+        <h2 className="text-3xl font-semibold md:pl-5 lg:text-4xl text-black text-center">
+          Permudah Aktivitas Membacamu Dengan Beragam Fitur BookWise
         </h2>
-        <div className="mx-auto mt-14 grid gap-x-20 gap-y-8 md:grid-cols-2 md:gap-y-6 lg:mt-20">
+        <div className="mx-auto mt-14 grid gap-x-10 gap-y-8 md:grid-cols-2 md:gap-y-6 lg:mt-20">
           {features.map((feature, idx) => (
-            <div className="flex gap-6 rounded-lg md:block md:p-5" key={idx}>
-              <span className="mb-8 flex size-10 shrink-0 items-center justify-center rounded-full bg-accent md:size-12">
+            <div 
+              className="flex gap-6 rounded-lg p-5 bg-opacity-100 bg-gray-900 transition-transform transform hover:scale-105 hover:shadow-lg md:block"
+              key={idx}
+            >
+              <span className="mb-8 flex size-10 shrink-0 items-center justify-center rounded-full bg-gray-600 p-4 md:size-12">
                 {feature.icon}
               </span>
               <div>
-                <h3 className="font-medium md:mb-2 md:text-xl">
+                <h3 className="font-semibold md:mb-2 md:text-xl">
                   {feature.title}
                 </h3>
-                <p className="text-sm text-muted-foreground md:text-base">
+                <p className="text-sm opacity-90 md:text-base">
                   {feature.description}
                 </p>
               </div>
@@ -178,105 +180,92 @@ const Features = () => {
   );
 };
 
-import { ArrowDownRight } from 'lucide-react';
 
-import { Badge } from '@/components/ui/badge';
+
+import { Star as StarIcon } from 'lucide-react'; // Correct icon import
+
+const books = [
+  {
+    title: 'Dilan 1990',
+    author: 'Pidi Baiq',
+    rating: 4.5,
+    review: 'A classic tale of love and ambition set in the roaring twenties.',
+    image: 'https://images-na.ssl-images-amazon.com/images/I/81cpDaCJJCL.jpg',
+  },
+  {
+    title: 'Dilan 1991',
+    author: 'Pidi Baiq',
+    rating: 4.8,
+    review:
+      'An unforgettable novel of childhood and moral growth in the American South.',
+    image: 'https://images-na.ssl-images-amazon.com/images/I/81cpDaCJJCL.jpg',
+  },
+  {
+    title: 'Dilan 1992',
+    author: 'Pidi Baiq',
+    rating: 4.7,
+    review:
+      'A dystopian novel exploring the dangers of totalitarianism and surveillance.',
+    image: 'https://images-na.ssl-images-amazon.com/images/I/81cpDaCJJCL.jpg',
+  },
+  {
+    title: 'Dilan 1993',
+    author: 'Pidi Baiq',
+    rating: 4.6,
+    review: 'A timeless romance that critiques the social norms of its era.',
+    image: 'https://images-na.ssl-images-amazon.com/images/I/81cpDaCJJCL.jpg',
+  },
+];
 
 const Hero2 = () => {
   return (
-    <section className="py-32">
-      <div className="container">
-        <div className="grid items-center gap-8 lg:grid-cols-2">
-          <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
-            <Badge variant="outline">
-              New Release
-              <ArrowDownRight className="ml-2 size-4" />
-            </Badge>
-            <h1 className="my-6 text-pretty text-4xl font-bold lg:text-6xl">
-              Welcome to Our Website
-            </h1>
-            <p className="mb-8 max-w-xl text-muted-foreground lg:text-xl">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Elig
-              doloremque mollitia fugiat omnis! Porro facilis quo animi
-              consequatur. Explicabo.
-            </p>
-            <div className="flex w-full flex-col justify-center gap-2 sm:flex-row lg:justify-start">
-              <Button className="w-full sm:w-auto">Primary Button</Button>
-              <Button variant="outline" className="w-full sm:w-auto">
-                Secondary Button
-                <ArrowDownRight className="ml-2 size-4" />
-              </Button>
+    <section className="py-32 bg-white-100">
+      <div className="container mx-auto">
+        <h2 className="mb-8 text-4xl font-bold text-center text-gray-800">
+          Favorite Books
+        </h2>
+        <div
+          className="flex gap-6 overflow-x-auto px-4 no-scrollbar"
+        >
+          {books.map((book, idx) => (
+            <div
+              key={idx}
+              className="min-w-[30px] p-5 bg-white rounded-lg shadow-lg flex-shrink-0"
+            >
+              <img
+                src={book.image}
+                alt={book.title}
+                className="w-80 h-100 object-cover rounded-md mx-auto"
+              />
+              <div className="mt-4">
+                <h3 className="text-xl font-semibold">{book.title}</h3>
+                <p className="text-sm text-gray-600">by {book.author}</p>
+                <div className="mt-2 flex items-center">
+                  {[...Array(5)].map((_, i) => (
+                    <StarIcon
+                      key={i}
+                      className={`size-4 ${
+                        i < Math.floor(book.rating)
+                          ? 'text-yellow-500'
+                          : 'text-gray-300'
+                      }`}
+                    />
+                  ))}
+                  <span className="ml-2 text-sm text-gray-600">
+                    {book.rating.toFixed(1)}
+                  </span>
+                </div>
+                <p className="mt-3 text-sm text-gray-700">{book.review}</p>
+              </div>
             </div>
-          </div>
-          <img
-            src="https://www.shadcnblocks.com/images/block/placeholder-1.svg"
-            alt="placeholder hero"
-            className="max-h-96 w-full rounded-md object-cover"
-          />
+          ))}
         </div>
       </div>
     </section>
   );
 };
 
-import { Mail, MapPin, Phone } from 'lucide-react'
 
-const Contact = () => {
-  return (
-    <section className='py-32'>
-      <div className='container'>
-        <div className='mb-14'>
-          <span className='text-sm font-semibold'>Reach Us</span>
-          <h1 className='mb-3 mt-1 text-balance text-3xl font-semibold md:text-4xl'>
-            Speak with Our Friendly Team
-          </h1>
-          <p className='text-lg text-muted-foreground'>
-            We&apos;d love to assist you. Fill out the form or drop
-            us an email.
-          </p>
-        </div>
-        <div className='grid gap-10 md:grid-cols-3'>
-          <div>
-            <span className='mb-3 flex size-12 flex-col items-center justify-center rounded-full bg-accent'>
-              <Mail className='h-6 w-auto' />
-            </span>
-            <p className='mb-2 text-lg font-semibold'>Email Us</p>
-            <p className='mb-3 text-muted-foreground'>
-              Our team is ready to assist.
-            </p>
-            <a href='#' className='font-semibold hover:underline'>
-              abc@example.com
-            </a>
-          </div>
-          <div>
-            <span className='mb-3 flex size-12 flex-col items-center justify-center rounded-full bg-accent'>
-              <MapPin className='h-6 w-auto' />
-            </span>
-            <p className='mb-2 text-lg font-semibold'>Visit Us</p>
-            <p className='mb-3 text-muted-foreground'>
-              Drop by our office for a chat.
-            </p>
-            <a href='#' className='font-semibold hover:underline'>
-              1234 Street Name, City Name
-            </a>
-          </div>
-          <div>
-            <span className='mb-3 flex size-12 flex-col items-center justify-center rounded-full bg-accent'>
-              <Phone className='h-6 w-auto' />
-            </span>
-            <p className='mb-2 text-lg font-semibold'> Call Us</p>
-            <p className='mb-3 text-muted-foreground'>
-              We&apos;re available Mon-Fri, 9am-5pm.
-            </p>
-            <a href='#' className='font-semibold hover:underline'>
-              +123 456 7890
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
 
 import { AvatarFallback } from '@/components/ui/avatar';
 import Link from 'next/link';
@@ -338,8 +327,7 @@ const Aboutus = () => {
           Meet our team
         </h2>
         <p className="mb-8 max-w-3xl text-muted-foreground lg:text-xl">
-          We are a passionate team dedicated to revolutionizing the way people interact with technology.
-          Our project aims to create intuitive, accessible, and powerful tools that empower users to achieve more.
+         Kelompok 4 - IF-46-10
         </p>
       </div>
       <div className="container mt-16 grid gap-x-8 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
