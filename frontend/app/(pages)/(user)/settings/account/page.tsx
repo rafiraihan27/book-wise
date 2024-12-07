@@ -1,249 +1,227 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import { Button } from "@/components/ui/button"
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Switch } from "@/components/ui/switch"
-import { Separator } from "@/components/ui/separator"
-import { toast } from "sonner"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
+import { fetchUserById, updateUserById } from "@/lib/api/users";
 
+// Schema validasi menggunakan zod
 const profileFormSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  name: z.string().min(2, {
+    message: "Name must be at least 2 characters.",
   }),
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
-  bio: z.string().max(160).optional(),
-  urls: z.object({
-    twitter: z.string().url({ message: "Please enter a valid URL." }).optional().or(z.literal("")),
-    github: z.string().url({ message: "Please enter a valid URL." }).optional().or(z.literal("")),
-  }),
-  notifications: z.object({
-    email: z.boolean(),
-    push: z.boolean(),
-  }),
-})
+  phone: z.string().optional(),
+  role: z.enum(["admin", "student", "lecturer"]),
+  nim: z.string().optional(),
+  nip: z.string().optional(),
+  year: z.string().optional(),
+});
 
-type ProfileFormValues = z.infer<typeof profileFormSchema>
-
-// This can come from your database or API
-const defaultValues: Partial<ProfileFormValues> = {
-  bio: "I love reading and sharing books!",
-  urls: {
-    twitter: "https://twitter.com/yourusername",
-    github: "https://github.com/yourusername",
-  },
-  notifications: {
-    email: true,
-    push: false,
-  },
-}
+type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 export default function ProfileSettingsPage() {
-  const [avatar, setAvatar] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
-    defaultValues,
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      role: "student",
+      nim: "",
+      nip: "",
+      year: "",
+    },
     mode: "onChange",
-  })
+  });
 
-  function onSubmit(data: ProfileFormValues) {
-    toast.success("Profile updated!")
-    console.log(data)
-  }
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        const userId = localStorage.getItem("userId");
+        if (!userId) throw new Error("User ID tidak ditemukan");
 
-  const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setAvatar(reader.result as string)
+        setIsLoading(true);
+        const userData = await fetchUserById(userId);
+
+        form.reset({
+          name: userData.name,
+          email: userData.email,
+          phone: userData.phone,
+          role: userData.role,
+          nim: userData.nim || "",
+          nip: userData.nip || "",
+          year: userData.year || "",
+        });
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        toast.error("Gagal memuat data pengguna");
+      } finally {
+        setIsLoading(false);
       }
-      reader.readAsDataURL(file)
+    };
+
+    loadUserData();
+  }, [form]);
+
+  const onSubmit = async (data: ProfileFormValues) => {
+    try {
+      const userId = localStorage.getItem("userId");
+      if (!userId) throw new Error("User ID tidak ditemukan");
+  
+      setIsLoading(true);
+  
+      // Pastikan properti opsional memiliki nilai string kosong jika undefined
+      const sanitizedData = {
+        ...data,
+        phone: data.phone || "",
+        nim: data.nim || "",
+        nip: data.nip || "",
+        year: data.year || "",
+      };
+  
+      // Panggil API untuk memperbarui user
+      const updatedUser = await updateUserById(userId, sanitizedData);
+  
+      console.log("Profil berhasil diperbarui:", updatedUser);
+      toast.success("Profile updated successfully!");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast.error("Gagal memperbarui profil");
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const role = form.watch("role");
+
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
 
   return (
     <div className="container mx-auto py-10">
       <h1 className="text-3xl font-bold mb-8">Profile Settings</h1>
-      <div className="space-y-8">
-        <div>
-          <h2 className="text-xl font-semibold mb-4">Avatar</h2>
-          <div className="flex items-center space-x-4">
-            <Avatar className="w-20 h-20">
-              <AvatarImage src={avatar || "/placeholder-avatar.png"} alt="Profile picture" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-            <div>
-              <Label htmlFor="avatar" className="cursor-pointer">
-                <div className="bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md">
-                  Change avatar
-                </div>
-              </Label>
-              <Input
-                id="avatar"
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleAvatarChange}
-              />
-            </div>
-          </div>
-        </div>
-        <Separator />
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Your full name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="Your email address" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phone</FormLabel>
+                <FormControl>
+                  <Input placeholder="Your phone number" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="role"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Role</FormLabel>
+                <FormControl>
+                  <Input disabled value={field.value} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {role === "student" && (
             <FormField
               control={form.control}
-              name="username"
+              name="nim"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>NIM</FormLabel>
                   <FormControl>
-                    <Input placeholder="Your username" {...field} />
+                    <Input placeholder="Your NIM" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This is your public display name. It can be your real name or a pseudonym.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
+          )}
+          {role === "lecturer" && (
             <FormField
               control={form.control}
-              name="email"
+              name="nip"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>NIP</FormLabel>
                   <FormControl>
-                    <Input placeholder="Your email address" {...field} />
+                    <Input placeholder="Your NIP" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    We'll use this email to send you notifications.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
+          )}
+          {role === "student" && (
             <FormField
               control={form.control}
-              name="bio"
+              name="year"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Bio</FormLabel>
+                  <FormLabel>Year</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Tell us a little bit about yourself"
-                      className="resize-none"
-                      {...field}
-                    />
+                    <Input placeholder="Year of entry" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    You can <span>@mention</span> other users and organizations to link to them.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <div>
-              <h2 className="text-xl font-semibold mb-4">Social Links</h2>
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="urls.twitter"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Twitter</FormLabel>
-                      <FormControl>
-                        <Input placeholder="https://twitter.com/yourusername" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="urls.github"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>GitHub</FormLabel>
-                      <FormControl>
-                        <Input placeholder="https://github.com/yourusername" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-            <Separator />
-            <div>
-              <h2 className="text-xl font-semibold mb-4">Notifications</h2>
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="notifications.email"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                      <div className="space-y-0.5">
-                        <FormLabel className="text-base">Email Notifications</FormLabel>
-                        <FormDescription>
-                          Receive email notifications about your account activity.
-                        </FormDescription>
-                      </div>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="notifications.push"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                      <div className="space-y-0.5">
-                        <FormLabel className="text-base">Push Notifications</FormLabel>
-                        <FormDescription>
-                          Receive push notifications about your account activity.
-                        </FormDescription>
-                      </div>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-            <Button type="submit">Update profile</Button>
-          </form>
-        </Form>
-      </div>
+          )}
+          <Separator />
+          <Button type="submit">Update profile</Button>
+        </form>
+      </Form>
     </div>
-  )
+  );
 }
-

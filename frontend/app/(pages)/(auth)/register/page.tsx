@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
@@ -29,6 +29,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useRouter } from "next/navigation"
 import { verifyToken } from "@/common/tokenizer"
 import { appInfo, assets } from "@/app/config"
+// Import API functions
+import { registerStudent, registerLecturer } from "@/lib/api/users"
 
 const studentFormSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -48,7 +50,14 @@ const lecturerFormSchema = z.object({
 })
 
 export default function RegisterPage() {
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    if (verifyToken()) {
+      router.push("/collections")
+    }
+  }, [router]);
 
   const studentForm = useForm<z.infer<typeof studentFormSchema>>({
     resolver: zodResolver(studentFormSchema),
@@ -73,18 +82,30 @@ export default function RegisterPage() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof studentFormSchema> | z.infer<typeof lecturerFormSchema>) {
-    setIsLoading(true)
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false)
-      toast("Registration Successful")
-    }, 2000)
-  }
+  async function onSubmit(
+    values: z.infer<typeof studentFormSchema> | z.infer<typeof lecturerFormSchema>
+  ) {
+    setIsLoading(true);
+  
+    try {
+      if ('nim' in values && 'year' in values) {
+        // Memastikan ini adalah mahasiswa
+        await registerStudent({ ...values, role: "student" }); // Sesuaikan tipe data untuk fungsi ini
+      } else if ('nip' in values) {
+        // Memastikan ini adalah dosen
+        await registerLecturer({ ...values, role: "lecturer" }); // Sesuaikan tipe data untuk fungsi ini
+      } else {
+        throw new Error('Invalid user role');
+      }
+      
+      router.push("/login")
 
-  const router = useRouter();
-  if (verifyToken()) {
-    router.push("/collections")
+      setIsLoading(false);
+      toast("Registration Successful");
+    } catch (error: any) {
+      setIsLoading(false);
+      toast.error(error.message || 'Something went wrong');
+    }
   }
 
   return (
@@ -280,8 +301,6 @@ export default function RegisterPage() {
                             </FormItem>
                           )}
                         />
-                      </div>
-                      <div className="grid md:grid-cols-2 gap-3">
                         <FormField
                           control={lecturerForm.control}
                           name="password"
@@ -323,4 +342,3 @@ export default function RegisterPage() {
     </>
   )
 }
-

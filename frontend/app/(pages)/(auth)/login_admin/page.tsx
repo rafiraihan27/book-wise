@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
@@ -30,6 +30,7 @@ import { useRouter } from "next/navigation"
 import NavbarAdmin from "@/components/navbar-admin"
 import { verifyToken } from "@/common/tokenizer"
 import { appInfo, assets } from "@/app/config"
+import { loginUserAdmin } from "@/lib/api/auth"
 
 const loginFormSchema = z.object({
   email: z.string().email({
@@ -41,7 +42,30 @@ const loginFormSchema = z.object({
 })
 
 export default function LoginPage() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    if (verifyToken()) {
+      router.push("/admin")
+    }
+  }, [router]);
+
+  useEffect(() => {
+    toast("Demo Account:", {
+      description: (
+        <pre className="text-sm whitespace-pre-wrap">
+          <code>
+            {JSON.stringify({ email: "admin@admin.com", password: "admin123" }, null, 2)}
+          </code>
+        </pre>
+      ),
+      duration: Infinity,
+      position: "bottom-right",
+      dismissible: true,
+      closeButton: true
+    });
+  }, []);
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -51,24 +75,24 @@ export default function LoginPage() {
     },
   })
 
-  const router = useRouter();
-  function onSubmit(values: z.infer<typeof loginFormSchema>) {
-    setIsLoading(true)
-    setTimeout(() => {
-      setIsLoading(false);
+  async function onSubmit(values: z.infer<typeof loginFormSchema>) {
+    setIsLoading(true);
+    toast.dismiss();
+    try {
+      // Proses login API
+      const response = await loginUserAdmin(values.email, values.password);
 
-      // API HERE
-      // ....
+      // Simpan token dan navigasi ke halaman collections
+      Cookies.set("authToken", response.token, { expires: 7, secure: true, path: "/" });
+      localStorage.setItem("userId", response.id);
 
-      const dummyToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
-      Cookies.set("authToken", dummyToken, { expires: 7, secure: false, path: "/" });
       toast.success("Login Successful");
       router.push("/admin");
-    }, 2000)
-  }
-
-  if (verifyToken()) {
-    router.push("/admin")
+    } catch (error: any) {
+      toast.error(error.message || "Login failed, please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (

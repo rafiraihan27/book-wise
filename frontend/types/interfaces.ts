@@ -46,3 +46,15 @@ export interface Notification {
     date: string
     read: boolean
   }
+
+export interface User {
+    id?: string,
+    email: string,
+    password?: string,
+    name: string,
+    phone?: string,
+    role: "admin" | "student" | "lecturer",
+    nim?: string,
+    nip?: string,
+    year?: string,
+}

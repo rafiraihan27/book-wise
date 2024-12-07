@@ -327,20 +327,43 @@ const NotificationComponent = () => {
   )
 }
 
-export default function Navbar({ loggedAs = "Mahasiswa", userName = "Mahasiswa" }: { loggedAs?: string, userName?: string }) {
+import { fetchUserById } from "@/lib/api/users";
+
+export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState<{ name: string; role: string } | null>(null);
 
   const onLogout = () => {
-    deleteToken()
+    deleteToken();
     toast.success("Logged out successfully");
-    router.push("/")
-  }
+    router.push("/");
+  };
 
   useEffect(() => {
-    setIsLoggedIn(verifyToken())
-  })
+    const fetchData = async () => {
+      const verify = verifyToken();
+      setIsLoggedIn(verify);
+  
+      if (verify) {
+        try {
+          const userId = localStorage.getItem("userId");
+          if (!userId) {
+            throw new Error("User ID tidak ditemukan di localStorage");
+          }
+  
+          const data = await fetchUserById(userId);
+          setUserData({ name: data.name, role: data.role });
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          toast.error("Gagal memuat data pengguna");
+        }
+      }
+    };
+  
+    fetchData();
+  }, []);
 
   return (
     <section className="flex border-b bg-background p-4 sticky top-0 z-50">
@@ -355,7 +378,7 @@ export default function Navbar({ loggedAs = "Mahasiswa", userName = "Mahasiswa" 
                 alt="logo"
               />
               <span className="text-xl font-bold uppercase">{webName}</span>
-              {isLoggedIn ? <span className="text-sm font-regular uppercase">| {loggedAs}</span> : null}
+              {isLoggedIn ? <span className="text-sm font-regular uppercase">| {userData?.role}</span> : null}
             </Link>
 
             {pathname !== '/collections' && (
@@ -394,8 +417,8 @@ export default function Navbar({ loggedAs = "Mahasiswa", userName = "Mahasiswa" 
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Avatar className="cursor-pointer">
-                        <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${userName}`} alt={userName} />
-                        <AvatarFallback>{userName}</AvatarFallback>
+                        <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${userData?.name}`} alt={userData?.name} />
+                        <AvatarFallback>{userData?.name}</AvatarFallback>
                       </Avatar>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
