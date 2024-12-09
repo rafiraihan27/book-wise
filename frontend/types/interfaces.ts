@@ -37,6 +37,25 @@ export interface SimpleBook {
     quota: number;
 }
 
+export interface CreateUpdateBook {
+    id?: string;
+    title: string;
+    author: string;
+    category: string;
+    year: number;
+    description: string;
+    image: string;
+    quota: number;
+    rackNumber: string;
+    mainSubject: string;
+    isbn: string;
+    language: string;
+    availableCopies: number;
+    lateFee: number;
+    canBorrow: boolean;
+    rating?: number;
+}
+
 export interface Notification {
     id: string
     userId: string
