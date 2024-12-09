@@ -16,7 +16,6 @@ export interface Book {
     image: string;
     quota: number;
     rackNumber: string;
-    mainSubject: string;
     isbn: string;
     language: string;
     availableCopies: number;
@@ -47,7 +46,6 @@ export interface CreateUpdateBook {
     image: string;
     quota: number;
     rackNumber: string;
-    mainSubject: string;
     isbn: string;
     language: string;
     availableCopies: number;

@@ -252,7 +252,6 @@ function BookForm({ book, onSubmit }: BookFormProps) {
         availableCopies: 1,
         lateFee: 1000,
         canBorrow: true,
-        mainSubject: "",
         ...(book || {}),
     });
 
@@ -291,10 +290,6 @@ function BookForm({ book, onSubmit }: BookFormProps) {
                     <div>
                         <Label htmlFor="category">Category</Label>
                         <Input id="category" name="category" value={formData.category} onChange={handleChange} required />
-                    </div>
-                    <div>
-                        <Label htmlFor="mainSubject">Main Subject</Label>
-                        <Input id="mainSubject" name="mainSubject" value={formData.mainSubject} onChange={handleChange} required />
                     </div>
                     <div>
                         <Label htmlFor="quota">Quota</Label>

@@ -48,7 +48,6 @@ export async function POST(req: Request) {
             ...body,
             id: crypto.randomUUID(),
             rating: body.rating ?? 0, // Berikan default nilai 0 untuk rating jika undefined
-            mainSubject: body.mainSubject || "", // Default mainSubject jika kosong
             reviews: [], // Tambahkan nilai default untuk reviews
         };
 
