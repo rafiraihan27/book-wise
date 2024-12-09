@@ -3,6 +3,21 @@ import { User } from "@/types/interfaces";
 const API_BASE_URL = '/api';
 
 /**
+ * 
+ * @returns 
+ */
+export async function fetchAllUsers(role?:string){
+    const response = await fetch(`${API_BASE_URL}/users?role=${role}`, {
+        method: 'GET',
+    });
+
+    if(!response.ok){
+        throw new Error('Gagal mengambil semua data users');
+    }
+    return response.json();
+}
+
+/**
  * Mengambil detail user berdasarkan ID-nya.
  *
  * @param {string} id - ID unik dari user yang ingin diambil.
@@ -159,6 +174,37 @@ export async function registerLecturer(data: User) {
 
     if (!response.ok) {
         throw new Error('Gagal mendaftarkan dosen');
+    }
+    return response.json();
+}
+
+
+export async function registerAdmin(data: User) {
+    const response = await fetch(`${API_BASE_URL}/users/register/admin`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+        throw new Error('Gagal mendaftarkan admin');
+    }
+    return response.json();
+}
+
+
+export async function deleteUserById(id: string) {
+    const response = await fetch(`${API_BASE_URL}/users/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error('Gagal menghapus data pengguna');
     }
     return response.json();
 }
