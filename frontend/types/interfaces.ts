@@ -1,3 +1,4 @@
+// review
 export interface Review {
     id: string;
     author: string;
@@ -6,6 +7,7 @@ export interface Review {
     content: string;
 }
 
+// book
 export interface Book {
     id: string;
     title: string;
@@ -54,6 +56,7 @@ export interface CreateUpdateBook {
     rating?: number;
 }
 
+// notification
 export interface Notification {
     id: string
     userId: string
@@ -64,6 +67,7 @@ export interface Notification {
     read: boolean
   }
 
+// user
 export interface User {
     id?: string,
     email: string,
@@ -74,4 +78,35 @@ export interface User {
     nim?: string,
     nip?: string,
     year?: string,
+}
+
+// transaction
+export interface BookItems {
+    id: string
+    title: string
+    author: string
+    image: string
+    lateFee: number
+}
+
+export interface Transaction {
+    id: string
+    invoiceCode: string
+    dateRange: {
+        from: string
+        to: string
+    }
+    totalFee: number
+    status: "pending" | "approved" | "declined" | "overdue" 
+    type: "borrow" | "return"
+    paymentMethod: string
+    paymentEvidence: string
+    items: BookItems[]
+    user: {
+        id: string
+        email: string
+        name: string
+        phone: string
+        role: string
+    }
 }

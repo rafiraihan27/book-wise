@@ -90,6 +90,7 @@ export default function CheckoutPage() {
         }
 
         const payload = {
+            userId: localStorage.getItem("userId"),
             items,
             totalFee,
             dateRange: {
@@ -116,8 +117,8 @@ export default function CheckoutPage() {
             //     toast.error("Checkout failed!");
             // }
             console.log(payload)
-            localStorage.removeItem("cartItems");
-            window.location.href = '/borrow/testdoanginibang';
+            // localStorage.removeItem("cartItems");
+            // window.location.href = '/borrow/testdoanginibang';
         } catch (error) {
             toast.error("An error occurred during checkout!");
         }
