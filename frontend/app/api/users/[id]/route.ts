@@ -46,7 +46,7 @@ export async function PUT(
     }
 
     // Validasi data yang dikirim dari body
-    const allowedFields = ["name", "email", "phone", "role", "nim", "nip", "year"];
+    const allowedFields = ["name", "email", "password", "phone", "role", "nim", "nip", "year"];
     const hasInvalidFields = Object.keys(body).some(
       (key) => !allowedFields.includes(key)
     );
@@ -77,5 +77,29 @@ export async function PUT(
       { error: "An error occurred while updating the user" },
       { status: 500 }
     );
+  }
+}
+
+
+export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+  try {
+      const { id } = params;
+
+      const userIndex = users.findIndex((user) => user.id === id);
+
+      if (userIndex === -1) {
+          return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      }
+
+      // Hapus user
+      const deletedUser = users.splice(userIndex, 1)[0];
+
+      return NextResponse.json(deletedUser);
+  } catch (error) {
+      console.error('Error deleting user:', error);
+      return NextResponse.json(
+          { error: 'Failed to delete the user. Please try again.' },
+          { status: 500 }
+      );
   }
 }

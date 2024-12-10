@@ -75,21 +75,28 @@ export default function UsersPage() {
     // Handle Add User
     const handleAddUser = async (newUser: Omit<User, "id">) => {
         try {
-            if (newUser.role == "student") {
-                const addedUser = await registerStudent(newUser);
-                setUsers([...users, addedUser]);
-            } else if (newUser.role == "lecturer") {
-                const addedUser = await registerLecturer(newUser);
-                setUsers([...users, addedUser]);
-            } else if (newUser.role == "admin") {
-                const addedUser = await registerAdmin(newUser);
-                setUsers([...users, addedUser]);
+            let addedUser;
+            switch (newUser.role) {
+                case "student":
+                    addedUser = await registerStudent(newUser);
+                    break;
+                case "lecturer":
+                    addedUser = await registerLecturer(newUser);
+                    break;
+                case "admin":
+                    addedUser = await registerAdmin(newUser);
+                    break;
+                default:
+                    throw new Error("Invalid role specified");
             }
+
+            setUsers([...users, addedUser.user]);
 
             toast.success("User Added", {
                 description: `${newUser.name} has been added successfully as ${newUser.role}.`,
             });
         } catch (err) {
+            console.error(err);
             toast.error("Failed to add user", { description: `${err}` });
         }
     };
@@ -97,14 +104,33 @@ export default function UsersPage() {
     // Handle Edit User
     const handleEditUser = async (editedUser: User) => {
         try {
-            const updatedUser = await updateUserById(editedUser.id || "", editedUser);
+            if (!editedUser.id) {
+                throw new Error("User ID is missing or invalid");
+            }
+
+            // Destrukturisasi untuk menghapus 'id' dari editedUser
+            const { id, ...rest } = editedUser;
+
+            // Sanitasi data yang tersisa
+            const sanitizedUser = {
+                ...rest,
+                phone: editedUser.phone || "",
+                nim: editedUser.nim || "",
+                nip: editedUser.nip || "",
+                year: editedUser.year || "",
+            };
+
+            const updatedUser = await updateUserById(id, sanitizedUser);
+
             setUsers((prevUsers) =>
-                prevUsers.map((book) => (book.id === updatedUser.id ? updatedUser : book))
+                prevUsers.map((user) => (user.id === updatedUser.id ? updatedUser : user))
             );
+
             toast.success("User Updated", {
-                description: `${updatedUser.title} has been updated successfully.`,
+                description: `${updatedUser.name} has been updated successfully.`,
             });
         } catch (err) {
+            console.error("Error updating user:", err);
             toast.error("Failed to update user", { description: `${err}` });
         }
     };
@@ -159,7 +185,7 @@ export default function UsersPage() {
             </div>
             <div className="flex flex-col md:flex-row gap-4">
                 {["student", "lecturer", "admin"].map((item) => (
-                    <div className="flex-grow overflow-auto">
+                    <div className="flex-1 basis-1/3 overflow-auto">
                         <Badge className="uppercase mb-3">{item}</Badge>
                         <div className="border rounded-md">
                             <ScrollArea className="h-full w-full">
@@ -189,7 +215,7 @@ export default function UsersPage() {
                                                                     <FilePenLine className="h-4 w-4" />
                                                                 </Button>
                                                             </DialogTrigger>
-                                                            <DialogContent className="max-w-4xl w-full overflow-y-auto">
+                                                            <DialogContent className="max-w-xl w-full overflow-y-auto">
                                                                 <DialogHeader>
                                                                     <DialogTitle>Edit user [{item}]</DialogTitle>
                                                                 </DialogHeader>

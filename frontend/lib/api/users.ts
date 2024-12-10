@@ -3,8 +3,54 @@ import { User } from "@/types/interfaces";
 const API_BASE_URL = '/api';
 
 /**
- * 
- * @returns 
+ * Mengambil semua data pengguna berdasarkan peran (opsional).
+ *
+ * @param {string} [role] - Peran pengguna yang ingin diambil (opsional). 
+ *                          Jika tidak disertakan, semua pengguna akan diambil.
+ * @returns {Promise<any>} Data semua pengguna yang sesuai dengan filter peran (jika disediakan).
+ * @throws {Error} Jika permintaan gagal atau respons tidak OK.
+ *
+ * Contoh permintaan (request):
+ * GET http://localhost:8080/api/users?role=admin
+ *
+ * Contoh respons (response):
+ * [
+ *   {
+ *     "id": "1",
+ *     "name": "John Doe",
+ *     "email": "johndoe@admin.com",
+ *     "phone": "08123456789",
+ *     "role": "admin"
+ *   },
+ *   {
+ *     "id": "2",
+ *     "name": "Jane Doe",
+ *     "email": "janedoe@admin.com",
+ *     "phone": "08123456788",
+ *     "role": "admin"
+ *   }
+ * ]
+ *
+ * Jika peran tidak disertakan:
+ * GET http://localhost:8080/api/users
+ *
+ * Contoh respons tanpa filter peran:
+ * [
+ *   {
+ *     "id": "1",
+ *     "name": "John Doe",
+ *     "email": "johndoe@admin.com",
+ *     "phone": "08123456789",
+ *     "role": "admin"
+ *   },
+ *   {
+ *     "id": "3",
+ *     "name": "Alice Smith",
+ *     "email": "alicesmith@student.com",
+ *     "phone": "08123456787",
+ *     "role": "student"
+ *   }
+ * ]
  */
 export async function fetchAllUsers(role?:string){
     const response = await fetch(`${API_BASE_URL}/users?role=${role}`, {
@@ -76,6 +122,7 @@ export async function fetchUserById(id: string) {
  * }
  */
 export async function updateUserById(id: string, data: User) {
+    console.log(id, data)
     const response = await fetch(`${API_BASE_URL}/users/${id}`, {
         method: 'PUT',
         headers: {
@@ -83,6 +130,8 @@ export async function updateUserById(id: string, data: User) {
         },
         body: JSON.stringify(data),
     });
+
+    console.log(response)
 
     if (!response.ok) {
         throw new Error('Gagal memperbarui data pengguna');
@@ -178,7 +227,32 @@ export async function registerLecturer(data: User) {
     return response.json();
 }
 
-
+/**
+ * Mendaftarkan admin baru.
+ *
+ * @param {User} data - Objek yang berisi data admin baru yang akan didaftarkan.
+ * @returns {Promise<any>} Data admin yang baru terdaftar.
+ * @throws {Error} Jika permintaan gagal atau respons tidak OK.
+ *
+ * Contoh permintaan (request):
+ * POST http://localhost:8080/api/users/register/admin
+ * Body:
+ * {
+ *   "name": "John Doe",
+ *   "email": "johndoe@admin.com",
+ *   "phone": "08123456789",
+ *   "password": "password123"
+ * }
+ *
+ * Contoh respons (response):
+ * {
+ *   "id": "1",
+ *   "name": "John Doe",
+ *   "email": "johndoe@admin.com",
+ *   "phone": "08123456789",
+ *   "role": "admin"
+ * }
+ */
 export async function registerAdmin(data: User) {
     const response = await fetch(`${API_BASE_URL}/users/register/admin`, {
         method: 'POST',
@@ -194,7 +268,21 @@ export async function registerAdmin(data: User) {
     return response.json();
 }
 
-
+/**
+ * Menghapus pengguna berdasarkan ID.
+ *
+ * @param {string} id - ID pengguna yang akan dihapus.
+ * @returns {Promise<any>} Data pengguna yang telah dihapus.
+ * @throws {Error} Jika permintaan gagal atau respons tidak OK.
+ *
+ * Contoh permintaan (request):
+ * DELETE http://localhost:8080/api/users/1
+ *
+ * Contoh respons (response):
+ * {
+ *   "message": "User has been deleted successfully."
+ * }
+ */
 export async function deleteUserById(id: string) {
     const response = await fetch(`${API_BASE_URL}/users/${id}`, {
         method: 'DELETE',
