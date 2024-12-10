@@ -2,7 +2,7 @@
 const nextConfig = {
     reactStrictMode: false,
     images: {
-        domains: ['images-na.ssl-images-amazon.com', 'cdn2.penguin.com.au', 'i.pinimg.com', 'covers.shakespeareandcompany.com', 'img.freepik.com'], // Add the domain here
+        domains: [], // Add the domain here
     },
 };
 

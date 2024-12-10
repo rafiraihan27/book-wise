@@ -23,6 +23,7 @@ import { Cart } from "@/components/user-page/borrow/cart";
 import { useAuthGuard } from "@/common/tokenizer";
 import { fetchBookById } from "@/lib/api/books";
 import { Book } from "@/types/interfaces";
+import { BookReviewForm } from "@/components/user-page/book-review-form";
 
 export default function BookDetailPage({ params }: { params: { id_book: string } }) {
   const { id_book } = params;
@@ -75,6 +76,13 @@ export default function BookDetailPage({ params }: { params: { id_book: string }
     );
   };
 
+  const handleReviewSubmit = async (review: { rating: number; comment: string }) => {
+    // Here you would typically send the review to your backend API
+    console.log('Submitting review:', review)
+    // After successfully submitting the review, you might want to refresh the book data
+    // or add the new review to the existing reviews
+  }
+
   const header = (
     <header className="container mx-auto flex h-10 shrink-0 items-center justify-between gap-2 px-4">
       {/* Breadcrumbs Section */}
@@ -108,7 +116,7 @@ export default function BookDetailPage({ params }: { params: { id_book: string }
         <div className="flex flex-col md:flex-row gap-8">
           <div className="md:w-1/3">
             <div className="relative">
-              <Image
+              <img
                 src={bookData.image}
                 alt={bookData.title}
                 width={300}
@@ -213,6 +221,16 @@ export default function BookDetailPage({ params }: { params: { id_book: string }
         </div>
         <Separator className="my-8" />
         <div>
+          <h2 className="text-2xl font-semibold mb-4">Write a Review</h2>
+          {!isLoading && (
+            <BookReviewForm bookId={id_book} onSubmit={handleReviewSubmit} />
+          )}
+          {isLoading && (
+            <p>Please log in to submit a review.</p>
+          )}
+        </div>
+        <Separator className="my-8" />
+        <div>
           <h2 className="text-2xl font-semibold mb-4">Reviews</h2>
           <div className="space-y-6">
             {bookData.reviews.slice(0, visibleReviews).map((review) => (
@@ -227,6 +245,7 @@ export default function BookDetailPage({ params }: { params: { id_book: string }
             </div>
           )}
         </div>
+        <Separator className="my-8 hidden md:block" />
         <RecomendationBook />
       </div>
     </SidebarLayout>

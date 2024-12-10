@@ -119,10 +119,9 @@ export function Cart({ isAdd = false, book }: { isAdd?: boolean; book?: CartItem
             items.map((item) => (
               <div key={item.id} className="flex gap-4 py-4">
                 <div className="relative w-16 h-24">
-                  <Image
+                  <img
                     src={item.image}
                     alt={item.title}
-                    fill
                     className="object-cover rounded"
                   />
                 </div>

@@ -43,12 +43,10 @@ export function RecomendationBook({ title = "Recommended Books" }) {
         {books.map((book) => (
           <Card key={book.id} className="inline-block overflow-hidden w-[200px] mx-2">
             <div className="relative aspect-[3/4]">
-              <Image
+              <img
                 src={book.image}
                 alt={`${book.title} Cover`}
-                layout="fill"
                 className="object-cover"
-                priority
               />
               {book.quota === 0 && (
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">

@@ -113,7 +113,7 @@ export const books = [
     },
     {
         id: "5",
-        title: "1984",
+        title: "Harry Potter",
         author: "George Orwell",
         category: "fiction",
         year: 1949,
