@@ -13,7 +13,7 @@ export default function Home() {
     <Navbar/>
     <div className="flex flex-col items-center justify-center">
       <Hero />
-      <Hero2 />
+      <BookSwiperCard />
       <Features />
       <Aboutus />
       
@@ -181,8 +181,16 @@ const Features = () => {
 };
 
 
+import Image from "next/image"
+import { Card, CardContent } from "@/components/ui/card"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
 
-import { Star as StarIcon } from 'lucide-react'; // Correct icon import
 
 const books = [
   {
@@ -190,80 +198,92 @@ const books = [
     author: 'Pidi Baiq',
     rating: 4.5,
     review: 'A classic tale of love and ambition set in the roaring twenties.',
-    image: 'https://images-na.ssl-images-amazon.com/images/I/81cpDaCJJCL.jpg',
+    image: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1442310576i/22037542.jpg',
   },
+
   {
     title: 'Dilan 1991',
     author: 'Pidi Baiq',
-    rating: 4.8,
-    review:
-      'An unforgettable novel of childhood and moral growth in the American South.',
-    image: 'https://images-na.ssl-images-amazon.com/images/I/81cpDaCJJCL.jpg',
+    rating: 4.5,
+    review: 'A classic tale of love and ambition set in the roaring twenties.',
+    image: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1436161520i/25857857.jpg',
   },
-  {
-    title: 'Dilan 1992',
-    author: 'Pidi Baiq',
-    rating: 4.7,
-    review:
-      'A dystopian novel exploring the dangers of totalitarianism and surveillance.',
-    image: 'https://images-na.ssl-images-amazon.com/images/I/81cpDaCJJCL.jpg',
-  },
-  {
-    title: 'Dilan 1993',
-    author: 'Pidi Baiq',
-    rating: 4.6,
-    review: 'A timeless romance that critiques the social norms of its era.',
-    image: 'https://images-na.ssl-images-amazon.com/images/I/81cpDaCJJCL.jpg',
-  },
-];
 
-const Hero2 = () => {
+  {
+    title: 'Laskar Pelangi',
+    author: 'Andrea Hirata',
+    rating: 4.5,
+    review: 'A classic tale of love and ambition set in the roaring twenties.',
+    image: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1489732961i/1362193.jpg',
+  },
+
+  {
+    title: 'Harry Potter and the Prisoner of Azkaban',
+    author: 'J.K. Rowling',
+    rating: 4.5,
+    review: 'A classic tale of love and ambition set in the roaring twenties.',
+    image: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1630547330i/5.jpg',
+  },
+
+  {
+    title: 'Dilan 1990',
+    author: 'Pidi Baiq',
+    rating: 4.5,
+    review: 'A classic tale of love and ambition set in the roaring twenties.',
+    image: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1442310576i/22037542.jpg',
+  },
+  // Add more books here if needed
+]
+
+export function BookSwiperCard() {
   return (
-    <section className="py-32 bg-white-100">
-      <div className="container mx-auto">
-        <h2 className="mb-8 text-4xl font-bold text-center text-gray-800">
-          Favorite Books
-        </h2>
-        <div
-          className="flex gap-6 overflow-x-auto px-4 no-scrollbar"
-        >
-          {books.map((book, idx) => (
-            <div
-              key={idx}
-              className="min-w-[30px] p-5 bg-white rounded-lg shadow-lg flex-shrink-0"
-            >
-              <img
-                src={book.image}
-                alt={book.title}
-                className="w-80 h-100 object-cover rounded-md mx-auto"
-              />
-              <div className="mt-4">
-                <h3 className="text-xl font-semibold">{book.title}</h3>
-                <p className="text-sm text-gray-600">by {book.author}</p>
-                <div className="mt-2 flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <StarIcon
-                      key={i}
-                      className={`size-4 ${
-                        i < Math.floor(book.rating)
-                          ? 'text-yellow-500'
-                          : 'text-gray-300'
-                      }`}
-                    />
-                  ))}
-                  <span className="ml-2 text-sm text-gray-600">
-                    {book.rating.toFixed(1)}
-                  </span>
-                </div>
-                <p className="mt-3 text-sm text-gray-700">{book.review}</p>
+    <Carousel className="container mx-auto max-w-screen-xl">
+      <CarouselContent>
+        {books.map((book, index) => (
+          <CarouselItem key={index} className=' container md:basis-1/3'>
+            <Card className="bg-white shadow-lg rounded-lg overflow-hidden">
+              <CardContent className="p-0">
+              <div className="relative h-96 w-full">
+                <Image
+                  src={book.image}
+                  alt={book.title}
+                  layout="fill"
+                  objectFit="contain" 
+                  className="rounded-md mx-auto"
+                />
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
+                <div className="p-4">
+                  <h2 className="text-xl font-bold mb-2 text-gray-800">{book.title}</h2>
+                  <p className="text-sm text-gray-600 mb-2">by {book.author}</p>
+                  <div className="flex items-center mb-2">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-4 h-4 ${
+                          i < Math.floor(book.rating)
+                            ? "text-yellow-400 fill-current"
+                            : "text-gray-300"
+                        }`}
+                      />
+                    ))}
+                    <span className="ml-2 text-sm text-gray-600">{book.rating}</span>
+                  </div>
+                  <p className="text-sm text-gray-700">{book.review}</p>
+                </div>
+              </CardContent>
+            </Card>
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      <CarouselPrevious />
+      <CarouselNext />
+    </Carousel>
+  )
+}
+
+
+
+
 
 
 

@@ -2,7 +2,7 @@
 const nextConfig = {
     reactStrictMode: false,
     images: {
-        domains: [], // Add the domain here
+        domains: ['images-na.ssl-images-amazon.com'], // Add the domain here
     },
 };
 
