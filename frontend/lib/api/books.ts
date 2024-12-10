@@ -21,7 +21,7 @@ const API_BASE_URL = '/api';
     "quota": 5
   }]
  */
-export async function fetchBooks(payload: Record<string, any>) {
+export async function fetchBooks(payload?: Record<string, any>) {
     const queryString = new URLSearchParams(payload).toString();
 
     const response = await fetch(`${API_BASE_URL}/books?${queryString}`, {
@@ -112,3 +112,76 @@ export async function fetchBooksRecommendation(max: number) {
     }
     return response.json();
 }
+
+/**
+ * Menambahkan buku baru.
+ *
+ * @param {Book} book - Data buku yang akan ditambahkan.
+ * @returns {Promise<any>} Respons dari server setelah menambahkan buku.
+ * @throws {Error} Jika permintaan gagal atau respons tidak OK.
+ *
+ * Request example: http://localhost:8080/api/books
+ */
+import { CreateUpdateBook } from "@/types/interfaces"
+export async function addBook(book: CreateUpdateBook) {
+    // console.log(book);
+    const response = await fetch(`${API_BASE_URL}/books`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(book),
+    });
+
+    if (!response.ok) {
+        throw new Error('Gagal menambahkan buku baru');
+    }
+    return response.json();
+}
+
+/**
+ * Memperbarui buku berdasarkan ID.
+ *
+ * @param {string} id - ID buku yang akan diperbarui.
+ * @param {Book} updatedBook - Data buku yang diperbarui.
+ * @returns {Promise<any>} Respons dari server setelah memperbarui buku.
+ * @throws {Error} Jika permintaan gagal atau respons tidak OK.
+ *
+ * Request example: http://localhost:8080/api/books/:id
+ */
+export async function updateBook(id: string, updatedBook: CreateUpdateBook) {
+    const response = await fetch(`${API_BASE_URL}/books/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedBook),
+    });
+
+    if (!response.ok) {
+        throw new Error('Gagal memperbarui buku');
+    }
+    return response.json();
+}
+
+/**
+ * Menghapus buku berdasarkan ID.
+ *
+ * @param {string} id - ID buku yang akan dihapus.
+ * @returns {Promise<void>} Tidak mengembalikan data jika berhasil.
+ * @throws {Error} Jika permintaan gagal atau respons tidak OK.
+ *
+ * Request example: http://localhost:8080/api/books/:id
+ */
+export async function deleteBook(id: string): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/books/${id}`, {
+        method: 'DELETE',
+    });
+
+    if (!response.ok) {
+        throw new Error('Gagal menghapus buku');
+    }
+}
+
+
+

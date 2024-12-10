@@ -82,7 +82,7 @@ export default function BookmarksPage() {
                     checked={selectedBookmarks.includes(bookmark)}
                     onCheckedChange={() => toggleBookmarkSelection(bookmark)}
                   />
-                  <Image
+                  <img
                     src={bookmark.image}
                     alt={bookmark.title}
                     width={80}

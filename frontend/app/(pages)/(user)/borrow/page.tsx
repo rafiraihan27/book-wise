@@ -90,6 +90,7 @@ export default function CheckoutPage() {
         }
 
         const payload = {
+            userId: localStorage.getItem("userId"),
             items,
             totalFee,
             dateRange: {
@@ -116,8 +117,8 @@ export default function CheckoutPage() {
             //     toast.error("Checkout failed!");
             // }
             console.log(payload)
-            localStorage.removeItem("cartItems");
-            window.location.href = '/borrow/testdoanginibang';
+            // localStorage.removeItem("cartItems");
+            // window.location.href = '/borrow/testdoanginibang';
         } catch (error) {
             toast.error("An error occurred during checkout!");
         }
@@ -146,7 +147,7 @@ export default function CheckoutPage() {
                             {items.map((item) => (
                                 <li key={item.id} className="flex justify-between items-center">
                                     <div className="flex items-center space-x-4">
-                                        <Image src={item.image} alt={item.title} width={80} height={100} className="object-cover" />
+                                        <img src={item.image} alt={item.title} width={80} height={100} className="object-cover" />
                                         <div>
                                             <a href={`/collections/book/${item.id}`}>
                                                 <p className="font-semibold">{item.title}</p>
@@ -200,7 +201,7 @@ export default function CheckoutPage() {
                                             htmlFor="qris"
                                             className="flex flex-1 flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:bg-accent [&:has([data-state=checked])]:bg-accent"
                                         >
-                                            <Image src='https://upload.wikimedia.org/wikipedia/commons/e/e1/QRIS_logo.svg' alt="QRIS Code" width={130} height={130} />
+                                            <img src='https://upload.wikimedia.org/wikipedia/commons/e/e1/QRIS_logo.svg' alt="QRIS Code" width={130} height={130} />
                                         </Label>
                                     </div>
                                 </RadioGroup>
@@ -248,7 +249,7 @@ export default function CheckoutPage() {
 
                                 {paymentMethod === 'qris' && (
                                     <div className="flex justify-center">
-                                        <Image src="https://img.freepik.com/free-vector/scan-me-qr-code_78370-2915.jpg" alt="QRIS Code" width={200} height={200} />
+                                        <img src="https://img.freepik.com/free-vector/scan-me-qr-code_78370-2915.jpg" alt="QRIS Code" width={200} height={200} />
                                     </div>
                                 )}
 

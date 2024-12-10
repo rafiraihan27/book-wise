@@ -28,4 +28,23 @@ export const users: User[] = [
     role: "lecturer",
     nip: "1301223164",
   },
+  {
+    id: "4",
+    email: "mahasiswa2@student.com",
+    password: "mahasiswa123",
+    name: "mahasiswa",
+    phone: "08123456",
+    role: "student",
+    nim: "1301223164",
+    year: "2022",
+  },
+  {
+    id: "5",
+    email: "dosen2@lecturer.com",
+    password: "dosen123",
+    name: "dosen",
+    phone: "0821342",
+    role: "lecturer",
+    nip: "42134",
+  },
 ];
