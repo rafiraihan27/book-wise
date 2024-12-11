@@ -108,9 +108,7 @@ export default function CheckoutPage() {
             } else {
                 toast.error("Checkout failed!");
             }
-            console.log(payload)
-            console.log(response)
-            // localStorage.removeItem("cartItems");
+            localStorage.removeItem("cartItems");
             window.location.href = `/borrow/${response.invoiceCode}`;
         } catch (error) {
             toast.error("An error occurred during checkout!");

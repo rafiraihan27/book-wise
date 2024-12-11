@@ -37,18 +37,18 @@ export async function GET(req: Request) {
     return NextResponse.json(filteredTransactions);
 }
 
-export async function POST(req: Request) {
-    let currentInvoiceNumber = 1; // Simpan ini di database untuk persisten
+let currentInvoiceNumber = 1; // Simpan ini di database untuk persisten
 
-    function generateInvoiceCodeSequential() {
-        const prefix = 'INV-';
-        const datePart = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-        const invoiceNumber = String(currentInvoiceNumber).padStart(4, '0'); // Tambahkan 0 di depan jika perlu
-        
-        currentInvoiceNumber++; // Increment setelah kode dibuat
-        return `${prefix}${datePart}-${invoiceNumber}`;
-    }
+function generateInvoiceCodeSequential() {
+    const prefix = 'INV-';
+    const datePart = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+    const invoiceNumber = String(currentInvoiceNumber).padStart(4, '0'); // Tambahkan 0 di depan jika perlu
     
+    currentInvoiceNumber++; // Increment setelah kode dibuat
+    return `${prefix}${datePart}-${invoiceNumber}`;
+}
+
+export async function POST(req: Request) {    
     try {
         const body: newTransaction = await req.json(); // Parse body dari request
         // Validasi field wajib
