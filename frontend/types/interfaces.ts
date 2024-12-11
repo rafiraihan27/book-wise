@@ -36,6 +36,7 @@ export interface SimpleBook {
     description?: string;
     image: string;
     quota: number;
+    canBorrow: boolean;
 }
 
 export interface CreateUpdateBook {

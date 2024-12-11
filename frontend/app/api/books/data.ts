@@ -307,5 +307,143 @@ export const books = [
                 content: "An inspiring and honest account of Michelle Obama's life journey."
             }
         ]
+    },
+
+    {
+        id: "13",
+        title: "Dilan: Dia Adalah Dilanku Tahun 1990",
+        author: "Pidi Baiq",
+        category: "romance",
+        year: 2014,
+        description:
+            "A love story between Dilan, a unique and persistent high school student in Bandung, and Milea, a transfer student from Jakarta, set in 1990.",
+        image: "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1442310576i/22037542.jpg",
+        quota: 5,
+        rackNumber: "31",
+        isbn: "978-6027870139", 
+        language: "Indonesian",
+        availableCopies: 5,
+        lateFee: 1000, 
+        canBorrow: true,
+        rating: 4.7,
+        reviews: [
+            {
+                id: "1",
+                author: "Anisa Putri",
+                date: "2023-11-10",
+                rating: 5,
+                content: "A heartwarming and nostalgic story that captures the essence of teenage love."
+            }
+        ]
+    }, 
+
+    {
+        id: "14",
+        title: "Dilan 1991 (Dia Adalah Dilanku Tahun 1991)",
+        author: "Pidi Baiq",
+        category: "romance",
+        year: 2015,
+        description:
+            "The continuation of Dilan and Milea's teenage love story, filled with emotional struggles, family conflicts, and tough decisions in 1990s Bandung.",
+        image: "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1436161520i/25857857.jpg",
+        quota: 5,
+        rackNumber: "32",
+        isbn: "978-6027870867",
+        language: "Indonesian",
+        availableCopies: 5,
+        lateFee: 1000,
+        canBorrow: false,
+        rating: 4.6,
+        reviews: [
+            {
+                id: "1",
+                author: "Dewi Lestari",
+                date: "2023-12-01",
+                rating: 5,
+                content: "An emotionally gripping sequel that perfectly captures teenage love and life's unpredictable turns."
+            },
+            {
+                id: "2",
+                author: "Andi Saputra",
+                date: "2023-12-05",
+                rating: 4,
+                content: "A touching and intense continuation of Dilan and Milea's journey, though the conflicts felt heavier this time."
+            }
+        ]
+    }, 
+
+    {
+        id: "15",
+        title: "Laskar Pelangi",
+        author: "Andrea Hirata",
+        category: "fiction",
+        year: 2005,
+        description:
+            "An inspiring story of ten students and their dedicated teachers in a poor village in Belitung, Indonesia, overcoming challenges through passion for education and friendship.",
+        image: "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1489732961i/1362193.jpg",
+        quota: 5,
+        rackNumber: "33",
+        isbn: "978-9793062791",
+        language: "Indonesian",
+        availableCopies: 5,
+        lateFee: 1500,
+        canBorrow: true,
+        rating: 4.7,
+        reviews: [
+            {
+                id: "1",
+                author: "Rina Kusuma",
+                date: "2023-12-08",
+                rating: 5,
+                content: "A moving and inspiring novel about resilience, friendship, and the power of education."
+            },
+            {
+                id: "2",
+                author: "Ahmad Fauzi",
+                date: "2023-12-10",
+                rating: 4,
+                content: "A beautifully written story that highlights social issues while keeping readers emotionally engaged."
+            }
+        ]
+    }, 
+
+    {
+        "id": "16",
+        "title": "Harry Potter and the Prisoner of Azkaban",
+        "author": "J.K. Rowling",
+        "category": "Fantasy",
+        "year": 1999,
+        "description": "In Harry's third year at Hogwarts, he faces the threat of the escaped prisoner Sirius Black while learning about his past and mastering powerful magic.",
+        "image": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1630547330i/5.jpg",
+        "quota": 5,
+        "rackNumber": "40",
+        "isbn": "978-1-4088-6541-5",
+        "language": "English",
+        "availableCopies": 5,
+        "lateFee": 1500,
+        "canBorrow": false,
+        "rating": 4.9,
+        "reviews": [
+            {
+                "id": "1",
+                "author": "Alex Johnson",
+                "date": "2023-11-05",
+                "rating": 5,
+                "content": "A captivating and magical story that deepens the Harry Potter saga with twists and emotional revelations."
+            },
+            {
+                "id": "2",
+                "author": "Taylor Morgan",
+                "date": "2023-11-10",
+                "rating": 4,
+                "content": "An intense, gripping adventure with strong character development and unforgettable magical moments."
+            }
+        ]
     }
+    
+    
+    
+
+
+    
 ];

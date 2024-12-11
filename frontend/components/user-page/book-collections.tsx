@@ -93,7 +93,7 @@ export default function BookCollection({ search = "", category = "", years = "" 
                                 </Link>
 
                                 {/* Overlay for Out of Quota */}
-                                {book.quota === 0 && (
+                                {!book.canBorrow && (
                                     <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center backdrop-blur-sm">
                                         <p className="text-white text-lg font-bold">
                                             Maaf (｡•́︿•̀｡) <br /> bukunya lagi banyak <br /> yang baca
