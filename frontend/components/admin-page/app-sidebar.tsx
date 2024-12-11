@@ -7,6 +7,7 @@ import {
     LayoutDashboard,
     UserRound,
     Cog,
+    RefreshCcw,
 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarInput, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
@@ -137,6 +138,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                             Pending Approval
                         </div>
                         <Label className="flex items-center gap-2 text-sm">
+                            <Button variant="ghost" size="icon" onClick={() => fetchData()}>
+                                <RefreshCcw className="h-4 w-4"/>
+                            </Button>
                             {filteredData?.length !== 0 && (
                                 <span className="w-6 h-6 rounded-full bg-[#E02954] text-primary-foreground text-xs flex items-center justify-center">
                                     {filteredData.length > 9 ? "10+" : filteredData.length}

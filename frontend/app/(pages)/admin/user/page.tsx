@@ -21,7 +21,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import { FilePlus2, FilePenLine, Trash2 } from 'lucide-react'
+import { FilePlus2, FilePenLine, Trash2, RefreshCcw } from 'lucide-react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { toast } from "sonner"
 import { Textarea } from "@/components/ui/textarea"
@@ -37,21 +37,21 @@ export default function UsersPage() {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>("");
 
+    async function loadUsers() {
+        setLoading(true);
+        try {
+            const data = await fetchAllUsers();
+            setUsers(data);
+            setError("");
+        } catch (err) {
+            setError(`Failed to load books: ${err}`);
+        } finally {
+            setLoading(false);
+        }
+    }
+    
     // Fetch Users
     useEffect(() => {
-        async function loadUsers() {
-            setLoading(true);
-            try {
-                const data = await fetchAllUsers();
-                setUsers(data);
-                setError("");
-            } catch (err) {
-                setError(`Failed to load books: ${err}`);
-            } finally {
-                setLoading(false);
-            }
-        }
-
         loadUsers();
     }, []);
 
@@ -151,7 +151,12 @@ export default function UsersPage() {
     return (
         <div className="flex flex-col h-full">
             <div className="space-y-6 mb-6">
-                <h1 className="text-3xl font-bold">Users Management</h1>
+                <div className="flex flex-row gap-2">
+                    <h1 className="text-3xl font-bold">User Management</h1>
+                    <Button variant="ghost" size="icon" onClick={() => loadUsers()}>
+                        <RefreshCcw className="h-4 w-4" />
+                    </Button>
+                </div>
                 <div className="flex flex-row justify-center items-end gap-4">
                     <div className="flex-1">
                         <Label htmlFor="search">Search</Label>
