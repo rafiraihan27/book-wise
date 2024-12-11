@@ -235,7 +235,7 @@ const books = [
   // Add more books here if needed
 ]
 
-export function BookSwiperCard() {
+function BookSwiperCard() {
   return (
     <div className="container mx-auto h-screen flex flex-col items-center justify-center w-full">
       <h1 className="text-3xl font-semibold md:pl-5 lg:text-4xl text-black text-center my-7">Our Books</h1>
