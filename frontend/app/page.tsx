@@ -323,7 +323,7 @@ const people = [
   },
   {
     id: "1301223292",
-    name: "Azrian Risqi Radhitya",
+    name: "Azrian Rifqi Radhitya",
     role: "Backend",
     avatar: "https://www.shadcnblocks.com/images/block/avatar-6.webp",
     image: "/teams/azrian.jpeg",
