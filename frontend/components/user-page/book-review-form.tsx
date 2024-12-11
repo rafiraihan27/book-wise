@@ -1,26 +1,42 @@
 'use client'
 
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { Input } from "@/components/ui/input"
-import { Star } from 'lucide-react'
+import { useState, useEffect } from 'react';
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Star } from 'lucide-react';
 
 interface BookReviewFormProps {
-  bookId: string
-  onSubmit: (review: { rating: number; comment: string }) => void
+  bookId: string;
+  onSubmit: (review: { author: string; rating: number; content: string }) => void;
 }
 
 export function BookReviewForm({ bookId, onSubmit }: BookReviewFormProps) {
-  const [rating, setRating] = useState(0)
-  const [comment, setComment] = useState('')
+  const [rating, setRating] = useState(0);
+  const [content, setContent] = useState('');
+  const [author, setAuthor] = useState('');
+
+  // Ambil authorId dari localStorage saat komponen dimuat
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      setAuthor(userId);
+    } else {
+      console.warn('No userId found in localStorage');
+    }
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    onSubmit({ rating, comment })
-    setRating(0)
-    setComment('')
-  }
+    e.preventDefault();
+
+    if (!author) {
+      console.error('Author ID is missing!');
+      return;
+    }
+
+    onSubmit({ author, rating, content });
+    setRating(0);
+    setContent('');
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -39,20 +55,19 @@ export function BookReviewForm({ bookId, onSubmit }: BookReviewFormProps) {
         </div>
       </div>
       <div>
-        <label htmlFor="comment" className="block text-sm font-medium text-gray-700">Your Review</label>
+        <label htmlFor="content" className="block text-sm font-medium text-gray-700">Your Review</label>
         <Textarea
-          id="comment"
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
+          id="content"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
           className="mt-1"
           rows={4}
           placeholder="Write your review here..."
         />
       </div>
-      <Button type="submit" disabled={rating === 0 || comment.trim() === ''}>
+      <Button type="submit" disabled={rating === 0 || content.trim() === ''}>
         Submit Review
       </Button>
     </form>
-  )
+  );
 }
-

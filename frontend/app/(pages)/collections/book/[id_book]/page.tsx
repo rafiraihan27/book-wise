@@ -24,6 +24,8 @@ import { useAuthGuard } from "@/common/tokenizer";
 import { fetchBookById } from "@/lib/api/books";
 import { Book } from "@/types/interfaces";
 import { BookReviewForm } from "@/components/user-page/book-review-form";
+import { submitReview } from "@/lib/api/reviews";
+import { toast } from "sonner";
 
 export default function BookDetailPage({ params }: { params: { id_book: string } }) {
   const { id_book } = params;
@@ -33,20 +35,20 @@ export default function BookDetailPage({ params }: { params: { id_book: string }
   const [visibleReviews, setVisibleReviews] = useState<number>(3);
   const { isLoading } = useAuthGuard();
 
-  useEffect(() => {
-    async function loadBook() {
-      setLoading(true);
-      try {
-        const data = await fetchBookById(id_book);
-        setBookData(data || null);
-        setError("");
-      } catch (err) {
-        setError(`Failed to load book: ${err}`);
-      } finally {
-        setLoading(false);
-      }
+  async function loadBook() {
+    setLoading(true);
+    try {
+      const data = await fetchBookById(id_book);
+      setBookData(data || null);
+      setError("");
+    } catch (err) {
+      setError(`Failed to load book: ${err}`);
+    } finally {
+      setLoading(false);
     }
+  }
 
+  useEffect(() => {
     loadBook();
   }, [id_book]);
 
@@ -76,11 +78,15 @@ export default function BookDetailPage({ params }: { params: { id_book: string }
     );
   };
 
-  const handleReviewSubmit = async (review: { rating: number; comment: string }) => {
-    // Here you would typically send the review to your backend API
-    console.log('Submitting review:', review)
-    // After successfully submitting the review, you might want to refresh the book data
-    // or add the new review to the existing reviews
+  const handleReviewSubmit = async (review: { author: string; rating: number; content: string  }) => {
+    try {
+      const content = await submitReview(id_book, review); // Kirim ulasan menggunakan API
+      toast("Review submitted successfully!");
+      await loadBook();
+    } catch (err) {
+      console.error("Failed to submit review:", err);
+      toast("Failed to submit review. Please try again.");
+    }
   }
 
   const header = (
