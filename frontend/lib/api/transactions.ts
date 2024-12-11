@@ -40,3 +40,15 @@ export async function fetchPostTransaction(data: newTransaction) {
     }
     return response.json();
 }
+
+export async function fetchUpdateStatusTransaction(invoiceCode: string, status: string) {
+    const response = await fetch(`${API_BASE_URL}/transactions?invoiceCode=${invoiceCode}&status=${status}`, {
+        method: 'PUT',
+    })
+
+    if (!response.ok) {
+        throw new Error('Gagal mengupdate status transaksi');
+    }
+    return response.json();
+}
+

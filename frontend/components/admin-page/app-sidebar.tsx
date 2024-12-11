@@ -16,8 +16,9 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogT
 import { Button } from "@/components/ui/button";
 import { NavUser } from "@/components/admin-page/nav-user";
 import InvoiceComponent from "../user-page/borrow/invoice";
-import { fetchTransactions } from "@/lib/api/transactions";
+import { fetchTransactions, fetchUpdateStatusTransaction } from "@/lib/api/transactions";
 import { Transaction } from "@/types/interfaces";
+import { toast } from "sonner";
 
 const data = {
     user: {
@@ -62,6 +63,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     React.useEffect(() => {
         fetchData();
     }, [searchQuery]);
+
+    const approveDeclineButton = async (invoiceCode: string, status: string) => {
+        console.log("asdf")
+        setLoading(true);
+        setError(null);
+
+        try {
+            const updateStatus = await fetchUpdateStatusTransaction(invoiceCode, status);
+            fetchData();
+            toast(`Berhasil update status ${status}`)
+        } catch(err) {
+            toast(`Gagas update status ${err}`)
+            console.error("Error update status transactions:", err);
+            setError("Failed to update status transactions.");
+        } finally {
+            setLoading(false);
+        }
+    }
 
     return (
         <Sidebar collapsible="icon" className="overflow-hidden [&>[data-sidebar=sidebar]]:flex-row" {...props}>
@@ -156,8 +175,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                                             <InvoiceComponent invoiceCode={item.invoiceCode} />
                                         </div>
                                         <DialogFooter>
-                                            <Button variant="secondary">Decline</Button>
-                                            <Button>Approve</Button>
+                                            <Button variant="secondary" onClick={() => approveDeclineButton(item.invoiceCode, "declined")}>Decline</Button>
+                                            <Button onClick={() => approveDeclineButton(item.invoiceCode, "approved")}>Approve</Button>
                                         </DialogFooter>
                                     </DialogContent>
                                 </Dialog>

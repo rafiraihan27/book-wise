@@ -105,3 +105,52 @@ export async function POST(req: Request) {
         );
     }
 }
+
+export async function PUT(req: Request) {
+    try {
+        // Parse URL dan parameter dari query string
+        const url = new URL(req.url);
+        const invoiceCode = url.searchParams.get('invoiceCode');
+        const status = url.searchParams.get('status');
+
+        // Validasi parameter wajib
+        if (!invoiceCode) {
+            return NextResponse.json({ error: 'Invoice code is required' }, { status: 400 });
+        }
+
+        if (!status) {
+            return NextResponse.json({ error: 'Status is required' }, { status: 400 });
+        }
+
+        // Validasi nilai status terhadap union type
+        const validStatuses = ["pending", "approved", "declined", "overdue"] as const;
+        if (!validStatuses.includes(status as typeof validStatuses[number])) {
+            return NextResponse.json(
+                { error: `Invalid status. Must be one of: ${validStatuses.join(', ')}` },
+                { status: 400 }
+            );
+        }
+
+        // Cari transaksi berdasarkan invoiceCode
+        const transactionIndex = transactions.findIndex(
+            (transaction) => transaction.invoiceCode === invoiceCode
+        );
+
+        if (transactionIndex === -1) {
+            return NextResponse.json({ error: 'Transaction not found' }, { status: 404 });
+        }
+
+        // Perbarui status transaksi
+        transactions[transactionIndex].status = status as "pending" | "approved" | "declined" | "overdue";
+
+        // Kembalikan transaksi yang diperbarui
+        return NextResponse.json(transactions[transactionIndex], { status: 200 });
+    } catch (error) {
+        console.error('Error updating transaction:', error);
+        return NextResponse.json(
+            { error: 'Failed to update the transaction. Please try again.' },
+            { status: 500 }
+        );
+    }
+}
+
