@@ -10,15 +10,15 @@ import Footer from '@/components/footer';
 export default function Home() {
   return (
     <>
-    <Navbar/>
-    <div className="flex flex-col items-center justify-center">
-      <Hero />
-      <BookSwiperCard />
-      <Features />
-      <Aboutus />
-      
-    </div>
-    <Footer/>
+      <Navbar />
+      <div className="flex flex-col items-center justify-center">
+        <Hero />
+        <BookSwiperCard />
+        <Features />
+        <Aboutus />
+
+      </div>
+      <Footer />
     </>
   );
 }
@@ -40,7 +40,7 @@ const Hero = () => {
             Selamat Datang
           </h1>
           <p className="text-balance text-muted-foreground lg:text-lg">
-          Bookwise: Jelajahi Dunia dengan Setiap Halaman
+            Bookwise: Jelajahi Dunia dengan Setiap Halaman
           </p>
         </div>
         <Button size="lg" className="mt-10">
@@ -157,7 +157,7 @@ const Features = () => {
         </h2>
         <div className="mx-auto mt-14 grid gap-x-10 gap-y-8 md:grid-cols-2 md:gap-y-6 lg:mt-20">
           {features.map((feature, idx) => (
-            <div 
+            <div
               className="flex gap-6 rounded-lg p-5 bg-opacity-100 bg-gray-900 transition-transform transform hover:scale-105 hover:shadow-lg md:block"
               key={idx}
             >
@@ -237,47 +237,49 @@ const books = [
 
 export function BookSwiperCard() {
   return (
-    <Carousel className="container mx-auto max-w-screen-xl">
-      <CarouselContent>
-        {books.map((book, index) => (
-          <CarouselItem key={index} className=' container md:basis-1/3'>
-            <Card className="bg-white shadow-lg rounded-lg overflow-hidden">
-              <CardContent className="p-0">
-              <div className="relative h-96 w-full">
-                <Image
-                  src={book.image}
-                  alt={book.title}
-                  layout="fill"
-                  objectFit="contain" 
-                  className="rounded-md mx-auto"
-                />
-              </div>
-                <div className="p-4">
-                  <h2 className="text-xl font-bold mb-2 text-gray-800">{book.title}</h2>
-                  <p className="text-sm text-gray-600 mb-2">by {book.author}</p>
-                  <div className="flex items-center mb-2">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`w-4 h-4 ${
-                          i < Math.floor(book.rating)
-                            ? "text-yellow-400 fill-current"
-                            : "text-gray-300"
-                        }`}
-                      />
-                    ))}
-                    <span className="ml-2 text-sm text-gray-600">{book.rating}</span>
+    <div className="container mx-auto h-screen flex flex-col items-center justify-center w-full">
+      <h1 className="text-3xl font-semibold md:pl-5 lg:text-4xl text-black text-center my-7">Our Books</h1>
+      <Carousel className="container mx-auto max-w-screen-xl">
+        <CarouselContent>
+          {books.map((book, index) => (
+            <CarouselItem key={index} className=' container md:basis-1/3'>
+              <Card className="bg-white shadow-lg rounded-lg overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="relative h-96 w-full">
+                    <Image
+                      src={book.image}
+                      alt={book.title}
+                      layout="fill"
+                      objectFit="contain"
+                      className="rounded-md mx-auto"
+                    />
                   </div>
-                  <p className="text-sm text-gray-700">{book.review}</p>
-                </div>
-              </CardContent>
-            </Card>
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
-    </Carousel>
+                  <div className="p-4">
+                    <h2 className="text-xl font-bold mb-2 text-gray-800">{book.title}</h2>
+                    <p className="text-sm text-gray-600 mb-2">by {book.author}</p>
+                    <div className="flex items-center mb-2">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-4 h-4 ${i < Math.floor(book.rating)
+                              ? "text-yellow-400 fill-current"
+                              : "text-gray-300"
+                            }`}
+                        />
+                      ))}
+                      <span className="ml-2 text-sm text-gray-600">{book.rating}</span>
+                    </div>
+                    <p className="text-sm text-gray-700">{book.review}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
+    </div>
   )
 }
 
@@ -347,7 +349,7 @@ const Aboutus = () => {
           Meet our team
         </h2>
         <p className="mb-8 max-w-3xl text-muted-foreground lg:text-xl">
-         Kelompok 4 - IF-46-10
+          Kelompok 4 - IF-46-10
         </p>
       </div>
       <div className="container mt-16 grid gap-x-8 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
