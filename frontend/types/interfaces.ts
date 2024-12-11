@@ -86,7 +86,7 @@ export interface BookItems {
     title: string
     author: string
     image: string
-    lateFee: number
+    lateFee?: number
 }
 
 export interface Transaction {
@@ -109,4 +109,14 @@ export interface Transaction {
         phone: string
         role: string
     }
+}
+
+export interface newTransaction {
+    userId: string
+    totalFee: number
+    paymentMethod: string
+    paymentEvidence: string
+    items: BookItems[]
+    dateFrom: string
+    dateTo: string
 }

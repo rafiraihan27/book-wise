@@ -127,7 +127,7 @@ export default function InvoiceComponent({ invoiceCode = "" }) {
                                         <TableCell>
                                             <img src={item.image} alt={item.title} className="w-16 h-24 object-cover rounded-md" />
                                         </TableCell>
-                                        <TableCell className="text-right">Rp{item.lateFee.toLocaleString()}</TableCell>
+                                        <TableCell className="text-right">Rp{item.lateFee?.toLocaleString()}</TableCell>
                                     </TableRow>
                                 ))}
                                 <TableRow>

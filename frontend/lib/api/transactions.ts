@@ -1,3 +1,5 @@
+import { newTransaction, Transaction } from "@/types/interfaces";
+
 const API_BASE_URL = '/api';
 
 export async function fetchTransactionsByInvoiceId(invoiceId: string) {
@@ -20,6 +22,21 @@ export async function fetchTransactions(payload?: Record<string, any>) {
 
     if (!response.ok) {
         throw new Error('Gagal mengambil data transaksi');
+    }
+    return response.json();
+}
+
+export async function fetchPostTransaction(data: newTransaction) {
+    const response = await fetch(`${API_BASE_URL}/transactions`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+
+    if (!response.ok) {
+        throw new Error('Gagal melakukan transaksi');
     }
     return response.json();
 }

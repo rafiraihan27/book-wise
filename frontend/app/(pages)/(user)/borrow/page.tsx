@@ -13,6 +13,8 @@ import { toast } from 'sonner'
 import DateRangePicker from "@/components/ui/date-range-picker"
 import { DateRange } from 'react-day-picker'
 import { useAuthGuard } from '@/common/tokenizer'
+import { newTransaction } from '@/types/interfaces'
+import { fetchPostTransaction } from '@/lib/api/transactions'
 
 interface CartItem {
     id: string;
@@ -89,36 +91,27 @@ export default function CheckoutPage() {
             return;
         }
 
-        const payload = {
-            userId: localStorage.getItem("userId"),
+        const payload: newTransaction = {
+            userId: localStorage.getItem("userId") || "",
             items,
             totalFee,
-            dateRange: {
-                from: dateRange.from.toISOString(),
-                to: dateRange.to.toISOString(),
-            },
             paymentMethod,
             paymentEvidence,
+            dateFrom: dateRange.from.toISOString(),
+            dateTo: dateRange.to.toISOString(),
         };
 
         try {
-            // const response = await fetch("/api/checkout", {
-            //     method: "POST",
-            //     headers: {
-            //         "Content-Type": "application/json",
-            //     },
-            //     body: JSON.stringify(payload),
-            // });
-
-            // if (response.ok) {
-            //     toast.success("Checkout successful!");
-            //     // Redirect or reset state
-            // } else {
-            //     toast.error("Checkout failed!");
-            // }
+            const response = await fetchPostTransaction(payload)
+            if (!response.ok) {
+                toast.success("Checkout successful!");
+            } else {
+                toast.error("Checkout failed!");
+            }
             console.log(payload)
+            console.log(response)
             // localStorage.removeItem("cartItems");
-            // window.location.href = '/borrow/testdoanginibang';
+            window.location.href = `/borrow/${response.invoiceCode}`;
         } catch (error) {
             toast.error("An error occurred during checkout!");
         }
