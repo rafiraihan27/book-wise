@@ -1,9 +1,7 @@
-const API_BASE_URL = '/api';
-
 export async function fetchReviewsByBookId(bookId: string) {
     // Bersihkan tanda kutip jika ada
     const sanitizedUserId = bookId.replace(/^"|"$/g, "");
-    const response = await fetch(`${API_BASE_URL}/reviews?bookId=${sanitizedUserId}`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/reviews?bookId=${sanitizedUserId}`, {
         method: 'GET',
     });
 
@@ -27,7 +25,7 @@ export async function fetchReviewsByBookId(bookId: string) {
 export async function submitReview(bookId: string, review: { author: string; rating: number; content: string }): Promise<any> {
     const sanitizedBookId = bookId.replace(/^"|"$/g, "");
 
-    const response = await fetch(`${API_BASE_URL}/reviews`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/reviews`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

@@ -1,7 +1,5 @@
 import { User } from "@/types/interfaces";
 
-const API_BASE_URL = '/api';
-
 /**
  * Mengambil semua data pengguna berdasarkan peran (opsional).
  *
@@ -53,7 +51,11 @@ const API_BASE_URL = '/api';
  * ]
  */
 export async function fetchAllUsers(role?:string){
-    const response = await fetch(`${API_BASE_URL}/users?role=${role}`, {
+    var url = `${process.env.API_BASE_URL_PRODUCTION}/users`;
+    if (role) {
+        url = `${process.env.API_BASE_URL_PRODUCTION}/users?role=${role}`;
+    }
+    const response = await fetch(url, {
         method: 'GET',
     });
 
@@ -81,7 +83,7 @@ export async function fetchAllUsers(role?:string){
  * }
  */
 export async function fetchUserById(id: string) {
-    const response = await fetch(`${API_BASE_URL}/users/${id}`, {
+    const response = await fetch(`${process.env.API_BASE_URL_PRODUCTION}/users/${id}`, {
         method: 'GET',
     });
 
@@ -123,7 +125,7 @@ export async function fetchUserById(id: string) {
  */
 export async function updateUserById(id: string, data: User) {
     console.log(id, data)
-    const response = await fetch(`${API_BASE_URL}/users/${id}`, {
+    const response = await fetch(`${process.env.API_BASE_URL_PRODUCTION}/users/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -170,7 +172,7 @@ export async function updateUserById(id: string, data: User) {
  * }
  */
 export async function registerStudent(data: User) {
-    const response = await fetch(`${API_BASE_URL}/users/register/student`, {
+    const response = await fetch(`${process.env.API_BASE_URL_PRODUCTION}/users/register/student`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -213,7 +215,7 @@ export async function registerStudent(data: User) {
  * }
  */
 export async function registerLecturer(data: User) {
-    const response = await fetch(`${API_BASE_URL}/users/register/lecturer`, {
+    const response = await fetch(`${process.env.API_BASE_URL_PRODUCTION}/users/register/lecturer`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -254,7 +256,7 @@ export async function registerLecturer(data: User) {
  * }
  */
 export async function registerAdmin(data: User) {
-    const response = await fetch(`${API_BASE_URL}/users/register/admin`, {
+    const response = await fetch(`${process.env.API_BASE_URL_PRODUCTION}/users/register/admin`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -284,7 +286,7 @@ export async function registerAdmin(data: User) {
  * }
  */
 export async function deleteUserById(id: string) {
-    const response = await fetch(`${API_BASE_URL}/users/${id}`, {
+    const response = await fetch(`${process.env.API_BASE_URL_PRODUCTION}/users/${id}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',

@@ -1,5 +1,3 @@
-const API_BASE_URL = '/api';
-
 /**
  * Mengambil daftar notifikasi berdasarkan ID pengguna.
  *
@@ -23,7 +21,7 @@ const API_BASE_URL = '/api';
 export async function fetchNotificationsByUserId(userId: string) {
     // Bersihkan tanda kutip jika ada
     const sanitizedUserId = userId.replace(/^"|"$/g, "");
-    const response = await fetch(`${API_BASE_URL}/notifications?userId=${sanitizedUserId}`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/notifications?userId=${sanitizedUserId}`, {
         method: 'GET',
     });
 
@@ -61,7 +59,7 @@ export async function updateNotificationsStatusById(id: string) {
     // Bersihkan tanda kutip jika ada
     const sanitizedId = id.replace(/^"|"$/g, "");
 
-    const response = await fetch(`${API_BASE_URL}/notifications`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/notifications`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

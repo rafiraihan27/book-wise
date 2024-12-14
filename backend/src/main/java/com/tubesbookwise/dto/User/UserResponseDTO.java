@@ -1,6 +1,6 @@
 package com.tubesbookwise.dto.User;
 
-import com.tubesbookwise.model.User;
+import com.tubesbookwise.Models.User;
 
 public class UserResponseDTO {
     private String id;

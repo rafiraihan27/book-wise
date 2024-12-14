@@ -1,19 +1,19 @@
 package com.tubesbookwise.controller;
 
-import com.tubesbookwise.dto.User.LecturerRequestDTO;
-import com.tubesbookwise.dto.User.StudentRequestDTO;
-import com.tubesbookwise.dto.User.UserRequestDTO;
-import com.tubesbookwise.dto.User.UserResponseDTO;
-import com.tubesbookwise.model.User;
-import com.tubesbookwise.repository.User.UserRepository;
+import com.tubesbookwise.dto.User.*;
+import com.tubesbookwise.Models.User;
+import com.tubesbookwise.Repository.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -21,19 +21,19 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final UserRepository userRepository;
-
     @Autowired
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private UserRepository userRepository;
 
-    //    GET http://localhost:8080/api/users?role=admin
     @Operation(summary = "Mengambil semua data pengguna", description = "Mengambil semua data pengguna berdasarkan parameter role (opsional)")
     @GetMapping
     public ResponseEntity<List<UserResponseDTO>> getAllUsers(@RequestParam(value = "role", required = false) String role) {
-        List<User> users = userRepository.findAll(role);
-        users.forEach(System.out::println);
+        List<User> users;
+        if (role != null && !role.isEmpty()) {
+            users = userRepository.findAllByRole(User.Role.valueOf(role));
+        } else {
+            users = userRepository.findAll();
+        }
+
         List<UserResponseDTO> responses = users.stream()
                 .map(user -> new UserResponseDTO(
                         user.getId(),
@@ -49,68 +49,104 @@ public class UserController {
         return ResponseEntity.ok(responses);
     }
 
+
     //    GET http://localhost:8080/api/users/1
     @Operation(summary = "Mengambil data user berdasarkan ID-nya.", description = "Mengambil data user berdasarkan ID-nya.")
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDTO> getUserById(
             @Parameter(description = "ID of the user to retrieve", required = true) @PathVariable String id) {
-        User user = userRepository.findById(id);
+        Optional<User> user = userRepository.findById(id);
         UserResponseDTO response = new UserResponseDTO(
-                user.getId(),
-                user.getEmail(),
-                user.getName(),
-                user.getRole(),
-                user.getPhone(),
-                user.getNim(),
-                user.getNip(),
-                user.getYear()
+                user.get().getId(),
+                user.get().getEmail(),
+                user.get().getName(),
+                user.get().getRole(),
+                user.get().getPhone(),
+                user.get().getNim(),
+                user.get().getNip(),
+                user.get().getYear()
         );
         return ResponseEntity.ok(response);
     }
 
-    // PUT http://localhost:8080/api/users/{id}
     @Operation(summary = "Update user data by id", description = "TAMBAHKAN ROLE [admin, student, lecturer]")
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateUser(
+    public ResponseEntity<Map<String, Object>> updateUserFields(
             @PathVariable String id,
-            @Valid @RequestBody UserRequestDTO userRequestDTO) {
+            @RequestBody AllUserRequestDTO allUserRequestDTO) {
 
-        // Find the existing user by ID
-        Optional<User> existingUserOptional = Optional.ofNullable(userRepository.findById(id));
-        if (existingUserOptional.isEmpty()) {
-            return ResponseEntity.status(404).body("User not found");
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            // Find the user by ID
+            Optional<User> existingUserOptional = userRepository.findById(id);
+            if (existingUserOptional.isEmpty()) {
+                response.put("status", 404);
+                response.put("message", "User not found");
+                return ResponseEntity.status(404).body(response);
+            }
+
+            User existingUser = existingUserOptional.get();
+
+            // Check for duplicate entries (e.g., email, phone, etc.)
+            if (userRepository.existsByEmail(allUserRequestDTO.getEmail()) &&
+                    !existingUser.getEmail().equals(allUserRequestDTO.getEmail())) {
+                response.put("status", 400);
+                response.put("message", "Email is already in use");
+                return ResponseEntity.status(400).body(response);
+            }
+            if (userRepository.existsByPhone(allUserRequestDTO.getPhone()) &&
+                    !existingUser.getPhone().equals(allUserRequestDTO.getPhone())) {
+                response.put("status", 400);
+                response.put("message", "Phone number is already in use");
+                return ResponseEntity.status(400).body(response);
+            }
+            if (userRepository.existsByNim(allUserRequestDTO.getNim()) &&
+                    !existingUser.getNim().equals(allUserRequestDTO.getNim())) {
+                response.put("status", 400);
+                response.put("message", "NIM is already in use");
+                return ResponseEntity.status(400).body(response);
+            }
+
+            // Update fields only if they are different
+            if (allUserRequestDTO.getEmail() != null && !allUserRequestDTO.getEmail().equals(existingUser.getEmail())) {
+                existingUser.setEmail(allUserRequestDTO.getEmail());
+            }
+            if (allUserRequestDTO.getName() != null && !allUserRequestDTO.getName().equals(existingUser.getName())) {
+                existingUser.setName(allUserRequestDTO.getName());
+            }
+            if (allUserRequestDTO.getPassword() != null && !allUserRequestDTO.getPassword().equals(existingUser.getPassword())) {
+                existingUser.setPassword(allUserRequestDTO.getPassword());
+            }
+            if (allUserRequestDTO.getPhone() != null && !allUserRequestDTO.getPhone().equals(existingUser.getPhone())) {
+                existingUser.setPhone(allUserRequestDTO.getPhone());
+            }
+            if (allUserRequestDTO.getRole() != null) {
+                existingUser.setRole(User.Role.valueOf(allUserRequestDTO.getRole().toString()));
+            }
+            if (allUserRequestDTO.getNim() != null && !allUserRequestDTO.getNim().equals(existingUser.getNim())) {
+                existingUser.setNim(allUserRequestDTO.getNim());
+            }
+            if (allUserRequestDTO.getNip() != null && !allUserRequestDTO.getNip().equals(existingUser.getNip())) {
+                existingUser.setNip(allUserRequestDTO.getNip());
+            }
+            if (allUserRequestDTO.getYear() != null && !allUserRequestDTO.getYear().equals(existingUser.getYear())) {
+                existingUser.setYear(allUserRequestDTO.getYear());
+            }
+
+            // Save the updated user
+            userRepository.save(existingUser);
+
+            response.put("status", 200);
+            response.put("message", "User updated successfully");
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            response.put("status", 500);
+            response.put("error", "Internal Server Error");
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(response);
         }
-
-        User existingUser = existingUserOptional.get();
-
-        // Handle different roles by using the DTOs
-        switch (User.Role.valueOf(userRequestDTO.getRole().toLowerCase())) {
-            case student:
-                StudentRequestDTO studentDTO = (StudentRequestDTO) userRequestDTO;
-                existingUser.setNim(studentDTO.getNim());
-                existingUser.setYear(studentDTO.getYear());
-                break;
-            case lecturer:
-                LecturerRequestDTO lecturerDTO = (LecturerRequestDTO) userRequestDTO;
-                existingUser.setNip(lecturerDTO.getNip());
-                break;
-            case admin:
-                // No additional fields for Admin
-                break;
-            default:
-                return ResponseEntity.status(400).body("Invalid role");
-        }
-
-        // Update common fields for all roles
-        existingUser.setEmail(userRequestDTO.getEmail());
-        existingUser.setPassword(userRequestDTO.getPassword());
-        existingUser.setName(userRequestDTO.getName());
-        existingUser.setRole(User.Role.valueOf(userRequestDTO.getRole().toLowerCase()));
-        existingUser.setPhone(userRequestDTO.getPhone());
-
-        // Save the updated user
-        userRepository.update(existingUser);
-        return ResponseEntity.ok("User updated successfully");
     }
 
     // POST http://localhost:8080/api/users/register/student
@@ -164,9 +200,21 @@ public class UserController {
     //    DELETE http://localhost:8080/api/users/1
     @Operation(summary = "Delete user", description = "Delete a user by ID")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(
+    public ResponseEntity<Map<String, Object>> deleteUser(
             @Parameter(description = "ID of the user to delete", required = true) @PathVariable String id) {
-        userRepository.deleteById(id);
-        return ResponseEntity.ok("User deleted successfully");
+        Map<String, Object> response = new HashMap<>();
+        try {
+            userRepository.deleteById(id);
+            response.put("status", "success");
+            response.put("message", "User deleted successfully");
+            response.put("userId", id);
+            return ResponseEntity.status(200).body(response);
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("message", "Failed to delete user");
+            response.put("error", e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
     }
+
 }

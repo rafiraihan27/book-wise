@@ -1,7 +1,5 @@
 import { newTransaction, Transaction } from "@/types/interfaces";
 
-const API_BASE_URL = '/api';
-
 /**
  * Mengambil data transaksi berdasarkan kode invoice.
  *
@@ -43,7 +41,7 @@ const API_BASE_URL = '/api';
 }
  */
 export async function fetchTransactionsByInvoiceId(invoiceId: string) {
-    const response = await fetch(`${API_BASE_URL}/transactions/invoice?invoiceCode=${invoiceId}`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/transactions/invoice?invoiceCode=${invoiceId}`, {
         method: 'GET',
     });
 
@@ -99,7 +97,7 @@ export async function fetchTransactionsByInvoiceId(invoiceId: string) {
 export async function fetchTransactions(payload?: Record<string, any>) {
     const queryString = new URLSearchParams(payload).toString();
 
-    const response = await fetch(`${API_BASE_URL}/transactions?${queryString}`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/transactions?${queryString}`, {
         method: 'GET',
     });
 
@@ -167,7 +165,7 @@ export async function fetchTransactions(payload?: Record<string, any>) {
 } 
  *  */
 export async function fetchPostTransaction(data: newTransaction) {
-    const response = await fetch(`${API_BASE_URL}/transactions`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/transactions`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -223,7 +221,7 @@ export async function fetchPostTransaction(data: newTransaction) {
 }
  */
 export async function fetchUpdateStatusTransaction(invoiceCode: string, status: string) {
-    const response = await fetch(`${API_BASE_URL}/transactions?invoiceCode=${invoiceCode}&status=${status}`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/transactions?invoiceCode=${invoiceCode}&status=${status}`, {
         method: 'PUT',
     })
 

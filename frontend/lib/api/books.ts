@@ -1,5 +1,3 @@
-const API_BASE_URL = '/api';
-
 /**
  * Mengambil daftar buku berdasarkan parameter query yang diberikan.
  *
@@ -24,7 +22,7 @@ const API_BASE_URL = '/api';
 export async function fetchBooks(payload?: Record<string, any>) {
     const queryString = new URLSearchParams(payload).toString();
 
-    const response = await fetch(`${API_BASE_URL}/books?${queryString}`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/books?${queryString}`, {
         method: 'GET',
     });
 
@@ -71,7 +69,7 @@ export async function fetchBooks(payload?: Record<string, any>) {
  }
  */
 export async function fetchBookById(id: string) {
-    const response = await fetch(`${API_BASE_URL}/books/${id}`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/books/${id}`, {
         method: 'GET',
     });
 
@@ -103,7 +101,7 @@ export async function fetchBookById(id: string) {
   }]
  */
 export async function fetchBooksRecommendation(max: number) {
-    const response = await fetch(`${API_BASE_URL}/books/recommended?max=${max}`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/books/recommended?max=${max}`, {
         method: 'GET',
     });
 
@@ -125,7 +123,7 @@ export async function fetchBooksRecommendation(max: number) {
 import { CreateUpdateBook } from "@/types/interfaces"
 export async function addBook(book: CreateUpdateBook) {
     // console.log(book);
-    const response = await fetch(`${API_BASE_URL}/books`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/books`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -150,7 +148,7 @@ export async function addBook(book: CreateUpdateBook) {
  * Request example: http://localhost:8080/api/books/:id
  */
 export async function updateBook(id: string, updatedBook: CreateUpdateBook) {
-    const response = await fetch(`${API_BASE_URL}/books/${id}`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/books/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -174,7 +172,7 @@ export async function updateBook(id: string, updatedBook: CreateUpdateBook) {
  * Request example: http://localhost:8080/api/books/:id
  */
 export async function deleteBook(id: string): Promise<void> {
-    const response = await fetch(`${API_BASE_URL}/books/${id}`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/books/${id}`, {
         method: 'DELETE',
     });
 

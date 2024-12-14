@@ -62,7 +62,6 @@ export default function UsersPage() {
     if (error) {
         return <div className="error">{error}</div>;
     }
-
     const filteredUsers = users.filter((user) => {
         const matchesSearch =
             (user.id?.toLowerCase().includes(search.toLowerCase()) ?? false) ||
@@ -75,6 +74,7 @@ export default function UsersPage() {
     // Handle Add User
     const handleAddUser = async (newUser: Omit<User, "id">) => {
         try {
+            setLoading(true)
             let addedUser;
             switch (newUser.role) {
                 case "student":
@@ -90,7 +90,7 @@ export default function UsersPage() {
                     throw new Error("Invalid role specified");
             }
 
-            setUsers([...users, addedUser.user]);
+            await loadUsers();
 
             toast.success("User Added", {
                 description: `${newUser.name} has been added successfully as ${newUser.role}.`,
@@ -98,12 +98,15 @@ export default function UsersPage() {
         } catch (err) {
             console.error(err);
             toast.error("Failed to add user", { description: `${err}` });
+        } finally {
+            setLoading(false);
         }
     };
 
     // Handle Edit User
     const handleEditUser = async (editedUser: User) => {
         try {
+            setLoading(true)
             if (!editedUser.id) {
                 throw new Error("User ID is missing or invalid");
             }
@@ -122,9 +125,7 @@ export default function UsersPage() {
 
             const updatedUser = await updateUserById(id, sanitizedUser);
 
-            setUsers((prevUsers) =>
-                prevUsers.map((user) => (user.id === updatedUser.id ? updatedUser : user))
-            );
+            await loadUsers();
 
             toast.success("User Updated", {
                 description: `${updatedUser.name} has been updated successfully.`,
@@ -132,21 +133,34 @@ export default function UsersPage() {
         } catch (err) {
             console.error("Error updating user:", err);
             toast.error("Failed to update user", { description: `${err}` });
+        } finally {
+            setLoading(false)
         }
     };
 
     // Handle Delete User
     const handleDeleteUser = async (id: string) => {
         try {
+            setLoading(true)
             await deleteUserById(id);
-            setUsers(users.filter((user) => user.id !== id));
+            await loadUsers()
             toast.error("User Deleted", {
                 description: "The User has been deleted successfully.",
             });
         } catch (err) {
             toast.error("Failed to delete user", { description: `${err}` });
+        } finally {
+            setLoading(false)
         }
     };
+
+    function truncateText(text: any, maxLength: number) {
+        if (text.length > maxLength) {
+            return text.slice(0, maxLength) + '...';
+        }
+        return text;
+    }
+    
 
     return (
         <div className="flex flex-col h-full">
@@ -209,7 +223,7 @@ export default function UsersPage() {
                                         <TableBody>
                                             {filteredUsers.filter((u) => u.role === item).map((user) => (
                                                 <TableRow key={user.id}>
-                                                    <TableCell className="font-medium">{user.id}</TableCell>
+                                                    <TableCell className="font-medium">{truncateText(user.id, 5)}</TableCell>
                                                     <TableCell>{user.name}</TableCell>
                                                     <TableCell>{user.email}</TableCell>
                                                     <TableCell>{user.phone}</TableCell>

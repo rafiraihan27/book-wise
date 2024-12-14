@@ -1,5 +1,3 @@
-const API_BASE_URL = '/api';
-
 /**
  * Fungsi untuk login user (student atau lecturer).
  *
@@ -25,7 +23,7 @@ const API_BASE_URL = '/api';
  * }
  */
 export async function loginUser(email: string, password: string) {
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -40,7 +38,7 @@ export async function loginUser(email: string, password: string) {
 }
 
 export async function loginUserAdmin(email: string, password: string) {
-    const response = await fetch(`${API_BASE_URL}/auth/login/admin`, {
+    const response = await fetch(`${process.env.API_BASE_URL}/auth/login/admin`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
