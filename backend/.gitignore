@@ -12,3 +12,5 @@ target/
 .mvn/
 mvnw
 mvnw.cmd
+
+*.jar
