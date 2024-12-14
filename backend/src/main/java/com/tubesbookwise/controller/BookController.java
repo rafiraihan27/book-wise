@@ -1,82 +1,57 @@
 package com.tubesbookwise.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
+import com.tubesbookwise.Models.Book;
+import com.tubesbookwise.Service.BookService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
 
-    //    GET http://localhost:8080/api/books?search="Dunia Sophie"&category="fiksi"&years=1991
-    @Operation(summary = "Ambil daftar buku", description = "Mengambil daftar buku berdasarkan parameter query")
-    @GetMapping()
-    public ResponseEntity<?> getBook(
+    @Autowired
+    private BookService bookService;
+
+    @GetMapping
+    public ResponseEntity<List<Book>> getBooks(
             @RequestParam(value = "search", required = false) String search,
             @RequestParam(value = "category", required = false) String category,
-            @RequestParam(value = "years", required = false) String years
-            ) {
-        return ResponseEntity.ok().body(
-                Map.of("message", search +" "+category+" "+years)
-        );
+            @RequestParam(value = "years", required = false) Integer years
+    ) {
+        List<Book> books = bookService.getAllBooks(search, category, years);
+        return ResponseEntity.ok(books);
     }
 
-    //    GET http://localhost:8080/api/books/1
-    @Operation(summary = "Ambil daftar buku by ID buku", description = "Mengambil daftar buku berdasarkan ID buku")
     @GetMapping("/{id}")
-    public ResponseEntity<?> getBookByID(
-            @PathVariable String id
-    ) {
-        return ResponseEntity.ok().body(
-                Map.of("message", id)
-        );
+    public ResponseEntity<Book> getBookById(@PathVariable UUID id) {
+        Optional<Book> book = bookService.getBookById(id);
+        return book.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    //    GET http://localhost:8080/api/books/recommended?max=4
-    @Operation(summary = "Ambil daftar buku rekomendasi", description = "Mengambil daftar rekomendasi buku berdasar max buku")
-    @GetMapping("/recommended")
-    public ResponseEntity<?> getBookRecommendation(
-            @RequestParam(value = "max", required = false) Integer max
-    ) {
-        return ResponseEntity.ok().body(
-                Map.of("message", max)
-        );
+    @PostMapping
+    public ResponseEntity<Book> addBook(@RequestBody Book book) {
+        Book createdBook = bookService.addBook(book);
+        return ResponseEntity.ok(createdBook);
     }
 
-    //    POST http://localhost:8080/api/books
-    @Operation(summary = "Tambah data buku", description = "Menambah data buku")
-    @PostMapping()
-    public ResponseEntity<?> postBook(
-            @Valid @RequestBody String bookName
-    ) {
-        return ResponseEntity.ok().body(
-                Map.of("message", bookName)
-        );
-    }
-
-    //    PUT http://localhost:8080/api/books/:id
-    @Operation(summary = "Update data buku", description = "Update/edit data buku")
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateBook(
-            @PathVariable String id,
-            @Valid @RequestBody String bookName
-    ) {
-        return ResponseEntity.ok().body(
-                Map.of("message", id+" "+bookName)
-        );
+    public ResponseEntity<Book> updateBook(@PathVariable UUID id, @RequestBody Book book) {
+        try {
+            Book updatedBook = bookService.updateBook(id, book);
+            return ResponseEntity.ok(updatedBook);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    //    DELETE http://localhost:8080/api/books/:id
-    @Operation(summary = "Delete data buku", description = "Menghapus data buku berdasarkan id buku")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteBook(
-            @PathVariable String id
-    ) {
-        return ResponseEntity.ok().body(
-                Map.of("message", id)
-        );
+    public ResponseEntity<Void> deleteBook(@PathVariable UUID id) {
+        bookService.deleteBook(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -45,7 +45,7 @@ public class User {
     public enum Role {
         admin,
         student,
-        lecturer
+        ADMIN, lecturer
     }
 
     public User() {}
