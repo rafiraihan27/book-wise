@@ -1,6 +1,6 @@
 # Project IPPL & PBO Kelompok 4
-- Frontend Demo [Vercel]: https://book-wise.guelo.xyz
-- Backend Demo [Microsoft Azure]: https://bookwise.azurewebsites.net/swagger-ui/index.html
+- Frontend Demo [NextJs] [Vercel]: https://book-wise.guelo.xyz
+- Backend Demo [Java Springboot] [Microsoft Azure]: https://bookwise.azurewebsites.net/swagger-ui/index.html
 - Mysql Database menggunakan Aivencloud
 
 ### Anggota Kelompok:
