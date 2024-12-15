@@ -1,6 +1,7 @@
 # Project IPPL & PBO Kelompok 4
-Frontend Demo: ttps://book-wise.guelo.xyz
-Backend Demo: https://bookwise.azurewebsites.net/swagger-ui/index.html
+- Frontend Demo [Vercel]: https://book-wise.guelo.xyz
+- Backend Demo [Microsoft Azure]: https://bookwise.azurewebsites.net/swagger-ui/index.html
+- Mysql Database menggunakan Aivencloud
 
 ### Anggota Kelompok:
 1. Gagas Surya Laksana - 1301223164
