@@ -68,4 +68,131 @@ public class Book {
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Review> reviews;
 
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public void setQuota(int quota) {
+        this.quota = quota;
+    }
+
+    public void setRackNumber(String rackNumber) {
+        this.rackNumber = rackNumber;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public void setAvailableCopies(int availableCopies) {
+        this.availableCopies = availableCopies;
+    }
+
+    public void setLateFee(BigDecimal lateFee) {
+        this.lateFee = lateFee;
+    }
+
+    public void setCanBorrow(boolean canBorrow) {
+        this.canBorrow = canBorrow;
+    }
+
+    public void setRating(BigDecimal rating) {
+        this.rating = rating;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public int getQuota() {
+        return quota;
+    }
+
+    public String getRackNumber() {
+        return rackNumber;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public int getAvailableCopies() {
+        return availableCopies;
+    }
+
+    public BigDecimal getLateFee() {
+        return lateFee;
+    }
+
+    public boolean isCanBorrow() {
+        return canBorrow;
+    }
+
+    public BigDecimal getRating() {
+        return rating;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
 }

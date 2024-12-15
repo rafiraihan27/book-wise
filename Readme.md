@@ -1,5 +1,6 @@
 # Project IPPL & PBO Kelompok 4
-Demo: https://book-wise.guelo.xyz
+Frontend Demo: ttps://book-wise.guelo.xyz
+Backend Demo: https://bookwise.azurewebsites.net/swagger-ui/index.html
 
 ### Anggota Kelompok:
 1. Gagas Surya Laksana - 1301223164

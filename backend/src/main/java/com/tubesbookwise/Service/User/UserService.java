@@ -50,11 +50,11 @@ public class UserService {
 
     public User updateUser(User newUser, String id) {
         switch (newUser.getRole()) {
-            case User.Role.admin:
+            case admin:
                 return adminService.updateAdmin(newUser, id);
-            case User.Role.lecturer:
+            case lecturer:
                 return lecturerService.updateLecturer(newUser, id);
-            case User.Role.student:
+            case student:
                 return studentService.updateStudent(newUser, id);
             default:
                 throw new IllegalArgumentException("Invalid user role");
