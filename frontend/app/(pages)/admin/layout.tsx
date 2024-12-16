@@ -17,6 +17,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { Sun, Moon, Cloud } from 'lucide-react'
+import { useAuthGuard } from "@/common/tokenizer"
 
 interface AdminLayoutProps {
   children: React.ReactNode,
@@ -24,6 +25,7 @@ interface AdminLayoutProps {
 }
 
 export default function AdminLayout({ children, page }: AdminLayoutProps) {
+  const { isLoading } = useAuthGuard();
   const [currentDate, setCurrentDate] = useState<string>("")
   const [greeting, setGreeting] = useState<string>("")
   const [icon, setIcon] = useState<React.ReactNode>(<Cloud />)
@@ -59,6 +61,14 @@ export default function AdminLayout({ children, page }: AdminLayoutProps) {
 
     updateDate()
   }, [])
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p>Admin validation...</p>
+      </div>
+    );
+  }
 
   return (
     <SidebarProvider
