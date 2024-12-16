@@ -114,7 +114,7 @@ export default function BookCollection({ search = "", category = "", years = "" 
                                     {/* Author */}
                                     <p className="text-sm text-gray-600 mt-1">by {book.author}</p>
                                     {/* Description */}
-                                    <p className="text-sm text-gray-600 mt-3">{book.description}</p>
+                                    <p className="text-sm text-gray-600 mt-3 line-clamp-3">{book.description}</p>
                                 </Link>
                             </div>
                         </div>
