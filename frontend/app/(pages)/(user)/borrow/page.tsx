@@ -172,7 +172,7 @@ export default function CheckoutPage() {
                     <CardContent>
                         <form>
                             <div className="grid gap-4">
-                                <RadioGroup
+                                {/* <RadioGroup
                                     defaultValue="bank"
                                     className="grid grid-cols-2 gap-4"
                                     onValueChange={(value) => setPaymentMethod(value)}
@@ -195,7 +195,7 @@ export default function CheckoutPage() {
                                             <img src='https://upload.wikimedia.org/wikipedia/commons/e/e1/QRIS_logo.svg' alt="QRIS Code" width={130} height={130} />
                                         </Label>
                                     </div>
-                                </RadioGroup>
+                                </RadioGroup> */}
 
                                 {paymentMethod === 'bank' && (
                                     <div className="border p-4 rounded-md mb-4">

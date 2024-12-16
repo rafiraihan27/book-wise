@@ -21,8 +21,8 @@ export default function DashboardPage() {
           <Tabs defaultValue="overview" className="space-y-4">
             <TabsList>
               <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="transactions">Transactions</TabsTrigger>
-              <TabsTrigger value="reviews">Reviews</TabsTrigger>
+              {/* <TabsTrigger value="transactions">Transactions</TabsTrigger>
+              <TabsTrigger value="reviews">Reviews</TabsTrigger> */}
             </TabsList>
             <TabsContent value="overview" className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

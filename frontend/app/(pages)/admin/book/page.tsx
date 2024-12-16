@@ -29,6 +29,7 @@ import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { CreateUpdateBook } from "@/types/interfaces"
 import { fetchBooks, addBook, updateBook, deleteBook } from "@/lib/api/books";
+import LoadingComponent from "@/components/loading"
 
 export default function BooksPage() {
     const [books, setBooks] = useState<CreateUpdateBook[]>([]);
@@ -50,14 +51,14 @@ export default function BooksPage() {
             setLoading(false);
         }
     }
-    
+
     // Fetch Books
     useEffect(() => {
         loadBooks();
     }, []);
 
     if (loading) {
-        return <div className="loading">Tunggu bentar, bukunya lagi diambil dari database...</div>;
+        return <LoadingComponent description="Tunggu bentar, bukunya lagi diambil dari database..." />;
     }
 
     if (error) {
@@ -106,15 +107,23 @@ export default function BooksPage() {
 
     // Handle Delete Book
     const handleDeleteBook = async (id: string) => {
-        try {
-            await deleteBook(id);
-            setBooks(books.filter((book) => book.id !== id));
-            toast.error("Book Deleted", {
-                description: "The book has been deleted successfully.",
-            });
-        } catch (err) {
-            toast.error("Failed to delete book", { description: `${err}` });
-        }
+        toast.info('Yakin buku ini dihapus?', {
+            closeButton: true,
+            action: {
+                label: 'Delete',
+                onClick: async () => {
+                    try {
+                        await deleteBook(id);
+                        setBooks(books.filter((book) => book.id !== id));
+                        toast.error("Book Deleted", {
+                            description: "The book has been deleted successfully.",
+                        });
+                    } catch (err) {
+                        toast.error("Failed to delete book", { description: `${err}` });
+                    }
+                },
+            },
+        });
     };
 
     return (

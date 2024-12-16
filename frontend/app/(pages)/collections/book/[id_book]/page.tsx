@@ -26,6 +26,7 @@ import { Book } from "@/types/interfaces";
 import { BookReviewForm } from "@/components/user-page/book-review-form";
 import { submitReview } from "@/lib/api/reviews";
 import { toast } from "sonner";
+import LoadingComponent from "@/components/loading";
 
 export default function BookDetailPage({ params }: { params: { id_book: string } }) {
   const { id_book } = params;
@@ -61,7 +62,7 @@ export default function BookDetailPage({ params }: { params: { id_book: string }
   }
 
   if (loading) {
-    return <div className="flex items-center justify-center h-screen">Tunggu bentar, bukunya lagi diambil dari database...</div>;
+    return <LoadingComponent description="Tunggu bentar, bukunya lagi diambil dari database..."/>;
   }
 
   if (error) {

@@ -56,9 +56,8 @@ export default function UsersPage() {
     }, []);
 
     if (loading) {
-        return <div className="loading">Tunggu bentar, data user lagi diambil dari database...</div>;
+        return <LoadingComponent description="Tunggu bentar, data user lagi diambil dari database..."/>;
     }
-
     if (error) {
         return <div className="error">{error}</div>;
     }
@@ -140,19 +139,27 @@ export default function UsersPage() {
 
     // Handle Delete User
     const handleDeleteUser = async (id: string) => {
-        try {
-            setLoading(true)
-            await deleteUserById(id);
-            await loadUsers()
-            toast.error("User Deleted", {
-                description: "The User has been deleted successfully.",
-            });
-        } catch (err) {
-            toast.error("Failed to delete user", { description: `${err}` });
-        } finally {
-            setLoading(false)
-        }
-    };
+        toast.info('Yakin user ini dihapus?', {
+            closeButton: true,
+            action: {
+                label: 'Delete',
+                onClick: async () => {
+                    try {
+                        setLoading(true);
+                        await deleteUserById(id);
+                        await loadUsers();
+                        toast.success("User Deleted", {
+                            description: "The User has been deleted successfully.",
+                        });
+                    } catch (err) {
+                        toast.error("Failed to delete user", { description: `${err}` });
+                    } finally {
+                        setLoading(false);
+                    }
+                },
+            },
+        });
+    };    
 
     function truncateText(text: any, maxLength: number) {
         if (text.length > maxLength) {
@@ -274,6 +281,7 @@ interface UserFormProps {
 }
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import LoadingComponent from "@/components/loading"
 
 function UserForm({ user, onSubmit }: UserFormProps) {
     const [formData, setFormData] = useState<Omit<User, "id"> | User>({

@@ -10,6 +10,7 @@ com/tubesbookwise/Models/Notification$NotificationType.class
 com/tubesbookwise/Service/User/AdminService.class
 com/tubesbookwise/exception/ApiException.class
 com/tubesbookwise/Models/Book.class
+com/tubesbookwise/Service/AuthService.class
 com/tubesbookwise/exception/ErrorResponse.class
 com/tubesbookwise/Models/Review.class
 com/tubesbookwise/dto/User/LecturerRequestDTO.class
@@ -20,7 +21,6 @@ com/tubesbookwise/Repository/UserRepository.class
 com/tubesbookwise/Models/Transaction$TransactionStatus.class
 com/tubesbookwise/dto/User/UserRequestDTO.class
 com/tubesbookwise/Service/User/UserService.class
-com/tubesbookwise/exception/GlobalExceptionHandler.class
 com/tubesbookwise/controller/TransactionController.class
 com/tubesbookwise/controller/AuthController.class
 com/tubesbookwise/Models/TransactionItem.class

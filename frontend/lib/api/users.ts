@@ -58,11 +58,11 @@ export async function fetchAllUsers(role?:string){
     const response = await fetch(url, {
         method: 'GET',
     });
-
-    if(!response.ok){
-        throw new Error('Gagal mengambil semua data users');
+    const responseBody = await response.json();
+    if (!response.ok) {
+        throw new Error(responseBody.message || "Gagal mengambil data users");
     }
-    return response.json();
+    return responseBody;
 }
 
 /**
@@ -86,11 +86,11 @@ export async function fetchUserById(id: string) {
     const response = await fetch(`${process.env.API_BASE_URL_PRODUCTION}/users/${id}`, {
         method: 'GET',
     });
-
+    const responseBody = await response.json();
     if (!response.ok) {
-        throw new Error('Gagal mengambil data user berdasarkan ID');
+        throw new Error(responseBody.message || "Gagal mengambil data user berdasarkan ID");
     }
-    return response.json();
+    return responseBody;
 }
 
 /**
@@ -132,13 +132,11 @@ export async function updateUserById(id: string, data: User) {
         },
         body: JSON.stringify(data),
     });
-
-    console.log(response)
-
+    const responseBody = await response.json();
     if (!response.ok) {
-        throw new Error('Gagal memperbarui data pengguna');
+        throw new Error(responseBody.message || "Gagal memperbarui data pengguna");
     }
-    return response.json();
+    return responseBody;
 }
 
 /**
@@ -179,11 +177,11 @@ export async function registerStudent(data: User) {
         },
         body: JSON.stringify(data),
     });
-
+    const responseBody = await response.json();
     if (!response.ok) {
-        throw new Error('Gagal mendaftarkan mahasiswa');
+        throw new Error(responseBody.message || "Gagal mendaftarkan mahasiswa");
     }
-    return response.json();
+    return responseBody;
 }
 
 /**
@@ -222,11 +220,11 @@ export async function registerLecturer(data: User) {
         },
         body: JSON.stringify(data),
     });
-
+    const responseBody = await response.json();
     if (!response.ok) {
-        throw new Error('Gagal mendaftarkan dosen');
+        throw new Error(responseBody.message || "Gagal mendaftarkan dosen");
     }
-    return response.json();
+    return responseBody;
 }
 
 /**
@@ -263,11 +261,11 @@ export async function registerAdmin(data: User) {
         },
         body: JSON.stringify(data),
     });
-
+    const responseBody = await response.json();
     if (!response.ok) {
-        throw new Error('Gagal mendaftarkan admin');
+        throw new Error(responseBody.message || "Gagal mendaftarkan admin");
     }
-    return response.json();
+    return responseBody;
 }
 
 /**
@@ -292,9 +290,9 @@ export async function deleteUserById(id: string) {
             'Content-Type': 'application/json',
         },
     });
-
+    const responseBody = await response.json();
     if (!response.ok) {
-        throw new Error('Gagal menghapus data pengguna');
+        throw new Error(responseBody.message || "Gagal menghapus data pengguna");
     }
-    return response.json();
+    return responseBody;
 }

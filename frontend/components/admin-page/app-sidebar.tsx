@@ -32,7 +32,7 @@ const data = {
         { title: "Book", url: "/admin/book", icon: LibraryBig, isActive: false },
         { title: "User", url: "/admin/user", icon: UserRound, isActive: false },
         { title: "Transaction", url: "/admin/transaction", icon: CalendarSearch, isActive: false },
-        { title: "Settings", url: "/admin/settings", icon: Cog, isActive: false },
+        // { title: "Settings", url: "/admin/settings", icon: Cog, isActive: false },
     ],
 };
 

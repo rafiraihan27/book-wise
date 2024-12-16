@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
             org.springframework.dao.DataIntegrityViolationException ex, WebRequest request) {
         return buildErrorResponse(
                 HttpStatus.CONFLICT,
-                "Duplicate entry or constraint violation",
+                "Datanya duplikat!",
                 request.getDescription(false).replace("uri=", "")
         );
     }

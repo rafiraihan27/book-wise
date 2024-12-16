@@ -101,7 +101,7 @@ export default function RegisterPage() {
       router.push("/login")
 
       setIsLoading(false);
-      toast("Registration Successful");
+      toast.success("Registration Successful");
     } catch (error: any) {
       setIsLoading(false);
       toast.error(error.message || 'Something went wrong');

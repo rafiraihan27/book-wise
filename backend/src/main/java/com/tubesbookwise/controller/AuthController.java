@@ -1,70 +1,69 @@
 package com.tubesbookwise.controller;
 
 import com.tubesbookwise.Models.User;
-import com.tubesbookwise.Repository.UserRepository;
+import com.tubesbookwise.Service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final AuthService authService;
 
     @Autowired
-    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
-    // POST http://localhost:8080/api/auth/login
-    @Operation(summary = "Login user", description = "Autentikasi user dengan email dan password")
+    @Operation(summary = "Login user", description = "Authenticate user with email and password")
     @PostMapping("/login")
     public ResponseEntity<?> login(
             @RequestParam String email,
             @RequestParam String password) {
+        try {
+            User user = authService.login(email, password);
+            String token = authService.generateToken(user);
 
-        // Find the user by email
-        User user = (User) userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+            // Create a response map
+            Map<String, Object> response = new HashMap<>();
+            response.put("id", user.getId());
+            response.put("email", user.getEmail());
+            response.put("name", user.getName());
+            response.put("role", user.getRole().toString());
+            response.put("token", token);
 
-        // Check if the password matches
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            return ResponseEntity.status(401).body("Invalid password");
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(401).body(Map.of("error", e.getMessage()));
         }
-
-        // Exclude password from response and return user data
-        user.setPassword(null);  // Remove sensitive data (password) from the response
-
-        return ResponseEntity.ok(user);  // Respond with user data (excluding password)
     }
 
-    // POST http://localhost:8080/api/auth/login/admin
-    @Operation(summary = "Login admin", description = "Autentikasi admin dengan email dan password")
+    @Operation(summary = "Login admin", description = "Authenticate admin with email and password")
     @PostMapping("/login/admin")
     public ResponseEntity<?> loginAdmin(
             @RequestParam String email,
             @RequestParam String password) {
+        try {
+            User user = authService.loginAdmin(email, password);
+            String token = authService.generateToken(user);
 
-        // Find the user by email
-        User user = (User) userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Admin not found"));
+            // Create a response map
+            Map<String, Object> response = new HashMap<>();
+            response.put("id", user.getId());
+            response.put("email", user.getEmail());
+            response.put("name", user.getName());
+            response.put("role", user.getRole().toString());
+            response.put("token", token);
 
-        // Check if the password matches
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            return ResponseEntity.status(401).body("Invalid password");
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(403).body(Map.of("error", e.getMessage()));
         }
-
-        // Check if the user is an admin
-        if (user.getRole() != User.Role.admin) {
-            return ResponseEntity.status(403).body("Unauthorized: Admin access only");
-        }
-
-        // Exclude password from response and return user data
-        user.setPassword(null);  // Remove sensitive data (password) from the response
-
-        return ResponseEntity.ok(user);  // Respond with user data (excluding password)
     }
 }

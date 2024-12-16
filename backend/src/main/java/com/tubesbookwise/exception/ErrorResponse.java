@@ -6,14 +6,14 @@ public class ErrorResponse {
     private LocalDateTime timesStamp;
     private int status;
     private String error;
-    private String messsage;
+    private String message;
     private String path;
 
-    public ErrorResponse(LocalDateTime timeStamp, int status, String error, String messsage, String path) {
+    public ErrorResponse(LocalDateTime timeStamp, int status, String error, String message, String path) {
         this.timesStamp = timeStamp;
         this.status = status;
         this.error = error;
-        this.messsage = messsage;
+        this.message = message;
         this.path = path;
     }
 
@@ -41,12 +41,12 @@ public class ErrorResponse {
         this.error = error;
     }
 
-    public String getMesssage() {
-        return messsage;
+    public String getmessage() {
+        return message;
     }
 
-    public void setMesssage(String messsage) {
-        this.messsage = messsage;
+    public void setmessage(String message) {
+        this.message = message;
     }
 
     public String getPath() {

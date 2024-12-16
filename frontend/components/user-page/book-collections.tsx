@@ -8,6 +8,7 @@ import { verifyToken } from "@/common/tokenizer";
 import { useEffect, useState } from 'react';
 import { fetchBooks } from '@/lib/api';
 import { SimpleBook } from "@/types/interfaces";
+import LoadingComponent from "../loading";
 
 export default function BookCollection({ search = "", category = "", years = "" }) {
     const [books, setBooks] = useState<SimpleBook[]>([]);
@@ -35,7 +36,7 @@ export default function BookCollection({ search = "", category = "", years = "" 
     }, [search, category, years]);
 
     if (loading) {
-        return <div className="loading">Tunggu bentar, bukunya lagi diambil dari database...</div>; 
+        return <LoadingComponent description="Tunggu bentar, bukunya lagi diambil dari database..."/>
     }
 
     if (error) {

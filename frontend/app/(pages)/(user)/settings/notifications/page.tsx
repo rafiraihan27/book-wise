@@ -17,6 +17,7 @@ import { Separator } from "@/components/ui/separator"
 import { toast } from "sonner"
 import { fetchNotificationsByUserId, updateNotificationsStatusById } from "@/lib/api"
 import { Notification } from "@/types/interfaces"
+import LoadingComponent from "@/components/loading"
 
 export default function NotificationsPage() {
   const [notifications, setNotifications] = useState<Notification[]>()
@@ -58,7 +59,7 @@ export default function NotificationsPage() {
   }, []);
 
   if (loading) {
-    return <div className="loading">Tunggu bentar, bukunya lagi diambil dari database...</div>;
+    return <LoadingComponent description="Tunggu bentar, notifikasinya lagi diambil dari database..."/>;
   }
 
   if (error) {

@@ -7,6 +7,7 @@
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Models/User.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Repository/BookRepository.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Repository/UserRepository.java
+/Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Service/AuthService.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Service/BookService.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Service/User/AdminService.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Service/User/LecturerService.java

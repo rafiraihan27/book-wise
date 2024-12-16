@@ -11,6 +11,7 @@ import { FileText, Loader2, Mail, Phone } from 'lucide-react'
 import { toast } from 'sonner'
 import { fetchTransactionsByInvoiceId } from '@/lib/api/transactions'
 import { Transaction } from '@/types/interfaces'
+import LoadingComponent from '@/components/loading'
 
 export default function InvoiceComponent({ invoiceCode = "" }) {
     const [invoice, setInvoice] = useState<Transaction>()
@@ -41,11 +42,7 @@ export default function InvoiceComponent({ invoiceCode = "" }) {
     }, []);
 
     if (loading) {
-        return (
-            <div className="flex items-center justify-center h-screen">
-                <Loader2 className="h-6 w-6 animate-spin" />
-            </div>
-        );
+        return <LoadingComponent description="Bentarr... Invoicenya lagi di bikinin!"/>
     }
     
     if (!invoice) {

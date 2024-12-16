@@ -5,6 +5,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { SimpleBook } from "@/types/interfaces"
 import { useEffect, useState } from "react"
 import { fetchBooksRecommendation } from "@/lib/api/books"
+import LoadingComponent from "../loading"
 
 export function RecomendationBook({ title = "Recommended Books" }) {
   const [books, setBooks] = useState<SimpleBook[]>([]);
@@ -30,7 +31,7 @@ export function RecomendationBook({ title = "Recommended Books" }) {
   }, []);
 
   if (loading) {
-      return <div className="loading">Tunggu bentar, bukunya lagi diambil dari database...</div>; 
+      return <LoadingComponent/>; 
   }
 
   if (error) {
