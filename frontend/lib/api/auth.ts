@@ -23,25 +23,27 @@
  * }
  */
 export async function loginUser(email: string, password: string) {
-    const response = await fetch(`${process.env.API_BASE_URL_PRODUCTION}/auth/login?email=${email}&password=${password}`, {
+    const response = await fetch(`${process.env.API_BASE_URL_PRODUCTION}/auth/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ email, password }),
     });
     const responseBody = await response.json()
     if (!response.ok) {
-        throw new Error(responseBody.error || 'Gagal login admin');
+        throw new Error(responseBody.error || 'Gagal login user');
     }
     return responseBody;
 }
 
 export async function loginUserAdmin(email: string, password: string) {
-    const response = await fetch(`${process.env.API_BASE_URL_PRODUCTION}/auth/login/admin?email=${email}&password=${password}`, {
+    const response = await fetch(`${process.env.API_BASE_URL_PRODUCTION}/auth/login/admin`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ email, password }),
     });
     const responseBody = await response.json()
     if (!response.ok) {

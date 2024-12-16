@@ -2,6 +2,7 @@ package com.tubesbookwise.controller;
 
 import com.tubesbookwise.Models.User;
 import com.tubesbookwise.Service.AuthService;
+import com.tubesbookwise.dto.AuthRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +24,9 @@ public class AuthController {
 
     @Operation(summary = "Login user", description = "Authenticate user with email and password")
     @PostMapping("/login")
-    public ResponseEntity<?> login(
-            @RequestParam String email,
-            @RequestParam String password) {
+    public ResponseEntity<?> login(@RequestBody AuthRequest loginRequest) {
         try {
-            User user = authService.login(email, password);
+            User user = authService.login(loginRequest.getEmail(), loginRequest.getPassword());
             String token = authService.generateToken(user);
 
             // Create a response map
@@ -46,11 +45,9 @@ public class AuthController {
 
     @Operation(summary = "Login admin", description = "Authenticate admin with email and password")
     @PostMapping("/login/admin")
-    public ResponseEntity<?> loginAdmin(
-            @RequestParam String email,
-            @RequestParam String password) {
+    public ResponseEntity<?> loginAdmin(@RequestBody AuthRequest loginRequest) {
         try {
-            User user = authService.loginAdmin(email, password);
+            User user = authService.loginAdmin(loginRequest.getEmail(), loginRequest.getPassword());
             String token = authService.generateToken(user);
 
             // Create a response map

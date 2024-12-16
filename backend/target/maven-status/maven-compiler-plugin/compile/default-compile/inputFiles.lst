@@ -22,6 +22,7 @@
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/controller/StatisticDashboardController.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/controller/TransactionController.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/controller/UserController.java
+/Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/dto/AuthRequest.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/dto/CreateUpdateBookRequest.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/dto/User/AllUserRequestDTO.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/dto/User/LecturerRequestDTO.java
