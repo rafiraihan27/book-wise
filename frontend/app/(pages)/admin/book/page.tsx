@@ -266,6 +266,7 @@ function BookForm({ book, onSubmit }: BookFormProps) {
         availableCopies: 1,
         lateFee: 1000,
         canBorrow: true,
+        rating: 0,
         ...(book || {}),
     });
 
@@ -316,6 +317,10 @@ function BookForm({ book, onSubmit }: BookFormProps) {
                     <div className="md:col-span-2">
                         <Label htmlFor="isbn">ISBN</Label>
                         <Input id="isbn" name="isbn" value={formData.isbn} onChange={handleChange} required />
+                    </div>
+                    <div>
+                        <Label htmlFor="rating">Rating (0 - 5.0)</Label>
+                        <Input id="rating" name="rating" value={formData.rating} onChange={handleChange} required />
                     </div>
                     <div>
                         <Label htmlFor="language">Language</Label>
