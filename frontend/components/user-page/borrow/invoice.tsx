@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
@@ -12,6 +12,9 @@ import { toast } from 'sonner'
 import { fetchTransactionsByInvoiceId } from '@/lib/api/transactions'
 import { Transaction } from '@/types/interfaces'
 import LoadingComponent from '@/components/loading'
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import Link from 'next/link'
 
 export default function InvoiceComponent({ invoiceCode = "" }) {
     const [invoice, setInvoice] = useState<Transaction>()
@@ -19,6 +22,7 @@ export default function InvoiceComponent({ invoiceCode = "" }) {
     const [totalAmount, setTotalAmount] = useState(0);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>("");
+    const invoiceRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -41,6 +45,27 @@ export default function InvoiceComponent({ invoiceCode = "" }) {
         fetchData();
     }, []);
 
+    const handleDownloadPDF = async () => {
+        if (!invoiceRef.current) return;
+        console.log("ter-click")
+
+        try {
+            const canvas = await html2canvas(invoiceRef.current);
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'px',
+                format: [canvas.width, canvas.height],
+            });
+
+            pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+            pdf.save(`Invoice_${invoiceCode}.pdf`);
+        } catch (error) {
+            console.error('Failed to generate PDF:', error);
+            toast.error("Gagal mengunduh PDF");
+        }
+    };
+
     if (loading) {
         return <LoadingComponent description="Bentarr... Invoicenya lagi di bikinin!"/>
     }
@@ -58,7 +83,7 @@ export default function InvoiceComponent({ invoiceCode = "" }) {
     }
 
     return (
-        <div className="container mx-auto p-4 space-y-8">
+        <div className="container mx-auto p-4 space-y-8" ref={invoiceRef}>
             <Card className="w-full max-w-4xl mx-auto">
                 <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0 pb-6">
                     <div>
@@ -171,8 +196,14 @@ export default function InvoiceComponent({ invoiceCode = "" }) {
                     </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
-                    <Button variant="outline">Download Invoice</Button>
-                    <Button>Contact Admin</Button>
+                    <Button variant="outline" onClick={handleDownloadPDF}>
+                        Download Invoice
+                    </Button>
+                    <Button asChild>
+                        <Link href="/contact">
+                            Contact Admin
+                        </Link>
+                    </Button>
                 </CardFooter>
             </Card>
 
