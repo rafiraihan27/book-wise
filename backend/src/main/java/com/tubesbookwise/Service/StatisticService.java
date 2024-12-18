@@ -13,7 +13,6 @@ public class StatisticService {
         public Long getJumlahUserNow() {
             return userRepository.count();
         }
-
         @Autowired
         private BookRepository bookRepository;
 
