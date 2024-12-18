@@ -226,7 +226,7 @@ export default function BookDetailPage({ params }: { params: { id_book: string }
             </div>
           </div>
         </div>
-        <Separator className="my-8" />
+        {/* <Separator className="my-8" />
         <div>
           <h2 className="text-2xl font-semibold mb-4">Write a Review</h2>
           {!isLoading && (
@@ -235,7 +235,7 @@ export default function BookDetailPage({ params }: { params: { id_book: string }
           {isLoading && (
             <p>Please log in to submit a review.</p>
           )}
-        </div>
+        </div> */}
         <Separator className="my-8" />
         <div>
           <h2 className="text-2xl font-semibold mb-4">Reviews</h2>

@@ -27,15 +27,42 @@ import { ChevronDown, ChevronUp, Loader2, Trash2 } from 'lucide-react';
 import { Transaction } from "@/types/interfaces";
 import React from "react";
 import InvoiceComponent from "@/components/user-page/borrow/invoice";
+import { submitReview } from "@/lib/api/reviews";
+import { toast } from "sonner";
+import { BookReviewForm } from "@/components/user-page/book-review-form";
+import { Separator } from "@/components/ui/separator";
 
 export default function TransactionPage() {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [type, setType] = useState<"all" | "borrow" | "return">("all");
-    const [status, setStatus] = useState<"all" | "pending" | "approved" | "declined" | "overdue" >("all");
+    const [status, setStatus] = useState<"all" | "pending" | "approved" | "declined" | "overdue">("all");
     const [search, setSearch] = useState("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [expandedRow, setExpandedRow] = useState<string | null>(null);
+    const [showReviewForm, setShowReviewForm] = useState(false);
+    const [selectedBookId, setSelectedBookId] = useState('');
+
+    const handleReviewSubmit = async (review: any) => {
+        try {
+            // Submit the review using the API
+            await submitReview(selectedBookId, review);
+            toast("Review submitted successfully!");
+            setShowReviewForm(false); // Hide the form after success
+        } catch (err) {
+            console.error("Failed to submit review:", err);
+            toast("Failed to submit review. Please try again.");
+        }
+    };
+
+    const handleShowReviewForm = (bookId: string) => {
+        if (bookId == selectedBookId && showReviewForm) {
+            setShowReviewForm(false);
+        } else {
+            setSelectedBookId(bookId);
+            setShowReviewForm(true);
+        }
+    };
 
     const fetchData = async (userId: string) => {
         setLoading(true);
@@ -62,8 +89,8 @@ export default function TransactionPage() {
     };
 
     useEffect(() => {
-      const userId:string = localStorage.getItem("userId")  || "";
-      fetchData(userId);
+        const userId: string = localStorage.getItem("userId") || "";
+        fetchData(userId);
     }, [search, type, status]);
 
     return (
@@ -95,7 +122,7 @@ export default function TransactionPage() {
                     </div>
                     <div>
                         <Label htmlFor="status">Status</Label>
-                        <Select value={status} onValueChange={(value: "all" | "pending" | "approved" | "declined" | "overdue" ) => setStatus(value)}>
+                        <Select value={status} onValueChange={(value: "all" | "pending" | "approved" | "declined" | "overdue") => setStatus(value)}>
                             <SelectTrigger id="status" className="w-[180px]">
                                 <SelectValue placeholder="Filter transactions" />
                             </SelectTrigger>
@@ -103,7 +130,7 @@ export default function TransactionPage() {
                                 <SelectItem value="all">All</SelectItem>
                                 <SelectItem value="pending">Pending</SelectItem>
                                 <SelectItem value="approved">Approved</SelectItem>
-                                <SelectItem value="decline">Decline</SelectItem>
+                                <SelectItem value="declined">Declined</SelectItem>
                                 <SelectItem value="overdue">Overdue</SelectItem>
                             </SelectContent>
                         </Select>
@@ -149,7 +176,7 @@ export default function TransactionPage() {
                                                         <DialogTitle>Transaction ID: {transaction.id}</DialogTitle>
                                                     </DialogHeader> */}
                                                     <div className="max-h-[70vh] overflow-y-auto">
-                                                        <InvoiceComponent invoiceCode={transaction.invoiceCode}/>
+                                                        <InvoiceComponent invoiceCode={transaction.invoiceCode} />
                                                     </div>
                                                 </DialogContent>
                                             </Dialog>
@@ -174,13 +201,14 @@ export default function TransactionPage() {
                                         </TableCell>
                                         <TableCell>
                                             <span
-                                                className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                                                    transaction.status === "approved"
-                                                        ? "bg-green-100 text-green-800"
-                                                        : transaction.status === "overdue"
-                                                        ? "bg-red-100 text-red-800"
-                                                        : "bg-gray-100 text-gray-800"
-                                                }`}
+                                                className={`px-2 py-1 rounded-full text-xs font-semibold ${transaction.status === "approved"
+                                                    ? "bg-green-100 text-green-800"
+                                                    : transaction.status === "pending"
+                                                        ? "bg-gray-100 text-gray-800"
+                                                        : transaction.status === "declined"
+                                                            ? "bg-red-100 text-red-800"
+                                                            : "bg-yellow-100 text-yellow-800"
+                                                    }`}
                                             >
                                                 {transaction.status}
                                             </span>
@@ -201,26 +229,47 @@ export default function TransactionPage() {
 
                                     {/* Expanded Row for Items */}
                                     {expandedRow === transaction.id && (
-                                        <TableRow>
+                                        <TableRow className="bg-muted/50">
                                             <TableCell colSpan={8}>
                                                 <div className="grid grid-cols-2 gap-4 p-4">
                                                     {transaction.items.map((item) => (
-                                                        <div
-                                                            key={item.id}
-                                                            className="flex items-center gap-4 p-2 border rounded"
-                                                        >
-                                                            <img
-                                                                src={item.image}
-                                                                alt={item.title}
-                                                                className="w-12 h-12 object-cover rounded"
-                                                            />
-                                                            <div>
-                                                                <p className="font-medium">{item.title}</p>
-                                                                <p className="text-sm text-muted-foreground">
-                                                                    by {item.author}
-                                                                </p>
+                                                        <div className="flex flex-col p-2 border rounded bg-white max-h-fit">
+                                                            <div className="flex items-center gap-4">
+                                                                <img
+                                                                    src={item.image}
+                                                                    alt={item.title}
+                                                                    className="w-12 h-12 object-cover rounded"
+                                                                />
+                                                                <div>
+                                                                    <p className="font-medium">{item.title}</p>
+                                                                    <p className="text-sm text-muted-foreground">by {item.author}</p>
+                                                                </div>
+                                                                {(transaction.status == 'approved' || transaction.status == 'overdue') && (
+                                                                    <Button
+                                                                        onClick={() => handleShowReviewForm(item.id)}
+                                                                        type="submit"
+                                                                        className="ml-auto px-4 py-2"
+                                                                    >
+                                                                        Review
+                                                                    </Button>
+                                                                )}
                                                             </div>
+                                                            {showReviewForm && selectedBookId === item.id && (
+                                                                <div className="mt-3">
+                                                                    <Separator className="md:block" />
+                                                                    <div className="m-4">
+                                                                        {/* <h3 className="text-lg font-semibold">Review Form</h3> */}
+                                                                        <BookReviewForm
+                                                                            bookId={selectedBookId}
+                                                                            onSubmit={(reviewData) => {
+                                                                                handleReviewSubmit(reviewData);
+                                                                            }}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                            )}
                                                         </div>
+
                                                     ))}
                                                 </div>
                                             </TableCell>

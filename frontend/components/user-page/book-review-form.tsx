@@ -41,7 +41,7 @@ export function BookReviewForm({ bookId, onSubmit }: BookReviewFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="rating" className="block text-sm font-medium text-gray-700">Rating</label>
+        {/* <label htmlFor="rating" className="block text-sm font-medium text-gray-700">Rating</label> */}
         <div className="flex items-center mt-1">
           {[1, 2, 3, 4, 5].map((value) => (
             <Star
@@ -55,7 +55,7 @@ export function BookReviewForm({ bookId, onSubmit }: BookReviewFormProps) {
         </div>
       </div>
       <div>
-        <label htmlFor="content" className="block text-sm font-medium text-gray-700">Your Review</label>
+        {/* <label htmlFor="content" className="block text-sm font-medium text-gray-700">Your Review</label> */}
         <Textarea
           id="content"
           value={content}

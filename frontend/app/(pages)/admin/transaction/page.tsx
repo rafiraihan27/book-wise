@@ -107,7 +107,7 @@ export default function TransactionPage() {
                                 <SelectItem value="all">All</SelectItem>
                                 <SelectItem value="pending">Pending</SelectItem>
                                 <SelectItem value="approved">Approved</SelectItem>
-                                <SelectItem value="decline">Decline</SelectItem>
+                                <SelectItem value="declined">Declined</SelectItem>
                                 <SelectItem value="overdue">Overdue</SelectItem>
                             </SelectContent>
                         </Select>
