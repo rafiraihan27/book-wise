@@ -2,6 +2,7 @@ package com.tubesbookwise.Service;
 
 import com.tubesbookwise.Repository.UserRepository;
 import com.tubesbookwise.Repository.BookRepository;
+import com.tubesbookwise.Repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
     
@@ -20,6 +21,13 @@ public class StatisticService {
 
   public long  getStatisticBook(){
     return bookRepository.count();
+  }
+  
+  @Autowired
+  private ReviewRepository reviewrepository;
+  
+  public Long getJumlahReview(){
+      return reviewrepository.count();
   }
   
 }
