@@ -1,41 +1,3 @@
-<<<<<<< Updated upstream
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\BookWiseApplication.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\config\DevCorsConfig.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\config\SecurityConfig.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\controller\AuthController.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\controller\BookController.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\controller\NotificationController.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\controller\ReviewController.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\controller\StatisticDashboardController.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\controller\TransactionController.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\controller\UserController.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\dto\AuthRequest.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\dto\BookResponse.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\dto\CreateUpdateBookRequest.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\dto\User\AllUserRequestDTO.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\dto\User\LecturerRequestDTO.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\dto\User\StudentRequestDTO.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\dto\User\UserRequestDTO.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\dto\User\UserResponseDTO.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\exception\ApiException.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\exception\ErrorResponse.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\exception\GlobalExceptionHandler.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\Models\Book.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\Models\Notification.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\Models\Review.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\Models\Transaction.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\Models\TransactionItem.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\Models\User.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\Repository\BookRepository.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\Repository\UserRepository.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\Service\AuthService.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\Service\BookService.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\Service\StatisticService.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\Service\User\AdminService.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\Service\User\LecturerService.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\Service\User\StudentService.java
-D:\Book Wise\backend\src\main\java\com\tubesbookwise\Service\User\UserService.java
-=======
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/BookWiseApplication.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Models/Book.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Models/Notification.java
@@ -44,9 +6,12 @@ D:\Book Wise\backend\src\main\java\com\tubesbookwise\Service\User\UserService.ja
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Models/TransactionItem.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Models/User.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Repository/BookRepository.java
+/Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Repository/ReviewRepository.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Repository/UserRepository.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Service/AuthService.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Service/BookService.java
+/Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Service/ReviewService.java
+/Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Service/StatisticService.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Service/User/AdminService.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Service/User/LecturerService.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Service/User/StudentService.java
@@ -63,6 +28,9 @@ D:\Book Wise\backend\src\main\java\com\tubesbookwise\Service\User\UserService.ja
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/dto/AuthRequest.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/dto/BookResponse.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/dto/CreateUpdateBookRequest.java
+/Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/dto/Review/ReviewContent.java
+/Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/dto/Review/ReviewDTO.java
+/Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/dto/Review/ReviewRequest.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/dto/User/AllUserRequestDTO.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/dto/User/LecturerRequestDTO.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/dto/User/StudentRequestDTO.java
@@ -71,4 +39,3 @@ D:\Book Wise\backend\src\main\java\com\tubesbookwise\Service\User\UserService.ja
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/exception/ApiException.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/exception/ErrorResponse.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/exception/GlobalExceptionHandler.java
->>>>>>> Stashed changes

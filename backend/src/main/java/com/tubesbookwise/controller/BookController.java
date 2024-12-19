@@ -1,8 +1,12 @@
 package com.tubesbookwise.controller;
 
 import com.tubesbookwise.Models.Book;
+import com.tubesbookwise.Models.Review;
 import com.tubesbookwise.Models.User;
 import com.tubesbookwise.Service.BookService;
+import com.tubesbookwise.Service.ReviewService;
+import com.tubesbookwise.dto.Review.ReviewContent;
+import com.tubesbookwise.dto.Review.ReviewDTO;
 import com.tubesbookwise.dto.User.UserResponseDTO;
 import com.tubesbookwise.exception.ApiException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/books")
@@ -21,6 +26,9 @@ public class BookController {
 
     @Autowired
     private BookService bookService;
+
+    @Autowired
+    private ReviewService reviewService;
 
     @Operation(summary = "Get all books", description = "Retrieve all books with optional filters")
     @GetMapping
@@ -45,34 +53,23 @@ public class BookController {
     @Operation(summary = "Get book by ID", description = "Retrieve a book by its ID")
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getBookById(
-            @Parameter(description = "ID of the book to retrieve", required = true) @PathVariable String id
+            @Parameter(description = "ID of the book to retrieve", required = true) @PathVariable String id,
+            @RequestParam(value = "max", required = false) Integer max // Optional max parameter
     ) {
+        // Retrieve the book by its ID
         Book book = bookService.getBookById(id)
                 .orElseThrow(() -> new ApiException("No value present", HttpStatus.NOT_FOUND));
 
-        // Create dummy reviews
-        List<Map<String, Object>> reviews = new ArrayList<>();
-        reviews.add(Map.of(
-                "id", "r1",
-                "author", "John Doe",
-                "date", "2023-01-01",
-                "rating", 5,
-                "content", "Buku yang sangat menginspirasi!"
-        ));
-        reviews.add(Map.of(
-                "id", "r2",
-                "author", "Jane Smith",
-                "date", "2023-02-15",
-                "rating", 4,
-                "content", "Ceritanya menarik dan sangat mendalam."
-        ));
+        // Fetch reviews for the book (using the getReview method from ReviewService)
+        List<ReviewDTO> reviews = reviewService.getReview(id, max); // Passing bookId and max to get reviews
 
         // Convert Book object to Map and add reviews
         Map<String, Object> response = new HashMap<>(book.toMap());
-        response.put("reviews", reviews);
+        response.put("reviews", reviews); // Add reviews to the response map
 
         return ResponseEntity.ok(response);
     }
+
 
     @PostMapping
     public ResponseEntity<Book> addBook(@RequestBody Book book) {

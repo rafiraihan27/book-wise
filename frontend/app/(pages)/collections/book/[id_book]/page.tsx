@@ -257,17 +257,22 @@ export default function BookDetailPage({ params }: { params: { id_book: string }
         <Separator className="my-8" />
         <div>
           <div className="flex flex-row items-center justify-between mb-8">
-            <h2 className="text-2xl font-semibold text-muted-foreground">Reviews</h2>
+            <h2 className="text-2xl font-semibold">Reviews</h2>
             <Button size="lg" variant="outline" onClick={() => route.push("/settings/transaction-history?status=approved")}>
               Review this book!
             </Button>
           </div>
 
           <div className="space-y-6">
-            {bookData.reviews.slice(0, visibleReviews).map((review) => (
-              <BookReview key={review.id} {...review} />
-            ))}
+            {bookData.reviews.length === 0 ? (
+              <p className="text-xs text-muted-foreground">No reviews yet.</p>
+            ) : (
+              bookData.reviews.slice(0, visibleReviews).map((review) => (
+                <BookReview key={review.id} {...review} />
+              ))
+            )}
           </div>
+
           {visibleReviews < bookData.reviews.length && (
             <div className="mt-6 text-center">
               <Button onClick={loadMoreReviews} variant="outline">
