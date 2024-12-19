@@ -16,7 +16,11 @@ import {
   BriefcaseBusiness,
   MonitorSmartphone,
   Cpu,
-  Piano
+  Piano,
+  BookHeart,
+  Swords,
+  Sparkles,
+  MoreHorizontal
 } from "lucide-react"
 
 import { NavMain } from "@/components/user-page/nav-main"
@@ -37,6 +41,7 @@ import { appInfo, assets } from "@/app/config"
 import Link from "next/link"
 import { NavNonBook } from "./nav-nonbook"
 import { useEffect, useState } from "react"
+import { MagicWandIcon } from "@radix-ui/react-icons"
 
 const data = {
   user: {
@@ -46,141 +51,57 @@ const data = {
   },
   navBook: [
     {
-      title: "Pengembangan Diri",
-      url: "/collections?category=Pengembangan Diri",
-      icon: UserPen, // ganti sesuai kebutuhan
+      title: "Fiction",
+      url: "/collections?category=fiction",
+      icon: MagicWandIcon, // ganti sesuai kebutuhan
       isActive: true,
-      items: [
-        {
-          title: "Analisis Tulisan Tangan",
-          url: "/collections?category=Pengembangan Diri&subcategory=Analisis Tulisan Tangan",
-        },
-        {
-          title: "Emosi",
-          url: "/collections?category=Pengembangan Diri&subcategory=Emosi",
-        },
-        {
-          title: "Journaling",
-          url: "/collections?category=Pengembangan Diri&subcategory=Journaling",
-        },
-        {
-          title: "Komunikasi & Keterampilan Sosial",
-          url: "/collections?category=Pengembangan Diri&subcategory=Komunikasi & Keterampilan Sosial",
-        },
-        {
-          title: "Motivasi & Inspiratif",
-          url: "/collections?category=Pengembangan Diri&subcategory=Motivasi & Inspiratif",
-        },
-      ],
     },
     {
-      title: "Bisnis",
-      url: "/collections?category=Bisnis",
-      icon: BriefcaseBusiness, // ganti sesuai kebutuhan
-      items: [
-        {
-          title: "Akuntansi",
-          url: "/collections?category=Bisnis&subcategory=Akuntansi",
-        },
-        {
-          title: "Asuransi",
-          url: "/collections?category=Bisnis&subcategory=Asuransi",
-        },
-        {
-          title: "Bank & Perbankan",
-          url: "/collections?category=Bisnis&subcategory=Bank & Perbankan",
-        },
-        {
-          title: "E-Commerce",
-          url: "/collections?category=Bisnis&subcategory=E-Commerce",
-        },
-        {
-          title: "Ekonomi",
-          url: "/collections?category=Bisnis&subcategory=Ekonomi",
-        },
-      ],
+      title: "Romance",
+      url: "/collections?category=romance",
+      icon: BookHeart, // ganti sesuai kebutuhan
     },
     {
-      title: "Komputer",
-      url: "/collections?category=Komputer",
-      icon: MonitorSmartphone, // ganti sesuai kebutuhan
-      items: [
-        {
-          title: "Aplikasi Bisnis & Produktivitas",
-          url: "/collections?category=Komputer&subcategory=Aplikasi Bisnis & Produktivitas",
-        },
-        {
-          title: "Database Administrasi & Manajemen",
-          url: "/collections?category=Komputer&subcategory=Database Administrasi & Manajemen",
-        },
-        {
-          title: "Desain, Grafik & Media",
-          url: "/collections?category=Komputer&subcategory=Desain, Grafik & Media",
-        },
-        {
-          title: "Internet",
-          url: "/collections?category=Komputer&subcategory=Internet",
-        },
-        {
-          title: "Pemrograman",
-          url: "/collections?category=Komputer&subcategory=Pemrograman",
-        },
-      ],
+      title: "Action",
+      url: "/collections?category=action",
+      icon: Swords, // ganti sesuai kebutuhan
     },
     {
-      title: "Teknologi",
-      url: "/collections?category=Teknologi",
-      icon: Cpu, // ganti sesuai kebutuhan
-      items: [
-        {
-          title: "Teknik Elektro",
-          url: "/collections?category=Teknologi&subcategory=Teknik Elektro",
-        },
-        {
-          title: "Teknologi Informasi",
-          url: "/collections?category=Teknologi&subcategory=Teknologi Informasi",
-        },
-        {
-          title: "Robotik",
-          url: "/collections?category=Teknologi&subcategory=Robotik",
-        },
-        {
-          title: "Kecerdasan Buatan",
-          url: "/collections?category=Teknologi&subcategory=Kecerdasan Buatan",
-        },
-        {
-          title: "Jaringan Komputer",
-          url: "/collections?category=Teknologi&subcategory=Jaringan Komputer",
-        },
-      ],
+      title: "Memoir",
+      url: "/collections?category=memoir",
+      icon: BookOpen, // ganti sesuai kebutuhan
     },
     {
-      title: "Musik",
-      url: "/collections?category=Musik",
-      icon: Piano, // ganti sesuai kebutuhan
+      title: "Fantasy",
+      url: "/collections?category=fantasy",
+      icon: Sparkles, // ganti sesuai kebutuhan
+    },
+    {
+      title: "Lainnya",
+      icon: MoreHorizontal, // ganti sesuai kebutuhan
       items: [
         {
-          title: "Alat Musik",
-          url: "/collections?category=Musik&subcategory=Alat Musik",
+          title: "Finance",
+          url: "/collections?kind=ebook&category=finance&subcategory=finance",
         },
         {
-          title: "Dance",
-          url: "/collections?category=Musik&subcategory=Dance",
+          title: "Self-help",
+          url: "/collections?kind=ebook&category=self-help&subcategory=self-help",
         },
         {
-          title: "Instruksi & Studi",
-          url: "/collections?category=Musik&subcategory=Instruksi & Studi",
+          title: "Southern Gothic",
+          url: "/collections?kind=ebook&category=southern gothic&subcategory=southern gothic",
         },
         {
-          title: "Musik Klasik",
-          url: "/collections?category=Musik&subcategory=Musik Klasik",
+          title: "Drama",
+          url: "/collections?kind=ebook&category=drama&subcategory=drama",
         },
         {
-          title: "Komposisi Musik",
-          url: "/collections?category=Musik&subcategory=Komposisi Musik",
+          title: "Philosophy",
+          url: "/collections?kind=ebook&category=philosophy&subcategory=philosophy",
         },
       ],
-    },
+    }
   ],
   navEBook: [
     {
@@ -340,7 +261,7 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
               <p className="text-sm text-gray-500">Contact our helpdesk</p>
             </div>
           </div>
-          <Link href="/contact">
+          <Link href="https://wa.me/6282232335782">
             <Button variant="outline" className="mt-4 w-full font-semibold">
               CONTACT
             </Button>
@@ -361,18 +282,18 @@ function TabsComponent({ data }: { data: any }) {
       onValueChange={(value) => setActiveTab(value)}
       className="w-full mt-3"
     >
-      <TabsList className="mx-auto flex items-center w-fit rounded-full gap-2 p-2 h-10">
+      {/* <TabsList className="mx-auto flex items-center w-fit rounded-full gap-2 p-2 h-10">
         <TabsTrigger value="book" className="rounded-full">Book</TabsTrigger>
         <TabsTrigger value="non-book" className="rounded-full">Non Book</TabsTrigger>
-      </TabsList>
+      </TabsList> */}
       <TabsContent value="book">
         <NavMain kind="Buku" items={data.navBook} />
-        <NavMain kind="E-Book" items={data.navEBook} />
+        {/* <NavMain kind="E-Book" items={data.navEBook} /> */}
       </TabsContent>
-      <TabsContent value="non-book">
+      {/* <TabsContent value="non-book">
         <NavNonBook kind="Journal" items={data.navNonBook} />
         <NavProjects projects={data.projects} />
-      </TabsContent>
+      </TabsContent> */}
     </Tabs>
   );
 }
