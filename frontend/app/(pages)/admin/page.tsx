@@ -9,6 +9,7 @@ import { LatestReviews } from "@/components/admin-page/dashboard/latest-reviews"
 import { useState, useEffect } from "react"
 import { fetchStatisticDashboard } from "@/lib/api/statisticDashboard"
 import { toast } from "sonner"
+import LoadingComponent from "@/components/loading"
 
 export interface StatisticDashboardResponse {
   message: string;
@@ -58,7 +59,7 @@ export default function DashboardPage() {
   },[]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingComponent/>;
   }
 
   return (

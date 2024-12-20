@@ -1,6 +1,7 @@
 "use client"
 
 import { useAuthGuard } from "@/common/tokenizer"
+import LoadingComponent from "@/components/loading";
 import Navbar from '@/components/navbar-user';
 
 interface UserLayoutProps {
@@ -12,7 +13,7 @@ export default function UserLayout({ children }: UserLayoutProps) {
     if (isLoading) {
         return (
         <div className="flex items-center justify-center h-screen">
-            <p>Loading...</p>
+            <LoadingComponent/>
         </div>
         );
     }
