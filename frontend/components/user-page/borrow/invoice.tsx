@@ -200,7 +200,7 @@ export default function InvoiceComponent({ invoiceCode = "" }) {
                         Download Invoice
                     </Button>
                     <Button asChild>
-                        <Link href="/contact">
+                        <Link href="https://wa.me/6282232335782">
                             Contact Admin
                         </Link>
                     </Button>

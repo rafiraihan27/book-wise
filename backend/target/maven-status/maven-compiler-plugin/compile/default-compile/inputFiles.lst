@@ -8,12 +8,15 @@
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Repository/BookRepository.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Repository/NotificationRepository.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Repository/ReviewRepository.java
+/Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Repository/TransactionItemRepository.java
+/Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Repository/TransactionRepository.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Repository/UserRepository.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Service/AuthService.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Service/BookService.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Service/NotificationsService.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Service/ReviewService.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Service/StatisticService.java
+/Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Service/TransactionService.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Service/User/AdminService.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Service/User/LecturerService.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/Service/User/StudentService.java
@@ -33,6 +36,7 @@
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/dto/Review/ReviewContent.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/dto/Review/ReviewDTO.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/dto/Review/ReviewRequest.java
+/Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/dto/TransactionRequest.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/dto/User/AllUserRequestDTO.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/dto/User/LecturerRequestDTO.java
 /Users/gagas/Desktop/kampus/book-wise/backend/src/main/java/com/tubesbookwise/dto/User/StudentRequestDTO.java

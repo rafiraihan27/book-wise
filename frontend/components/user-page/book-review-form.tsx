@@ -7,13 +7,13 @@ import { Star } from 'lucide-react';
 
 interface BookReviewFormProps {
   bookId: string;
-  onSubmit: (review: { author: string; rating: number; content: string }) => void;
+  onSubmit: (review: { authorId: string; rating: number; content: string }) => void;
 }
 
 export function BookReviewForm({ bookId, onSubmit }: BookReviewFormProps) {
   const [rating, setRating] = useState(0);
   const [content, setContent] = useState('');
-  const [author, setAuthor] = useState('');
+  const [authorId, setAuthor] = useState('');
 
   // Ambil authorId dari localStorage saat komponen dimuat
   useEffect(() => {
@@ -28,12 +28,12 @@ export function BookReviewForm({ bookId, onSubmit }: BookReviewFormProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!author) {
+    if (!authorId) {
       console.error('Author ID is missing!');
       return;
     }
 
-    onSubmit({ author, rating, content });
+    onSubmit({ authorId, rating, content });
     setRating(0);
     setContent('');
   };

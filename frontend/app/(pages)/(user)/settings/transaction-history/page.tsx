@@ -31,6 +31,7 @@ import { submitReview } from "@/lib/api/reviews";
 import { toast } from "sonner";
 import { BookReviewForm } from "@/components/user-page/book-review-form";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 
 export default function TransactionPage() {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -45,6 +46,7 @@ export default function TransactionPage() {
 
     const handleReviewSubmit = async (review: any) => {
         try {
+            console.log(selectedBookId)
             // Submit the review using the API
             await submitReview(selectedBookId, review);
             toast("Review submitted successfully!");
@@ -122,7 +124,7 @@ export default function TransactionPage() {
                     </div>
                     <div>
                         <Label htmlFor="status">Status</Label>
-                        <Select value={status} onValueChange={(value: "all" | "pending" | "approved" | "declined" | "overdue") => setStatus(value)}>
+                        <Select value={status.toLowerCase()} onValueChange={(value: "all" | "pending" | "approved" | "declined" | "overdue") => setStatus(value)}>
                             <SelectTrigger id="status" className="w-[180px]">
                                 <SelectValue placeholder="Filter transactions" />
                             </SelectTrigger>
@@ -201,19 +203,23 @@ export default function TransactionPage() {
                                         </TableCell>
                                         <TableCell>
                                             <span
-                                                className={`px-2 py-1 rounded-full text-xs font-semibold ${transaction.status === "approved"
+                                                className={`px-2 py-1 rounded-full text-xs font-semibold ${transaction.status.toLowerCase() === "approved"
                                                     ? "bg-green-100 text-green-800"
-                                                    : transaction.status === "pending"
+                                                    : transaction.status.toLowerCase() === "pending"
                                                         ? "bg-gray-100 text-gray-800"
-                                                        : transaction.status === "declined"
+                                                        : transaction.status.toLowerCase() === "declined"
                                                             ? "bg-red-100 text-red-800"
                                                             : "bg-yellow-100 text-yellow-800"
                                                     }`}
                                             >
-                                                {transaction.status}
+                                                {transaction.status.toLowerCase()}
                                             </span>
                                         </TableCell>
-                                        <TableCell>{transaction.type}</TableCell>
+                                        <TableCell>{transaction.type.toLowerCase() === "borrow" ? (
+                                            <Badge variant="destructive">Borrow</Badge>
+                                        ) : (
+                                            <Badge>Return</Badge>
+                                        )}</TableCell>
                                         <TableCell>{transaction.paymentMethod}</TableCell>
                                         <TableCell>
                                             <Button
@@ -244,7 +250,7 @@ export default function TransactionPage() {
                                                                     <p className="font-medium">{item.title}</p>
                                                                     <p className="text-sm text-muted-foreground">by {item.author}</p>
                                                                 </div>
-                                                                {(transaction.status == 'approved' || transaction.status == 'overdue') && (
+                                                                {(transaction.status.toLowerCase() == 'approved' || transaction.status.toLowerCase() == 'overdue') && (
                                                                     <Button
                                                                         onClick={() => handleShowReviewForm(item.id)}
                                                                         type="submit"
