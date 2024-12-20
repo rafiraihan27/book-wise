@@ -108,8 +108,8 @@ export default function CheckoutPage() {
             } else {
                 toast.error("Checkout failed!");
             }
-            // localStorage.removeItem("cartItems");
-            // window.location.href = `/borrow/${response.invoiceCode}`;
+            localStorage.removeItem("cartItems");
+            window.location.href = `/borrow/${response.data}`;
         } catch (error) {
             toast.error("An error occurred during checkout!");
         }
