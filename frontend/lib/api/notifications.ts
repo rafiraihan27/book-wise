@@ -21,10 +21,9 @@
 export async function fetchNotificationsByUserId(userId: string) {
     // Bersihkan tanda kutip jika ada
     const sanitizedUserId = userId.replace(/^"|"$/g, "");
-    const response = await fetch(`${process.env.API_BASE_URL}/notifications?userId=${sanitizedUserId}`, {
+    const response = await fetch(`${process.env.API_BASE_URL_PRODUCTION}/notifications?userId=${sanitizedUserId}`, {
         method: 'GET',
     });
-
     if (!response.ok) {
         throw new Error('Gagal mengambil data notifikasi user');
     }
@@ -59,14 +58,11 @@ export async function updateNotificationsStatusById(id: string) {
     // Bersihkan tanda kutip jika ada
     const sanitizedId = id.replace(/^"|"$/g, "");
 
-    const response = await fetch(`${process.env.API_BASE_URL}/notifications`, {
+    const response = await fetch(`${process.env.API_BASE_URL_PRODUCTION}/notifications?notifId=${sanitizedId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            id: sanitizedId,
-        }),
     });
 
     if (!response.ok) {
