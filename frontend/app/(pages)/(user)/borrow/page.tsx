@@ -15,6 +15,7 @@ import { DateRange } from 'react-day-picker'
 import { useAuthGuard } from '@/common/tokenizer'
 import { newTransaction } from '@/types/interfaces'
 import { fetchPostTransaction } from '@/lib/api/transactions'
+import LoadingComponent from '@/components/loading'
 
 interface CartItem {
     id: string;
@@ -119,7 +120,7 @@ export default function CheckoutPage() {
     if (isLoading) {
         return (
         <div className="flex items-center justify-center h-screen">
-            <p>Loading...</p>
+            <LoadingComponent/>
         </div>
         );
     }

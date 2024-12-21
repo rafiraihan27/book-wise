@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { fetchUserById, updateUserById } from "@/lib/api/users";
+import LoadingComponent from "@/components/loading";
 
 // Schema validasi menggunakan zod
 const profileFormSchema = z.object({
@@ -113,7 +114,7 @@ export default function ProfileSettingsPage() {
   const role = form.watch("role");
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingComponent/>;
   }
 
   return (

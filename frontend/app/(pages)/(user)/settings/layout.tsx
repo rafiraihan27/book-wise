@@ -5,6 +5,7 @@ import Image from "next/image"
 import { Separator } from "@/components/ui/separator"
 import { SidebarNav } from "@/components/user-page/sidebar-nav"
 import { useAuthGuard } from "@/common/tokenizer"
+import LoadingComponent from "@/components/loading"
 
 const sidebarNavItems = [
   {
@@ -34,7 +35,7 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
     if (isLoading) {
         return (
         <div className="flex items-center justify-center h-screen">
-            <p>Loading...</p>
+            <LoadingComponent/>
         </div>
         );
     }
