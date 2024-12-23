@@ -35,28 +35,28 @@ public class ReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
 
-    // public List<ReviewDTO> getReview(String bookId, Integer max) {
-    //     if (max == null) {
-    //         max = 5;
-    //     }
+    public List<ReviewDTO> getReview(String bookId, Integer max) {
+        if (max == null) {
+            max = 5;
+        }
 
-    //     PageRequest pageRequest = PageRequest.of(0, max);
+        PageRequest pageRequest = PageRequest.of(0, max);
 
-    //     Page<Review> reviewPage = (bookId != null)
-    //             ? reviewRepository.findByBookId(bookId, pageRequest)
-    //             : reviewRepository.findAll(pageRequest);
+        Page<Review> reviewPage = (bookId != null)
+                ? reviewRepository.findByBookId(bookId, pageRequest)
+                : reviewRepository.findAll(pageRequest);
 
-    //     return reviewPage.getContent().stream()
-    //             .map(review -> new ReviewDTO(
-    //                     review.getId(),
-    //                     review.getBook().getTitle(),
-    //                     review.getAuthor().getName(),
-    //                     review.getDate(),
-    //                     review.getRating(),
-    //                     review.getContent()
-    //             ))
-    //             .collect(Collectors.toList());
-    // }
+        return reviewPage.getContent().stream()
+                .map(review -> new ReviewDTO(
+                        review.getId(),
+                        review.getBook().getTitle(),
+                        review.getAuthor().getName(),
+                        review.getDate(),
+                        review.getRating(),
+                        review.getContent()
+                ))
+                .collect(Collectors.toList());
+    }
 
 
     // public ResponseEntity<?> submitReview(ReviewRequest reviewRequest) {
