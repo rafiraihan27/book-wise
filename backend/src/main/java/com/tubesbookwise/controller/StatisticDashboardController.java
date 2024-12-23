@@ -15,25 +15,24 @@ public class StatisticDashboardController {
     @Autowired
     private StatisticService statisticservice;
 
-    //    GET http://localhost:8080/api/statistic
-    @Operation(summary = "Ambil data statistik", description = "Mengambil data statistik dari database")
-    @GetMapping()
-    public ResponseEntity<?> getStatistics(
-            @RequestParam(value = "max", required = false) Integer max
-    ) {
-        return ResponseEntity.ok().body(
-                Map.of(
-                        "message", "Data statistik berhasil diambil",
-                        "data", Map.of(
-                                "totalBook", statisticservice.getStatisticBook(),
-                                "totalUser", statisticservice.getJumlahUserNow(),
-                                "totalTransaction", statisticservice.getJumlahTransaksi(),
-                                "totalNotifications", statisticservice.getJumlahNotifikasi(),
-                                "averageReview", statisticservice.getAverageReview(),
-                                "totalReview", statisticservice.getJumlahReview(),
-                                "recentReviews", statisticservice.getRecentReview(max)
-                        )
-                )
-        );
-    }
+//     @Operation(summary = "Ambil data statistik", description = "Mengambil data statistik dari database")
+//     @GetMapping()
+//     public ResponseEntity<?> getStatistics(
+//             @RequestParam(value = "max", required = false) Integer max
+//     ) {
+//         return ResponseEntity.ok().body(
+//                 Map.of(
+//                         "message", "Data statistik berhasil diambil",
+//                         "data", Map.of(
+//                                 "totalBook", statisticservice.getStatisticBook(),
+//                                 "totalUser", statisticservice.getJumlahUserNow(),
+//                                 "totalTransaction", statisticservice.getJumlahTransaksi(),
+//                                 "totalNotifications", statisticservice.getJumlahNotifikasi(),
+//                                 "averageReview", statisticservice.getAverageReview(),
+//                                 "totalReview", statisticservice.getJumlahReview(),
+//                                 "recentReviews", statisticservice.getRecentReview(max)
+//                         )
+//                 )
+//         );
+//     }
 }

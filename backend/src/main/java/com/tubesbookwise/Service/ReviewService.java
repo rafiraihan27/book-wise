@@ -35,79 +35,68 @@ public class ReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
 
-    // Method to get reviews with optional filters
-    public List<ReviewDTO> getReview(String bookId, Integer max) {
-        // Default to 5 reviews if max is not provided
-        if (max == null) {
-            max = 5;
-        }
+    // public List<ReviewDTO> getReview(String bookId, Integer max) {
+    //     if (max == null) {
+    //         max = 5;
+    //     }
 
-        // PageRequest to limit the number of reviews and sort by date in descending order (most recent first)
-        PageRequest pageRequest = PageRequest.of(0, max);
+    //     PageRequest pageRequest = PageRequest.of(0, max);
 
-        // Fetch the reviews from the repository, using pagination
-        Page<Review> reviewPage = (bookId != null)
-                ? reviewRepository.findByBookId(bookId, pageRequest)
-                : reviewRepository.findAll(pageRequest);
+    //     Page<Review> reviewPage = (bookId != null)
+    //             ? reviewRepository.findByBookId(bookId, pageRequest)
+    //             : reviewRepository.findAll(pageRequest);
 
-        // Map the Review entities to ReviewDTO objects
-        return reviewPage.getContent().stream()
-                .map(review -> new ReviewDTO(
-                        review.getId(),
-                        review.getBook().getTitle(),
-                        review.getAuthor().getName(),
-                        review.getDate(),
-                        review.getRating(),
-                        review.getContent()
-                ))
-                .collect(Collectors.toList());
-    }
+    //     return reviewPage.getContent().stream()
+    //             .map(review -> new ReviewDTO(
+    //                     review.getId(),
+    //                     review.getBook().getTitle(),
+    //                     review.getAuthor().getName(),
+    //                     review.getDate(),
+    //                     review.getRating(),
+    //                     review.getContent()
+    //             ))
+    //             .collect(Collectors.toList());
+    // }
 
 
-    public ResponseEntity<?> submitReview(ReviewRequest reviewRequest) {
-        String bookId = reviewRequest.getBookId();
-        String userId = reviewRequest.getReview().getAuthorId();
+    // public ResponseEntity<?> submitReview(ReviewRequest reviewRequest) {
+    //     String bookId = reviewRequest.getBookId();
+    //     String userId = reviewRequest.getReview().getAuthorId();
 
-        // Check if the book exists
-        Optional<Book> bookOptional = bookService.getBookById(bookId);
-        if (bookOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    Map.of("message", "Book not found with id: " + bookId)
-            );
-        }
+    //     Optional<Book> bookOptional = bookService.getBookById(bookId);
+    //     if (bookOptional.isEmpty()) {
+    //         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+    //                 Map.of("message", "Book not found with id: " + bookId)
+    //         );
+    //     }
 
-        // Check if the user exists
-        Optional<User> userOptional = userService.findById(userId);
-        if (userOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    Map.of("message", "User not found with id: " + userId)
-            );
-        }
+    //     Optional<User> userOptional = userService.findById(userId);
+    //     if (userOptional.isEmpty()) {
+    //         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+    //                 Map.of("message", "User not found with id: " + userId)
+    //         );
+    //     }
 
-        // Proceed with the review logic (e.g., saving the review to the database)
-        ReviewContent reviewContent = reviewRequest.getReview();
-        String authorId = reviewContent.getAuthorId();
-        double rating = reviewContent.getRating();
-        String content = reviewContent.getContent();
+    //     ReviewContent reviewContent = reviewRequest.getReview();
+    //     String authorId = reviewContent.getAuthorId();
+    //     double rating = reviewContent.getRating();
+    //     String content = reviewContent.getContent();
 
-        // Create the Review entity
-        Review review = new Review();
-        review.setBook(bookOptional.get());
-        review.setAuthor(userOptional.get());
-        review.setDate(LocalDateTime.now());
-        review.setRating(rating);
-        review.setContent(content);
+    //     Review review = new Review();
+    //     review.setBook(bookOptional.get());
+    //     review.setAuthor(userOptional.get());
+    //     review.setDate(LocalDateTime.now());
+    //     review.setRating(rating);
+    //     review.setContent(content);
 
-        // save to database
-        reviewRepository.save(review);
+    //     reviewRepository.save(review);
 
-        // response
-        Map<String, Object> response = new HashMap<>();
-        response.put("bookId", bookId);
-        response.put("author", authorId);
-        response.put("rating", rating);
-        response.put("content", content);
+    //     Map<String, Object> response = new HashMap<>();
+    //     response.put("bookId", bookId);
+    //     response.put("author", authorId);
+    //     response.put("rating", rating);
+    //     response.put("content", content);
 
-        return ResponseEntity.ok().body(response);
-    }
+    //     return ResponseEntity.ok().body(response);
+    // }
 }
