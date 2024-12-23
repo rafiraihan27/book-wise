@@ -96,33 +96,33 @@ public class UserController {
         }
     }
 
-    // @Autowired
-    // private StudentService studentService;
+    @Autowired
+    private StudentService studentService;
 
-    // @Operation(summary = "Register a student", description = "Register a user with the role of student")
-    // @PostMapping("/register/student")
-    // public ResponseEntity<User> registerStudent(@Valid @RequestBody StudentRequestDTO studentDTO) {
-    //     User user = studentService.registerStudent(studentDTO);
-    //     return ResponseEntity.status(201).body(user);
-    // }
+    @Operation(summary = "Register a student", description = "Register a user with the role of student")
+    @PostMapping("/register/student")
+    public ResponseEntity<User> registerStudent(@Valid @RequestBody StudentRequestDTO studentDTO) {
+        User user = studentService.registerStudent(studentDTO);
+        return ResponseEntity.status(201).body(user);
+    }
 
-    // @Autowired
-    // private LecturerService lecturerService;
+    @Autowired
+    private LecturerService lecturerService;
 
-    // @Operation(summary = "Register a lecturer", description = "Register a user with the role of lecturer")
-    // @PostMapping("/register/lecturer")
-    // public ResponseEntity<User> registerLecturer(@Valid @RequestBody LecturerRequestDTO lecturerDTO) {
-    //     User user = lecturerService.registerLecturer(lecturerDTO);
-    //     return ResponseEntity.status(201).body(user);
-    // }
+    @Operation(summary = "Register a lecturer", description = "Register a user with the role of lecturer")
+    @PostMapping("/register/lecturer")
+    public ResponseEntity<User> registerLecturer(@Valid @RequestBody LecturerRequestDTO lecturerDTO) {
+        User user = lecturerService.registerLecturer(lecturerDTO);
+        return ResponseEntity.status(201).body(user);
+    }
 
-    // @Autowired
-    // private AdminService adminService;
+    @Autowired
+    private AdminService adminService;
 
-    // @Operation(summary = "Register an admin", description = "Register a user with the role of admin")
-    // @PostMapping("/register/admin")
-    // public ResponseEntity<User> registerAdmin(@Valid @RequestBody UserRequestDTO adminDTO) {
-    //     User user = adminService.registerAdmin(adminDTO);
-    //     return ResponseEntity.status(201).body(user);
-    // }
+    @Operation(summary = "Register an admin", description = "Register a user with the role of admin")
+    @PostMapping("/register/admin")
+    public ResponseEntity<User> registerAdmin(@Valid @RequestBody UserRequestDTO adminDTO) {
+        User user = adminService.registerAdmin(adminDTO);
+        return ResponseEntity.status(201).body(user);
+    }
 }
