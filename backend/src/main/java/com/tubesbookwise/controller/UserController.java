@@ -49,23 +49,23 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    // @Operation(summary = "Mengambil data user berdasarkan ID-nya.", description = "Mengambil data user berdasarkan ID-nya.")
-    // @GetMapping("/{id}")
-    // public ResponseEntity<UserResponseDTO> getUserById(
-    //         @Parameter(description = "ID of the user to retrieve", required = true) @PathVariable String id) {
-    //     Optional<User> user = userService.findById(id);
-    //     UserResponseDTO response = new UserResponseDTO(
-    //             user.get().getId(),
-    //             user.get().getEmail(),
-    //             user.get().getName(),
-    //             user.get().getRole(),
-    //             user.get().getPhone(),
-    //             user.get().getNim(),
-    //             user.get().getNip(),
-    //             user.get().getYear()
-    //     );
-    //     return ResponseEntity.ok(response);
-    // }
+    @Operation(summary = "Mengambil data user berdasarkan ID-nya.", description = "Mengambil data user berdasarkan ID-nya.")
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> getUserById(
+            @Parameter(description = "ID of the user to retrieve", required = true) @PathVariable String id) {
+        Optional<User> user = userService.findById(id);
+        UserResponseDTO response = new UserResponseDTO(
+                user.get().getId(),
+                user.get().getEmail(),
+                user.get().getName(),
+                user.get().getRole(),
+                user.get().getPhone(),
+                user.get().getNim(),
+                user.get().getNip(),
+                user.get().getYear()
+        );
+        return ResponseEntity.ok(response);
+    }
 
     // @Operation(summary = "Update user data by id", description = "TAMBAHKAN ROLE [admin, student, lecturer]")
     // @PutMapping("/{id}")
