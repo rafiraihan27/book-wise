@@ -17,18 +17,18 @@ public class ReviewController {
     @Autowired
     private ReviewService reviewService;
 
-    // @Operation(summary = "Ambil daftar review by bookId", description = "Mengambil daftar review buku berdasarkan bookId")
-    // @GetMapping()
-    // public List<ReviewDTO> getNotif(
-    //         @RequestParam(value = "bookId", required = false) String bookId,
-    //         @RequestParam(value = "max", required = false) Integer max
-    // ) {
-    //     return reviewService.getReview(bookId, max);
-    // }
+    @Operation(summary = "Ambil daftar review by bookId", description = "Mengambil daftar review buku berdasarkan bookId")
+    @GetMapping()
+    public List<ReviewDTO> getNotif(
+            @RequestParam(value = "bookId", required = false) String bookId,
+            @RequestParam(value = "max", required = false) Integer max
+    ) {
+        return reviewService.getReview(bookId, max);
+    }
 
-    // @Operation(summary = "Tambah review", description = "Menambah review untuk buku")
-    // @PostMapping()
-    // public ResponseEntity<?> postReview(@RequestBody ReviewRequest reviewRequest) {
-    //     return reviewService.submitReview(reviewRequest);
-    // }
+    @Operation(summary = "Tambah review", description = "Menambah review untuk buku")
+    @PostMapping()
+    public ResponseEntity<?> postReview(@RequestBody ReviewRequest reviewRequest) {
+        return reviewService.submitReview(reviewRequest);
+    }
 }
