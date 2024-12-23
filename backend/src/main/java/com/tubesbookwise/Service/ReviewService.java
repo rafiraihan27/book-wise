@@ -59,44 +59,44 @@ public class ReviewService {
     }
 
 
-    // public ResponseEntity<?> submitReview(ReviewRequest reviewRequest) {
-    //     String bookId = reviewRequest.getBookId();
-    //     String userId = reviewRequest.getReview().getAuthorId();
+    public ResponseEntity<?> submitReview(ReviewRequest reviewRequest) {
+        String bookId = reviewRequest.getBookId();
+        String userId = reviewRequest.getReview().getAuthorId();
 
-    //     Optional<Book> bookOptional = bookService.getBookById(bookId);
-    //     if (bookOptional.isEmpty()) {
-    //         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-    //                 Map.of("message", "Book not found with id: " + bookId)
-    //         );
-    //     }
+        Optional<Book> bookOptional = bookService.getBookById(bookId);
+        if (bookOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    Map.of("message", "Book not found with id: " + bookId)
+            );
+        }
 
-    //     Optional<User> userOptional = userService.findById(userId);
-    //     if (userOptional.isEmpty()) {
-    //         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-    //                 Map.of("message", "User not found with id: " + userId)
-    //         );
-    //     }
+        Optional<User> userOptional = userService.findById(userId);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    Map.of("message", "User not found with id: " + userId)
+            );
+        }
 
-    //     ReviewContent reviewContent = reviewRequest.getReview();
-    //     String authorId = reviewContent.getAuthorId();
-    //     double rating = reviewContent.getRating();
-    //     String content = reviewContent.getContent();
+        ReviewContent reviewContent = reviewRequest.getReview();
+        String authorId = reviewContent.getAuthorId();
+        double rating = reviewContent.getRating();
+        String content = reviewContent.getContent();
 
-    //     Review review = new Review();
-    //     review.setBook(bookOptional.get());
-    //     review.setAuthor(userOptional.get());
-    //     review.setDate(LocalDateTime.now());
-    //     review.setRating(rating);
-    //     review.setContent(content);
+        Review review = new Review();
+        review.setBook(bookOptional.get());
+        review.setAuthor(userOptional.get());
+        review.setDate(LocalDateTime.now());
+        review.setRating(rating);
+        review.setContent(content);
 
-    //     reviewRepository.save(review);
+        reviewRepository.save(review);
 
-    //     Map<String, Object> response = new HashMap<>();
-    //     response.put("bookId", bookId);
-    //     response.put("author", authorId);
-    //     response.put("rating", rating);
-    //     response.put("content", content);
+        Map<String, Object> response = new HashMap<>();
+        response.put("bookId", bookId);
+        response.put("author", authorId);
+        response.put("rating", rating);
+        response.put("content", content);
 
-    //     return ResponseEntity.ok().body(response);
-    // }
+        return ResponseEntity.ok().body(response);
+    }
 }
