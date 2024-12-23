@@ -29,25 +29,25 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // @Operation(summary = "Mengambil semua data pengguna", description = "Mengambil semua data pengguna berdasarkan parameter role (opsional)")
-    // @GetMapping
-    // public ResponseEntity<List<UserResponseDTO>> getAllUsers(
-    //         @RequestParam(value = "role", required = false) String role) {
-    //     List<User> users = userService.findAll(role);
-    //     List<UserResponseDTO> response = users.stream()
-    //             .map(user -> new UserResponseDTO(
-    //                     user.getId(),
-    //                     user.getEmail(),
-    //                     user.getName(),
-    //                     user.getRole(),
-    //                     user.getPhone(),
-    //                     user.getNim(),
-    //                     user.getNip(),
-    //                     user.getYear()
-    //             ))
-    //             .collect(Collectors.toList());
-    //     return ResponseEntity.ok(response);
-    // }
+    @Operation(summary = "Mengambil semua data pengguna", description = "Mengambil semua data pengguna berdasarkan parameter role (opsional)")
+    @GetMapping
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers(
+            @RequestParam(value = "role", required = false) String role) {
+        List<User> users = userService.findAll(role);
+        List<UserResponseDTO> response = users.stream()
+                .map(user -> new UserResponseDTO(
+                        user.getId(),
+                        user.getEmail(),
+                        user.getName(),
+                        user.getRole(),
+                        user.getPhone(),
+                        user.getNim(),
+                        user.getNip(),
+                        user.getYear()
+                ))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(response);
+    }
 
     // @Operation(summary = "Mengambil data user berdasarkan ID-nya.", description = "Mengambil data user berdasarkan ID-nya.")
     // @GetMapping("/{id}")
