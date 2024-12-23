@@ -18,46 +18,46 @@ import java.util.Optional;
 @Transactional
 public class UserService {
 
-    // @Autowired
-    // protected UserRepository userRepository;
-    // @Autowired
-    // protected PasswordEncoder passwordEncoder;
+    @Autowired
+    protected UserRepository userRepository;
+    @Autowired
+    protected PasswordEncoder passwordEncoder;
 
-    // public Optional<User> findById(String id) {
-    //     return Optional.ofNullable(userRepository.findById(id).orElse(null));
-    // }
+    public Optional<User> findById(String id) {
+        return Optional.ofNullable(userRepository.findById(id).orElse(null));
+    }
 
-    // public List<User> findAll(String role) {
-    //     if (role != null && !role.isEmpty()) {
-    //         return userRepository.findAllByRole(User.Role.valueOf(role));
-    //     }
-    //     return userRepository.findAll();
-    // }
+    public List<User> findAll(String role) {
+        if (role != null && !role.isEmpty()) {
+            return userRepository.findAllByRole(User.Role.valueOf(role));
+        }
+        return userRepository.findAll();
+    }
 
-    // public void deleteById(String id) {
-    //     userRepository.deleteById(id);
-    // }
+    public void deleteById(String id) {
+        userRepository.deleteById(id);
+    }
 
-    // @Lazy
-    // @Autowired
-    // private AdminService adminService;
-    // @Lazy
-    // @Autowired
-    // private LecturerService lecturerService;
-    // @Lazy
-    // @Autowired
-    // private StudentService studentService;
+    @Lazy
+    @Autowired
+    private AdminService adminService;
+    @Lazy
+    @Autowired
+    private LecturerService lecturerService;
+    @Lazy
+    @Autowired
+    private StudentService studentService;
 
-    // public User updateUser(User newUser, String id) {
-    //     switch (newUser.getRole()) {
-    //         case admin:
-    //             return adminService.updateAdmin(newUser, id);
-    //         case lecturer:
-    //             return lecturerService.updateLecturer(newUser, id);
-    //         case student:
-    //             return studentService.updateStudent(newUser, id);
-    //         default:
-    //             throw new IllegalArgumentException("Invalid user role");
-    //     }
-    // }
+    public User updateUser(User newUser, String id) {
+        switch (newUser.getRole()) {
+            case admin:
+                return adminService.updateAdmin(newUser, id);
+            case lecturer:
+                return lecturerService.updateLecturer(newUser, id);
+            case student:
+                return studentService.updateStudent(newUser, id);
+            default:
+                throw new IllegalArgumentException("Invalid user role");
+        }
+    }
 }
