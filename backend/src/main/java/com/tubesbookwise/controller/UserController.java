@@ -80,21 +80,21 @@ public class UserController {
         }
     }
 
-    // @Operation(summary = "Delete user", description = "Delete a user by ID")
-    // @DeleteMapping("/{id}")
-    // public ResponseEntity<Map<String, Object>> deleteUser(@PathVariable String id) {
-    //     Map<String, Object> response = new HashMap<>();
-    //     try {
-    //         userService.deleteById(id);
-    //         response.put("status", "success");
-    //         response.put("message", "User deleted successfully");
-    //         return ResponseEntity.ok(response);
-    //     } catch (Exception e) {
-    //         response.put("status", "error");
-    //         response.put("message", e.getMessage());
-    //         return ResponseEntity.status(500).body(response);
-    //     }
-    // }
+    @Operation(summary = "Delete user", description = "Delete a user by ID")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> deleteUser(@PathVariable String id) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            userService.deleteById(id);
+            response.put("status", "success");
+            response.put("message", "User deleted successfully");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
 
     // @Autowired
     // private StudentService studentService;
