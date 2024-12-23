@@ -28,6 +28,7 @@ import { Transaction } from "@/types/interfaces";
 import React from "react";
 import InvoiceComponent from "@/components/user-page/borrow/invoice";
 import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge";
 
 export default function TransactionPage() {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -99,7 +100,7 @@ export default function TransactionPage() {
                     </div>
                     <div>
                         <Label htmlFor="status">Status</Label>
-                        <Select value={status} onValueChange={(value: "all" | "pending" | "approved" | "declined" | "overdue") => setStatus(value)}>
+                        <Select value={status.toLowerCase()} onValueChange={(value: "all" | "pending" | "approved" | "declined" | "overdue") => setStatus(value)}>
                             <SelectTrigger id="status" className="w-[180px]">
                                 <SelectValue placeholder="Filter transactions" />
                             </SelectTrigger>
@@ -107,7 +108,7 @@ export default function TransactionPage() {
                                 <SelectItem value="all">All</SelectItem>
                                 <SelectItem value="pending">Pending</SelectItem>
                                 <SelectItem value="approved">Approved</SelectItem>
-                                <SelectItem value="decline">Decline</SelectItem>
+                                <SelectItem value="declined">Declined</SelectItem>
                                 <SelectItem value="overdue">Overdue</SelectItem>
                             </SelectContent>
                         </Select>
@@ -178,7 +179,7 @@ export default function TransactionPage() {
                                         </TableCell>
                                         <TableCell>
                                             <span
-                                                className={`px-2 py-1 rounded-full text-xs font-semibold ${transaction.status === "approved"
+                                                className={`px-2 py-1 rounded-full text-xs font-semibold ${transaction.status.toLowerCase() === "approved"
                                                     ? "bg-green-100 text-green-800"
                                                     : transaction.status === "pending"
                                                         ? "bg-gray-100 text-gray-800"
@@ -190,7 +191,12 @@ export default function TransactionPage() {
                                                 {transaction.status}
                                             </span>
                                         </TableCell>
-                                        <TableCell>{transaction.type}</TableCell>
+                                        <TableCell>{transaction.type.toLowerCase() === "borrow" ? (
+                                            <Badge variant="destructive">Borrow</Badge>
+                                        ) : (
+                                            <Badge>Return</Badge>
+                                        )}
+                                        </TableCell>
                                         <TableCell>{transaction.paymentMethod}</TableCell>
                                         <TableCell>
                                             <Button
@@ -237,7 +243,7 @@ export default function TransactionPage() {
                                                             Change Status:
                                                         </Label>
                                                         <Select
-                                                            value={transaction.status}
+                                                            value={transaction.status.toLowerCase()}
                                                             onValueChange={async (newStatus: "pending" | "approved" | "declined" | "overdue") => {
                                                                 try {
                                                                     // Call API to update status

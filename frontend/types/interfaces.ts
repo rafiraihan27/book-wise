@@ -63,7 +63,7 @@ export interface Notification {
     userId: string
     title: string
     message: string
-    type: "info" | "reminder" | "alert"
+    type: "INFO" | "REMINDER" | "ALERT"
     date: string
     read: boolean
   }

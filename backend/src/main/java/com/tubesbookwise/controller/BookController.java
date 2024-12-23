@@ -1,14 +1,24 @@
 package com.tubesbookwise.controller;
 
 import com.tubesbookwise.Models.Book;
+import com.tubesbookwise.Models.Review;
+import com.tubesbookwise.Models.User;
 import com.tubesbookwise.Service.BookService;
+import com.tubesbookwise.Service.ReviewService;
+import com.tubesbookwise.dto.Review.ReviewContent;
+import com.tubesbookwise.dto.Review.ReviewDTO;
+import com.tubesbookwise.dto.User.UserResponseDTO;
+import com.tubesbookwise.exception.ApiException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/books")
@@ -17,8 +27,12 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
+    @Autowired
+    private ReviewService reviewService;
+
+    @Operation(summary = "Get all books", description = "Retrieve all books with optional filters")
     @GetMapping
-    public ResponseEntity<List<Book>> getBooks(
+    public ResponseEntity<List<Book>> getAllBooks(
             @RequestParam(value = "search", required = false) String search,
             @RequestParam(value = "category", required = false) String category,
             @RequestParam(value = "years", required = false) Integer years
@@ -27,11 +41,35 @@ public class BookController {
         return ResponseEntity.ok(books);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Book> getBookById(@PathVariable UUID id) {
-        Optional<Book> book = bookService.getBookById(id);
-        return book.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    @Operation(summary = "Get recommended books", description = "Retrieve recommended books with max data filters")
+    @GetMapping("/recommended")
+    public ResponseEntity<List<Book>> getRecommendedBooks(
+            @RequestParam(value = "max", required = false) Integer max
+    ) {
+        List<Book> books = bookService.getRecommendedBooks(max);
+        return ResponseEntity.ok(books);
     }
+
+    @Operation(summary = "Get book by ID", description = "Retrieve a book by its ID")
+    @GetMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> getBookById(
+            @Parameter(description = "ID of the book to retrieve", required = true) @PathVariable String id,
+            @RequestParam(value = "max", required = false) Integer max // Optional max parameter
+    ) {
+        // Retrieve the book by its ID
+        Book book = bookService.getBookById(id)
+                .orElseThrow(() -> new ApiException("No value present", HttpStatus.NOT_FOUND));
+
+        // Fetch reviews for the book (using the getReview method from ReviewService)
+        List<ReviewDTO> reviews = reviewService.getReview(id, max); // Passing bookId and max to get reviews
+
+        // Convert Book object to Map and add reviews
+        Map<String, Object> response = new HashMap<>(book.toMap());
+        response.put("reviews", reviews); // Add reviews to the response map
+
+        return ResponseEntity.ok(response);
+    }
+
 
     @PostMapping
     public ResponseEntity<Book> addBook(@RequestBody Book book) {
@@ -40,7 +78,7 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable UUID id, @RequestBody Book book) {
+    public ResponseEntity<Book> updateBook(@PathVariable String id, @RequestBody Book book) {
         try {
             Book updatedBook = bookService.updateBook(id, book);
             return ResponseEntity.ok(updatedBook);
@@ -49,9 +87,28 @@ public class BookController {
         }
     }
 
+    @Operation(summary = "Delete book by ID", description = "Delete a book by its ID")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBook(@PathVariable UUID id) {
-        bookService.deleteBook(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteBook(
+            @Parameter(description = "ID of the book to delete", required = true)
+            @PathVariable String id
+    ) {
+        // Check if the book exists, otherwise throw an exception
+        if (!bookService.existsById(id)) {
+            throw new ApiException("No value present", HttpStatus.NOT_FOUND);
+        }
+
+        // Delete the book
+        bookService.deleteById(id);
+
+        // Return JSON response indicating success
+        Map<String, Object> response = new HashMap<>();
+        response.put("timestamp", LocalDateTime.now());
+        response.put("status", HttpStatus.OK.value());
+        response.put("message", "Book successfully deleted");
+        response.put("path", "/api/books/" + id);
+
+        return ResponseEntity.ok(response);
     }
+
 }

@@ -1,13 +1,15 @@
 package com.tubesbookwise.Service;
 
 import com.tubesbookwise.Models.Book;
+import com.tubesbookwise.Models.User;
 import com.tubesbookwise.Repository.BookRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class BookService {
@@ -15,21 +17,46 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     public List<Book> getAllBooks(String search, String category, Integer years) {
-        // Example: Implement search logic based on parameters if needed.
-        // For now, return all books.
-        return bookRepository.findAll();
+        StringBuilder jpql = new StringBuilder("SELECT b FROM Book b WHERE 1=1");
+        Map<String, Object> parameters = new HashMap<>();
+
+        // Add conditions dynamically based on non-null parameters
+        if (search != null && !search.isEmpty()) {
+            jpql.append(" AND LOWER(b.title) LIKE :search");
+            parameters.put("search", "%" + search.toLowerCase() + "%");
+        }
+
+        if (category != null && !category.isEmpty()) {
+            jpql.append(" AND b.category = :category");
+            parameters.put("category", category);
+        }
+
+        if (years != null) {
+            jpql.append(" AND b.year = :year");
+            parameters.put("year", years);
+        }
+
+        TypedQuery<Book> query = entityManager.createQuery(jpql.toString(), Book.class);
+
+        // Dynamically set parameters
+        parameters.forEach(query::setParameter);
+
+        return query.getResultList();
     }
 
-    public Optional<Book> getBookById(UUID id) {
-        return bookRepository.findById(id);
+    public Optional<Book> getBookById(String id) {
+        return Optional.ofNullable(bookRepository.findById(id).orElse(null));
     }
 
     public Book addBook(Book book) {
         return bookRepository.save(book);
     }
 
-    public Book updateBook(UUID id, Book updatedBook) {
+    public Book updateBook(String id, Book updatedBook) {
         return bookRepository.findById(id).map(existingBook -> {
             existingBook.setTitle(updatedBook.getTitle());
             existingBook.setAuthor(updatedBook.getAuthor());
@@ -49,7 +76,24 @@ public class BookService {
         }).orElseThrow(() -> new RuntimeException("Book not found"));
     }
 
-    public void deleteBook(UUID id) {
+    public void deleteById(String id) {
         bookRepository.deleteById(id);
+    }
+
+    public boolean existsById(String id) {
+        return bookRepository.existsById(id);
+    }
+
+    public List<Book> getRecommendedBooks(Integer max) {
+        String jpql = "SELECT b FROM Book b ORDER BY FUNCTION('RAND')";
+
+        TypedQuery<Book> query = entityManager.createQuery(jpql, Book.class);
+
+        // Limit the number of results if 'max' is provided
+        if (max != null && max > 0) {
+            query.setMaxResults(max);
+        }
+
+        return query.getResultList();
     }
 }

@@ -27,14 +27,21 @@ import { BookReviewForm } from "@/components/user-page/book-review-form";
 import { submitReview } from "@/lib/api/reviews";
 import { toast } from "sonner";
 import LoadingComponent from "@/components/loading";
+import { useRouter } from "next/navigation";
 
 export default function BookDetailPage({ params }: { params: { id_book: string } }) {
+  const route = useRouter();
   const { id_book } = params;
   const [bookData, setBookData] = useState<Book | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [visibleReviews, setVisibleReviews] = useState<number>(3);
   const { isLoading } = useAuthGuard();
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpanded = () => {
+    setIsExpanded((prev) => !prev);
+  };
 
   async function loadBook() {
     setLoading(true);
@@ -56,13 +63,13 @@ export default function BookDetailPage({ params }: { params: { id_book: string }
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <p>Loading...</p>
+        <LoadingComponent/>
       </div>
     );
   }
 
   if (loading) {
-    return <LoadingComponent description="Tunggu bentar, bukunya lagi diambil dari database..."/>;
+    return <LoadingComponent description="Tunggu bentar, bukunya lagi diambil dari database..." />;
   }
 
   if (error) {
@@ -79,7 +86,7 @@ export default function BookDetailPage({ params }: { params: { id_book: string }
     );
   };
 
-  const handleReviewSubmit = async (review: { author: string; rating: number; content: string  }) => {
+  const handleReviewSubmit = async (review: { author: string; rating: number; content: string }) => {
     try {
       const content = await submitReview(id_book, review); // Kirim ulasan menggunakan API
       toast("Review submitted successfully!");
@@ -195,7 +202,18 @@ export default function BookDetailPage({ params }: { params: { id_book: string }
             <Separator />
             <div>
               <h2 className="text-xl font-semibold mb-2">Abstract</h2>
-              <p className="text-muted-foreground">{bookData.description}</p>
+              <p
+                className={`text-muted-foreground text-justify ${!isExpanded ? "line-clamp-3" : ""
+                  }`}
+              >
+                {bookData.description}
+              </p>
+              <button
+                onClick={toggleExpanded}
+                className="mt-2 text-muted-foreground underline hover:text-black"
+              >
+                {isExpanded ? "Show less" : "Show more"}
+              </button>
             </div>
             <div className="md:flex items-center justify-between">
               <div className="flex items-center text-sm text-muted-foreground mb-5 md:mb-0">
@@ -226,7 +244,7 @@ export default function BookDetailPage({ params }: { params: { id_book: string }
             </div>
           </div>
         </div>
-        <Separator className="my-8" />
+        {/* <Separator className="my-8" />
         <div>
           <h2 className="text-2xl font-semibold mb-4">Write a Review</h2>
           {!isLoading && (
@@ -235,15 +253,26 @@ export default function BookDetailPage({ params }: { params: { id_book: string }
           {isLoading && (
             <p>Please log in to submit a review.</p>
           )}
-        </div>
+        </div> */}
         <Separator className="my-8" />
         <div>
-          <h2 className="text-2xl font-semibold mb-4">Reviews</h2>
-          <div className="space-y-6">
-            {bookData.reviews.slice(0, visibleReviews).map((review) => (
-              <BookReview key={review.id} {...review} />
-            ))}
+          <div className="flex flex-row items-center justify-between mb-8">
+            <h2 className="text-2xl font-semibold">Reviews</h2>
+            <Button size="lg" variant="outline" onClick={() => route.push("/settings/transaction-history?status=approved")}>
+              Review this book!
+            </Button>
           </div>
+
+          <div className="space-y-6">
+            {bookData.reviews.length === 0 ? (
+              <p className="text-xs text-muted-foreground">No reviews yet.</p>
+            ) : (
+              bookData.reviews.slice(0, visibleReviews).map((review) => (
+                <BookReview key={review.id} {...review} />
+              ))
+            )}
+          </div>
+
           {visibleReviews < bookData.reviews.length && (
             <div className="mt-6 text-center">
               <Button onClick={loadMoreReviews} variant="outline">

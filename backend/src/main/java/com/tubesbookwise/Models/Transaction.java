@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Setter
@@ -15,9 +16,8 @@ import java.util.UUID;
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)  // Auto generation strategy for the primary key
-    @Column(name = "id", updatable = false, nullable = false)
-    private UUID id;  // Primary key for the transaction
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)  // Foreign key to the "users" table
@@ -61,5 +61,93 @@ public class Transaction {
     // Enum for Transaction Type
     public enum TransactionType {
         BORROW, RETURN
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getInvoiceCode() {
+        return invoiceCode;
+    }
+
+    public void setInvoiceCode(String invoiceCode) {
+        this.invoiceCode = invoiceCode;
+    }
+
+    public LocalDate getDateFrom() {
+        return dateFrom;
+    }
+
+    public void setDateFrom(LocalDate dateFrom) {
+        this.dateFrom = dateFrom;
+    }
+
+    public LocalDate getDateTo() {
+        return dateTo;
+    }
+
+    public void setDateTo(LocalDate dateTo) {
+        this.dateTo = dateTo;
+    }
+
+    public double getTotalFee() {
+        return totalFee;
+    }
+
+    public void setTotalFee(double totalFee) {
+        this.totalFee = totalFee;
+    }
+
+    public TransactionStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TransactionStatus status) {
+        this.status = status;
+    }
+
+    public TransactionType getType() {
+        return type;
+    }
+
+    public void setType(TransactionType type) {
+        this.type = type;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public String getPaymentEvidence() {
+        return paymentEvidence;
+    }
+
+    public void setPaymentEvidence(String paymentEvidence) {
+        this.paymentEvidence = paymentEvidence;
+    }
+
+    public List<TransactionItem> getItems() {
+        return items;
+    }
+
+    public void setItems(List<TransactionItem> items) {
+        this.items = items;
     }
 }

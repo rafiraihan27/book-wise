@@ -28,6 +28,7 @@
 
     <properties>
         <java.version>17</java.version>
+        <start-class>com.tubesbookwise.BookWiseApplication</start-class>
     </properties>
 
     <dependencies>
@@ -101,7 +102,7 @@
                 <version>2.9.0</version>
                 <configuration>
                     <schemaVersion>v2</schemaVersion>
-                    <resourceGroup>tubes-book-wise-1734198348668-rg</resourceGroup>
+                    <resourceGroup>bookwise-rg</resourceGroup>
                     <appName>bookwise</appName>
                     <pricingTier>B1</pricingTier>
                     <region>East US</region>

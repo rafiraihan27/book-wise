@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Setter
@@ -14,11 +15,10 @@ import java.util.UUID;
 public class Notification {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)  // Auto generation strategy for the primary key
-    @Column(name = "id", updatable = false, nullable = false)
-    private UUID id;  // Primary key for the notification
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)  // Foreign key to the "users" table
     private User user;
 
@@ -35,11 +35,67 @@ public class Notification {
     @Column(name = "date", nullable = false)  // Timestamp when the notification was created
     private LocalDateTime date;
 
-    @Column(name = "read", nullable = false)
+    @Column(name = "`read`", nullable = false)
     private boolean read = false;  // Default value is false
 
     // Enum for Notification Type
     public enum NotificationType {
         INFO, REMINDER, ALERT
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public NotificationType getType() {
+        return type;
+    }
+
+    public void setType(NotificationType type) {
+        this.type = type;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
     }
 }

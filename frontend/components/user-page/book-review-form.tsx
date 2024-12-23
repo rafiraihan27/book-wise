@@ -7,13 +7,13 @@ import { Star } from 'lucide-react';
 
 interface BookReviewFormProps {
   bookId: string;
-  onSubmit: (review: { author: string; rating: number; content: string }) => void;
+  onSubmit: (review: { authorId: string; rating: number; content: string }) => void;
 }
 
 export function BookReviewForm({ bookId, onSubmit }: BookReviewFormProps) {
   const [rating, setRating] = useState(0);
   const [content, setContent] = useState('');
-  const [author, setAuthor] = useState('');
+  const [authorId, setAuthor] = useState('');
 
   // Ambil authorId dari localStorage saat komponen dimuat
   useEffect(() => {
@@ -28,12 +28,12 @@ export function BookReviewForm({ bookId, onSubmit }: BookReviewFormProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!author) {
+    if (!authorId) {
       console.error('Author ID is missing!');
       return;
     }
 
-    onSubmit({ author, rating, content });
+    onSubmit({ authorId, rating, content });
     setRating(0);
     setContent('');
   };
@@ -41,7 +41,7 @@ export function BookReviewForm({ bookId, onSubmit }: BookReviewFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="rating" className="block text-sm font-medium text-gray-700">Rating</label>
+        {/* <label htmlFor="rating" className="block text-sm font-medium text-gray-700">Rating</label> */}
         <div className="flex items-center mt-1">
           {[1, 2, 3, 4, 5].map((value) => (
             <Star
@@ -55,7 +55,7 @@ export function BookReviewForm({ bookId, onSubmit }: BookReviewFormProps) {
         </div>
       </div>
       <div>
-        <label htmlFor="content" className="block text-sm font-medium text-gray-700">Your Review</label>
+        {/* <label htmlFor="content" className="block text-sm font-medium text-gray-700">Your Review</label> */}
         <Textarea
           id="content"
           value={content}

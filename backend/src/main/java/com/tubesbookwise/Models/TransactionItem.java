@@ -13,11 +13,9 @@ import java.util.UUID;
 @Table(name = "transaction_items")
 public class TransactionItem {
 
-    // Getters and setters
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", updatable = false, nullable = false)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "transaction_id", nullable = false)
@@ -27,10 +25,27 @@ public class TransactionItem {
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
-    @Column(name = "late_fee", precision = 10, scale = 2)
-    private BigDecimal lateFee;  // Use BigDecimal for precision and scale
+    public String getId() {
+        return id;
+    }
 
-    @Column(name = "title", nullable = false)
-    private String title;
+    public void setId(String id) {
+        this.id = id;
+    }
 
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
+    }
+
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
 }

@@ -68,11 +68,11 @@ export default function NotificationsPage() {
 
   const getIconForNotificationType = (type: Notification["type"]) => {
     switch (type) {
-      case "info":
+      case "INFO":
         return <Bell className="h-4 w-4 text-blue-500" />
-      case "reminder":
+      case "REMINDER":
         return <Calendar className="h-4 w-4 text-yellow-500" />
-      case "alert":
+      case "ALERT":
         return <Book className="h-4 w-4 text-red-500" />
       default:
         return <Bell className="h-4 w-4" />
