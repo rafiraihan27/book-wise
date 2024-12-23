@@ -16,51 +16,51 @@ public class StatisticService {
   private final TransactionRepository transactionRepository;
   private final NotificationRepository notificationRepository;
 
-  // public StatisticService(
-  //         ReviewRepository reviewrepository,
-  //         UserRepository userRepository,
-  //         BookRepository bookRepository,
-  //         ReviewService reviewService,
-  //         TransactionRepository transactionRepository,
-  //         NotificationRepository notificationRepository
-  // ) {
-  //   this.reviewrepository = reviewrepository;
-  //   this.userRepository = userRepository;
-  //   this.bookRepository = bookRepository;
-  //   this.reviewService = reviewService;
-  //   this.transactionRepository = transactionRepository;
-  //   this.notificationRepository = notificationRepository;
-  // }
+  public StatisticService(
+          ReviewRepository reviewrepository,
+          UserRepository userRepository,
+          BookRepository bookRepository,
+          ReviewService reviewService,
+          TransactionRepository transactionRepository,
+          NotificationRepository notificationRepository
+  ) {
+    this.reviewrepository = reviewrepository;
+    this.userRepository = userRepository;
+    this.bookRepository = bookRepository;
+    this.reviewService = reviewService;
+    this.transactionRepository = transactionRepository;
+    this.notificationRepository = notificationRepository;
+  }
 
-  // public Long getJumlahUserNow() {
-  //   return userRepository.count();
-  // }
+  public Long getJumlahUserNow() {
+    return userRepository.count();
+  }
 
-  // public long getStatisticBook() {
-  //   return bookRepository.count();
-  // }
+  public long getStatisticBook() {
+    return bookRepository.count();
+  }
 
-  // public Long getJumlahReview() {
-  //   return reviewrepository.count();
-  // }
+  public Long getJumlahReview() {
+    return reviewrepository.count();
+  }
 
-  // public Double getAverageReview() {
-  //   Double averageRating = reviewrepository.findAverageRating();
-  //   if (averageRating == null) {
-  //     return 0.0;
-  //   }
-  //   return Math.round(averageRating * 100.0) / 100.0;
-  // }
+  public Double getAverageReview() {
+    Double averageRating = reviewrepository.findAverageRating();
+    if (averageRating == null) {
+      return 0.0;
+    }
+    return Math.round(averageRating * 100.0) / 100.0;
+  }
 
-  // public List<ReviewDTO> getRecentReview(Integer max) {
-  //   return reviewService.getReview(null, max);
-  // }
+  public List<ReviewDTO> getRecentReview(Integer max) {
+    return reviewService.getReview(null, max);
+  }
 
-  // public Long getJumlahTransaksi() {
-  //   return transactionRepository.count();
-  // }
+  public Long getJumlahTransaksi() {
+    return transactionRepository.count();
+  }
 
-  // public Long getJumlahNotifikasi() {
-  //   return notificationRepository.count();
-  // }
+  public Long getJumlahNotifikasi() {
+    return notificationRepository.count();
+  }
 }
