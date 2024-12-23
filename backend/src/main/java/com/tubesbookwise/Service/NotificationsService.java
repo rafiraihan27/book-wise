@@ -23,44 +23,44 @@ public class NotificationsService {
         this.userRepository = userRepository;
     }
 
-    // public List<Notification> getNotificationsByUserId(String userId) {
-    //     return notificationRepository.findByUserId(userId);
-    // }
+    public List<Notification> getNotificationsByUserId(String userId) {
+        return notificationRepository.findByUserId(userId);
+    }
 
-    // public Notification addNotification(User user, String title, String message, Notification.NotificationType type) {
-    //     Notification notification = new Notification();
-    //     notification.setUser(user);
-    //     notification.setTitle(title);
-    //     notification.setMessage(message);
-    //     notification.setType(type);
-    //     notification.setDate(LocalDateTime.now());
-    //     notification.setRead(false);
+    public Notification addNotification(User user, String title, String message, Notification.NotificationType type) {
+        Notification notification = new Notification();
+        notification.setUser(user);
+        notification.setTitle(title);
+        notification.setMessage(message);
+        notification.setType(type);
+        notification.setDate(LocalDateTime.now());
+        notification.setRead(false);
 
-    //     return notificationRepository.save(notification);
-    // }
+        return notificationRepository.save(notification);
+    }
 
-    // public Notification markAsRead(String notificationId) {
-    //     Optional<Notification> optionalNotification = notificationRepository.findById(notificationId);
+    public Notification markAsRead(String notificationId) {
+        Optional<Notification> optionalNotification = notificationRepository.findById(notificationId);
 
-    //     if (optionalNotification.isPresent()) {
-    //         Notification notification = optionalNotification.get();
-    //         notification.setRead(true);
-    //         return notificationRepository.save(notification);
-    //     } else {
-    //         throw new IllegalArgumentException("Notification with ID " + notificationId + " not found");
-    //     }
-    // }
+        if (optionalNotification.isPresent()) {
+            Notification notification = optionalNotification.get();
+            notification.setRead(true);
+            return notificationRepository.save(notification);
+        } else {
+            throw new IllegalArgumentException("Notification with ID " + notificationId + " not found");
+        }
+    }
 
-    // public User getUserById(String userId) {
-    //     return userRepository.findById(userId)
-    //             .orElseThrow(() -> new IllegalArgumentException("User with ID " + userId + " not found"));
-    // }
+    public User getUserById(String userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User with ID " + userId + " not found"));
+    }
 
-    // public void deleteNotification(String notifId) {
-    //     if (notificationRepository.existsById(notifId)) {
-    //         notificationRepository.deleteById(notifId);
-    //     } else {
-    //         throw new IllegalArgumentException("Notification with ID " + notifId + " not found");
-    //     }
-    // }
+    public void deleteNotification(String notifId) {
+        if (notificationRepository.existsById(notifId)) {
+            notificationRepository.deleteById(notifId);
+        } else {
+            throw new IllegalArgumentException("Notification with ID " + notifId + " not found");
+        }
+    }
 }
