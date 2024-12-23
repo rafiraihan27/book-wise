@@ -32,188 +32,188 @@ public class TransactionService {
     @Autowired
     private NotificationsService notificationService;
 
-//     @Transactional
-//     public String createTransaction(TransactionRequest transactionRequest) {
-//         User user = userRepository.findById(transactionRequest.getUserId())
-//                 .orElseThrow(() -> new RuntimeException("User not found"));
+     @Transactional
+     public String createTransaction(TransactionRequest transactionRequest) {
+         User user = userRepository.findById(transactionRequest.getUserId())
+                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-//         Transaction transaction = new Transaction();
-//         transaction.setUser(user);
-//         transaction.setTotalFee(transactionRequest.getTotalFee());
-//         transaction.setPaymentMethod(transactionRequest.getPaymentMethod());
-//         transaction.setPaymentEvidence(transactionRequest.getPaymentEvidence());
-//         transaction.setDateFrom(transactionRequest.getDateFrom());
-//         transaction.setDateTo(transactionRequest.getDateTo());
-//         transaction.setStatus(Transaction.TransactionStatus.PENDING); 
-//         transaction.setType(Transaction.TransactionType.BORROW);
+         Transaction transaction = new Transaction();
+         transaction.setUser(user);
+         transaction.setTotalFee(transactionRequest.getTotalFee());
+         transaction.setPaymentMethod(transactionRequest.getPaymentMethod());
+         transaction.setPaymentEvidence(transactionRequest.getPaymentEvidence());
+         transaction.setDateFrom(transactionRequest.getDateFrom());
+         transaction.setDateTo(transactionRequest.getDateTo());
+         transaction.setStatus(Transaction.TransactionStatus.PENDING);
+         transaction.setType(Transaction.TransactionType.BORROW);
 
-//         String randomHex = generateRandomHex(3); 
-//         String currentDate = getCurrentDate();
-//         String invoiceCode = "INV-" + currentDate + "-" + randomHex;
+         String randomHex = generateRandomHex(3);
+         String currentDate = getCurrentDate();
+         String invoiceCode = "INV-" + currentDate + "-" + randomHex;
 
-//         transaction.setInvoiceCode(invoiceCode);
+         transaction.setInvoiceCode(invoiceCode);
 
-//         Transaction savedTransaction = transactionRepository.save(transaction);
+         Transaction savedTransaction = transactionRepository.save(transaction);
 
-//         String title = "Transaction Pending";
-//         String message = "Your transaction with invoice code " + invoiceCode + " is pending and will be reviewed by an admin until approved.";
-//         notificationService.addNotification(user, title, message, Notification.NotificationType.INFO);
+         String title = "Transaction Pending";
+         String message = "Your transaction with invoice code " + invoiceCode + " is pending and will be reviewed by an admin until approved.";
+         notificationService.addNotification(user, title, message, Notification.NotificationType.INFO);
 
-//         List<TransactionItem> transactionItems = transactionRequest.getItems().stream()
-//                 .map(itemRequest -> {
-//                     Book book = bookRepository.findById(itemRequest.getId())
-//                             .orElseThrow(() -> new RuntimeException("Book not found"));
+         List<TransactionItem> transactionItems = transactionRequest.getItems().stream()
+                 .map(itemRequest -> {
+                     Book book = bookRepository.findById(itemRequest.getId())
+                             .orElseThrow(() -> new RuntimeException("Book not found"));
 
-//                     TransactionItem transactionItem = new TransactionItem();
-//                     transactionItem.setTransaction(savedTransaction);
-//                     transactionItem.setBook(book);
+                     TransactionItem transactionItem = new TransactionItem();
+                     transactionItem.setTransaction(savedTransaction);
+                     transactionItem.setBook(book);
 
-//                     return transactionItem;
-//                 }).toList();
+                     return transactionItem;
+                 }).toList();
 
-//         transactionItemRepository.saveAll(transactionItems);
+         transactionItemRepository.saveAll(transactionItems);
 
-//         return savedTransaction.getInvoiceCode();
-//     }
+         return savedTransaction.getInvoiceCode();
+     }
 
-//     private String generateRandomHex(int length) {
-//         StringBuilder hexString = new StringBuilder();
-//         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-//         for (int i = 0; i < length; i++) {
-//             int randomIndex = (int) (Math.random() * characters.length());
-//             hexString.append(characters.charAt(randomIndex));
-//         }
-//         return hexString.toString();
-//     }
+     private String generateRandomHex(int length) {
+         StringBuilder hexString = new StringBuilder();
+         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+         for (int i = 0; i < length; i++) {
+             int randomIndex = (int) (Math.random() * characters.length());
+             hexString.append(characters.charAt(randomIndex));
+         }
+         return hexString.toString();
+     }
 
-//     private String getCurrentDate() {
-//         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyyMMdd");
-//         return sdf.format(new java.util.Date());
-//     }
+     private String getCurrentDate() {
+         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyyMMdd");
+         return sdf.format(new java.util.Date());
+     }
 
-//     @Transactional
-//     public Map<String, Object> getTransactionByInvoiceCode(String invoiceCode) {
-//         Transaction transaction = transactionRepository.findByInvoiceCode(invoiceCode)
-//                 .orElseThrow(() -> new RuntimeException("Transaction not found"));
+     @Transactional
+     public Map<String, Object> getTransactionByInvoiceCode(String invoiceCode) {
+         Transaction transaction = transactionRepository.findByInvoiceCode(invoiceCode)
+                 .orElseThrow(() -> new RuntimeException("Transaction not found"));
 
-//         transaction.getUser().getName(); // Trigger lazy loading
-//         transaction.getItems().size();
+         transaction.getUser().getName(); // Trigger lazy loading
+         transaction.getItems().size();
 
-//         return Map.of(
-//                 "id", transaction.getId(),
-//                 "invoiceCode", transaction.getInvoiceCode(),
-//                 "dateRange", Map.of(
-//                         "from", transaction.getDateFrom(),
-//                         "to", transaction.getDateTo()
-//                 ),
-//                 "status", transaction.getStatus(),
-//                 "type", transaction.getType(),
-//                 "user", Map.of(
-//                         "id", transaction.getUser().getId(),
-//                         "name", transaction.getUser().getName(),
-//                         "email", transaction.getUser().getEmail(),
-//                         "phone", transaction.getUser().getPhone(),
-//                         "role", transaction.getUser().getRole()
-//                 ),
-//                 "totalFee", transaction.getTotalFee(),
-//                 "paymentMethod", transaction.getPaymentMethod(),
-//                 "paymentEvidence", transaction.getPaymentEvidence(),
-//                 "items", transaction.getItems().stream()
-//                         .map(this::mapTransactionItemToResponse)
-//                         .collect(Collectors.toList())
-//         );
-//     }
+         return Map.of(
+                 "id", transaction.getId(),
+                 "invoiceCode", transaction.getInvoiceCode(),
+                 "dateRange", Map.of(
+                         "from", transaction.getDateFrom(),
+                         "to", transaction.getDateTo()
+                 ),
+                 "status", transaction.getStatus(),
+                 "type", transaction.getType(),
+                 "user", Map.of(
+                         "id", transaction.getUser().getId(),
+                         "name", transaction.getUser().getName(),
+                         "email", transaction.getUser().getEmail(),
+                         "phone", transaction.getUser().getPhone(),
+                         "role", transaction.getUser().getRole()
+                 ),
+                 "totalFee", transaction.getTotalFee(),
+                 "paymentMethod", transaction.getPaymentMethod(),
+                 "paymentEvidence", transaction.getPaymentEvidence(),
+                 "items", transaction.getItems().stream()
+                         .map(this::mapTransactionItemToResponse)
+                         .collect(Collectors.toList())
+         );
+     }
 
-//     private Map<String, Object> mapTransactionItemToResponse(TransactionItem transactionItem) {
-//         return Map.of(
-//                 "id", transactionItem.getBook().getId(),
-//                 "title", transactionItem.getBook().getTitle(),
-//                 "author", transactionItem.getBook().getAuthor(),
-//                 "image", transactionItem.getBook().getImage(),
-//                 "lateFee", transactionItem.getBook().getLateFee()
-//         );
-//     }
+     private Map<String, Object> mapTransactionItemToResponse(TransactionItem transactionItem) {
+         return Map.of(
+                 "id", transactionItem.getBook().getId(),
+                 "title", transactionItem.getBook().getTitle(),
+                 "author", transactionItem.getBook().getAuthor(),
+                 "image", transactionItem.getBook().getImage(),
+                 "lateFee", transactionItem.getBook().getLateFee()
+         );
+     }
 
-//     @Transactional
-//     public List<Map<String, Object>> getTransactionsWithFilter(String search, String status, String type, String userId) {
-//         List<Transaction> transactions = transactionRepository.findAll().stream()
-//                 .filter(transaction ->
-//                          (status == null || status.equalsIgnoreCase("all") || transaction.getStatus().toString().equalsIgnoreCase(status)) &&
-//                                 (type == null || type.equalsIgnoreCase("all") || transaction.getType().toString().equalsIgnoreCase(type)) &&
-//                                 (userId == null || transaction.getUser().getId().equals(userId)) &&
-//                                 (search == null ||
-//                                         transaction.getInvoiceCode().contains(search) ||
-//                                         transaction.getUser().getName().toLowerCase().contains(search.toLowerCase()))
-//                 )
-//                 .toList();
+     @Transactional
+     public List<Map<String, Object>> getTransactionsWithFilter(String search, String status, String type, String userId) {
+         List<Transaction> transactions = transactionRepository.findAll().stream()
+                 .filter(transaction ->
+                          (status == null || status.equalsIgnoreCase("all") || transaction.getStatus().toString().equalsIgnoreCase(status)) &&
+                                 (type == null || type.equalsIgnoreCase("all") || transaction.getType().toString().equalsIgnoreCase(type)) &&
+                                 (userId == null || transaction.getUser().getId().equals(userId)) &&
+                                 (search == null ||
+                                         transaction.getInvoiceCode().contains(search) ||
+                                         transaction.getUser().getName().toLowerCase().contains(search.toLowerCase()))
+                 )
+                 .toList();
 
-//         return transactions.stream()
-//                 .map(this::mapTransactionToResponse)
-//                 .collect(Collectors.toList());
-//     }
+         return transactions.stream()
+                 .map(this::mapTransactionToResponse)
+                 .collect(Collectors.toList());
+     }
 
-//     private Map<String, Object> mapTransactionToResponse(Transaction transaction) {
-//         return Map.of(
-//                 "id", transaction.getId(),
-//                 "invoiceCode", transaction.getInvoiceCode(),
-//                 "dateRange", Map.of(
-//                         "from", transaction.getDateFrom(),
-//                         "to", transaction.getDateTo()
-//                 ),
-//                 "status", transaction.getStatus(),
-//                 "type", transaction.getType(),
-//                 "user", Map.of(
-//                         "id", transaction.getUser().getId(),
-//                         "name", transaction.getUser().getName(),
-//                         "email", transaction.getUser().getEmail(),
-//                         "phone", transaction.getUser().getPhone(),
-//                         "role", transaction.getUser().getRole()
-//                 ),
-//                 "totalFee", transaction.getTotalFee(),
-//                 "paymentMethod", transaction.getPaymentMethod(),
-//                 "paymentEvidence", transaction.getPaymentEvidence(),
-//                 "items", transaction.getItems().stream()
-//                         .map(this::mapTransactionItemToResponse)
-//                         .collect(Collectors.toList())
-//         );
-//     }
+     private Map<String, Object> mapTransactionToResponse(Transaction transaction) {
+         return Map.of(
+                 "id", transaction.getId(),
+                 "invoiceCode", transaction.getInvoiceCode(),
+                 "dateRange", Map.of(
+                         "from", transaction.getDateFrom(),
+                         "to", transaction.getDateTo()
+                 ),
+                 "status", transaction.getStatus(),
+                 "type", transaction.getType(),
+                 "user", Map.of(
+                         "id", transaction.getUser().getId(),
+                         "name", transaction.getUser().getName(),
+                         "email", transaction.getUser().getEmail(),
+                         "phone", transaction.getUser().getPhone(),
+                         "role", transaction.getUser().getRole()
+                 ),
+                 "totalFee", transaction.getTotalFee(),
+                 "paymentMethod", transaction.getPaymentMethod(),
+                 "paymentEvidence", transaction.getPaymentEvidence(),
+                 "items", transaction.getItems().stream()
+                         .map(this::mapTransactionItemToResponse)
+                         .collect(Collectors.toList())
+         );
+     }
 
-//     @Transactional
-//     public void updateTransactionStatus(String invoiceCode, String status) {
-//         Transaction transaction = transactionRepository.findByInvoiceCode(invoiceCode)
-//                 .orElseThrow(() -> new IllegalArgumentException("Transaksi dengan kode invoice tidak ditemukan"));
+     @Transactional
+     public void updateTransactionStatus(String invoiceCode, String status) {
+         Transaction transaction = transactionRepository.findByInvoiceCode(invoiceCode)
+                 .orElseThrow(() -> new IllegalArgumentException("Transaksi dengan kode invoice tidak ditemukan"));
 
-//         if (!List.of("approved", "declined", "pending").contains(status.toLowerCase())) {
-//             throw new IllegalArgumentException("Status tidak valid. Gunakan 'approved', 'declined', atau 'pending'");
-//         }
+         if (!List.of("approved", "declined", "pending").contains(status.toLowerCase())) {
+             throw new IllegalArgumentException("Status tidak valid. Gunakan 'approved', 'declined', atau 'pending'");
+         }
 
-//        transaction.setStatus(Transaction.TransactionStatus.valueOf(status.toUpperCase()));
-//         transactionRepository.save(transaction);
+        transaction.setStatus(Transaction.TransactionStatus.valueOf(status.toUpperCase()));
+         transactionRepository.save(transaction);
 
-//         User user = transaction.getUser();
+         User user = transaction.getUser();
 
-//         String title;
-//         String message;
-//         Notification.NotificationType type;
+         String title;
+         String message;
+         Notification.NotificationType type;
 
-//         switch (status.toLowerCase()) {
-//             case "approved":
-//                 title = "Transaction Approved";
-//                 message = "Congratulations! Your transaction with invoice code " + invoiceCode + " has been approved.";
-//                 type = Notification.NotificationType.REMINDER;
-//                 break;
-//             case "declined":
-//                 title = "Transaction Declined";
-//                 message = "Your transaction with invoice code " + invoiceCode + " has been declined. Please contact support for details.";
-//                 type = Notification.NotificationType.ALERT;
-//                 break;
-//             default:
-//                 title = "Transaction Pending";
-//                 message = "Your transaction with invoice code " + invoiceCode + " is pending and will be reviewed by an admin.";
-//                 type = Notification.NotificationType.INFO;
-//                 break;
-//         }
+         switch (status.toLowerCase()) {
+             case "approved":
+                 title = "Transaction Approved";
+                 message = "Congratulations! Your transaction with invoice code " + invoiceCode + " has been approved.";
+                 type = Notification.NotificationType.REMINDER;
+                 break;
+             case "declined":
+                 title = "Transaction Declined";
+                 message = "Your transaction with invoice code " + invoiceCode + " has been declined. Please contact support for details.";
+                 type = Notification.NotificationType.ALERT;
+                 break;
+             default:
+                 title = "Transaction Pending";
+                 message = "Your transaction with invoice code " + invoiceCode + " is pending and will be reviewed by an admin.";
+                 type = Notification.NotificationType.INFO;
+                 break;
+         }
 
-//         notificationService.addNotification(user, title, message, type);
-//     }
+         notificationService.addNotification(user, title, message, type);
+     }
 }
