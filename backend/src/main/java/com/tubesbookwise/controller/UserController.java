@@ -67,18 +67,18 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    // @Operation(summary = "Update user data by id", description = "TAMBAHKAN ROLE [admin, student, lecturer]")
-    // @PutMapping("/{id}")
-    // public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User newUser) {
-    //     try {
-    //         User updatedUser = userService.updateUser(newUser, id);
-    //         return ResponseEntity.ok(updatedUser);
-    //     } catch (IllegalArgumentException e) {
-    //         return ResponseEntity.badRequest().body(null);
-    //     } catch (RuntimeException e) {
-    //         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-    //     }
-    // }
+    @Operation(summary = "Update user data by id", description = "TAMBAHKAN ROLE [admin, student, lecturer]")
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User newUser) {
+        try {
+            User updatedUser = userService.updateUser(newUser, id);
+            return ResponseEntity.ok(updatedUser);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
 
     // @Operation(summary = "Delete user", description = "Delete a user by ID")
     // @DeleteMapping("/{id}")
