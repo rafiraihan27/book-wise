@@ -178,42 +178,69 @@ public class TransactionService {
          );
      }
 
-     @Transactional
-     public void updateTransactionStatus(String invoiceCode, String status) {
-         Transaction transaction = transactionRepository.findByInvoiceCode(invoiceCode)
-                 .orElseThrow(() -> new IllegalArgumentException("Transaksi dengan kode invoice tidak ditemukan"));
+    @Transactional
+    public void updateTransactionStatus(String invoiceCode, String status, String typeIn) {
+        Transaction transaction = transactionRepository.findByInvoiceCode(invoiceCode)
+                .orElseThrow(() -> new IllegalArgumentException("Transaksi dengan kode invoice tidak ditemukan"));
 
-         if (!List.of("approved", "declined", "pending").contains(status.toLowerCase())) {
-             throw new IllegalArgumentException("Status tidak valid. Gunakan 'approved', 'declined', atau 'pending'");
-         }
+        if (!List.of("approved", "declined", "pending").contains(status.toLowerCase())) {
+            throw new IllegalArgumentException("Status tidak valid. Gunakan 'approved', 'declined', atau 'pending'");
+        }
 
         transaction.setStatus(Transaction.TransactionStatus.valueOf(status.toUpperCase()));
-         transactionRepository.save(transaction);
 
-         User user = transaction.getUser();
+        if (!typeIn.isEmpty()) {
+            transaction.setType(Transaction.TransactionType.valueOf(typeIn.toUpperCase()));
+        }
 
-         String title;
-         String message;
-         Notification.NotificationType type;
+        transactionRepository.save(transaction);
 
-         switch (status.toLowerCase()) {
-             case "approved":
-                 title = "Transaction Approved";
-                 message = "Congratulations! Your transaction with invoice code " + invoiceCode + " has been approved.";
-                 type = Notification.NotificationType.REMINDER;
-                 break;
-             case "declined":
-                 title = "Transaction Declined";
-                 message = "Your transaction with invoice code " + invoiceCode + " has been declined. Please contact support for details.";
-                 type = Notification.NotificationType.ALERT;
-                 break;
-             default:
-                 title = "Transaction Pending";
-                 message = "Your transaction with invoice code " + invoiceCode + " is pending and will be reviewed by an admin.";
-                 type = Notification.NotificationType.INFO;
-                 break;
-         }
+        User user = transaction.getUser();
 
-         notificationService.addNotification(user, title, message, type);
-     }
+        String title;
+        String message;
+        Notification.NotificationType type;
+
+        if ("borrow".equalsIgnoreCase(typeIn)) {
+            switch (status.toLowerCase()) {
+                case "approved":
+                    title = "Borrow Request Approved";
+                    message = "Your borrow request with invoice code " + invoiceCode + " has been approved.";
+                    type = Notification.NotificationType.REMINDER;
+                    break;
+                case "declined":
+                    title = "Borrow Request Declined";
+                    message = "Your borrow request with invoice code " + invoiceCode + " has been declined. Please contact support for details.";
+                    type = Notification.NotificationType.ALERT;
+                    break;
+                default:
+                    title = "Borrow Request Pending";
+                    message = "Your borrow request with invoice code " + invoiceCode + " is pending and will be reviewed by an admin.";
+                    type = Notification.NotificationType.INFO;
+                    break;
+            }
+        } else if ("return".equalsIgnoreCase(typeIn)) {
+            switch (status.toLowerCase()) {
+                case "approved":
+                    title = "Return Approved";
+                    message = "Your return request with invoice code " + invoiceCode + " has been approved.";
+                    type = Notification.NotificationType.REMINDER;
+                    break;
+                case "declined":
+                    title = "Return Declined";
+                    message = "Return request with invoice code " + invoiceCode + " has been declined. Please contact support for details.";
+                    type = Notification.NotificationType.ALERT;
+                    break;
+                default:
+                    title = "Return Pending";
+                    message = "Return request with invoice code " + invoiceCode + " is pending and you should return it and approve it.";
+                    type = Notification.NotificationType.INFO;
+                    break;
+            }
+        } else {
+            throw new IllegalArgumentException("Tipe transaksi tidak valid. Gunakan 'borrow' atau 'return'.");
+        }
+
+        notificationService.addNotification(user, title, message, type);
+    }
 }

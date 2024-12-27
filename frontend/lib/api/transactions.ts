@@ -221,14 +221,21 @@ export async function fetchPostTransaction(data: newTransaction) {
   ]
 }
  */
-export async function fetchUpdateStatusTransaction(invoiceCode: string, status: string) {
-    const response = await fetch(`${process.env.API_BASE_URL_PRODUCTION}/transactions?invoiceCode=${invoiceCode}&status=${status}`, {
-        method: 'PUT',
-    })
+export async function fetchUpdateStatusTransaction(invoiceCode: string, status: string, type?: string) {
+  let url = `${process.env.API_BASE_URL_PRODUCTION}/transactions?invoiceCode=${invoiceCode}&status=${status}`;
+  if (type) {
+      url += `&type=${type}`;
+  }
 
-    if (!response.ok) {
-        throw new Error('Gagal mengupdate status transaksi');
-    }
-    return response.json();
+  const response = await fetch(url, {
+      method: 'PUT',
+  });
+
+  if (!response.ok) {
+      throw new Error('Gagal mengupdate status transaksi');
+  }
+  
+  return response.json();
 }
+
 

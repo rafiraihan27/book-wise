@@ -3,6 +3,7 @@
 import * as React from "react";
 import {
     CalendarSearch,
+    CalendarArrowDownIcon,
     LibraryBig,
     LayoutDashboard,
     UserRound,
@@ -32,6 +33,7 @@ const data = {
         { title: "Book", url: "/admin/book", icon: LibraryBig, isActive: false },
         { title: "User", url: "/admin/user", icon: UserRound, isActive: false },
         { title: "Transaction", url: "/admin/transaction", icon: CalendarSearch, isActive: false },
+        { title: "Return", url: "/admin/return", icon: CalendarArrowDownIcon, isActive: false },
         // { title: "Settings", url: "/admin/settings", icon: Cog, isActive: false },
     ],
 };
@@ -50,7 +52,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         try {
             const data = await fetchTransactions({
                 search: searchQuery,
-                status: "pending", // Only fetch pending transactions
+                status: "pending", 
+                type: "borrow"
             });
             setFilteredData(data);
         } catch (err) {

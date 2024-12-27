@@ -59,10 +59,11 @@ public class TransactionController {
              description = "Memperbarui status transaksi dengan kode invoice dan status baru.")
      public ResponseEntity<?> updateTransactionStatus(
              @RequestParam(value = "invoiceCode", required = true) String invoiceCode,
-             @RequestParam(value = "status", required = true) String status
+             @RequestParam(value = "status", required = true) String status,
+             @RequestParam(value = "type", required = false) String type
      ) {
          try {
-             transactionService.updateTransactionStatus(invoiceCode, status);
+             transactionService.updateTransactionStatus(invoiceCode, status, type);
              return ResponseEntity.ok().body(Map.of("message", "Status transaksi berhasil diperbarui"));
          } catch (IllegalArgumentException e) {
              return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
