@@ -23,14 +23,17 @@ import {
 } from "@/components/ui/select";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { ChevronDown, ChevronUp, Loader2, RefreshCcw, Trash2 } from 'lucide-react';
+import { ArrowLeftRight, ChevronDown, ChevronUp, CircleCheckBigIcon, Loader2, Trash2 } from 'lucide-react';
 import { Transaction } from "@/types/interfaces";
 import React from "react";
 import InvoiceComponent from "@/components/user-page/borrow/invoice";
+import { submitReview } from "@/lib/api/reviews";
 import { toast } from "sonner";
+import { BookReviewForm } from "@/components/user-page/book-review-form";
+import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 
-export default function TransactionPage() {
+export default function ReturnPage() {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [type, setType] = useState<"all" | "borrow" | "return">("all");
     const [status, setStatus] = useState<"all" | "pending" | "approved" | "declined" | "overdue">("all");
@@ -38,8 +41,33 @@ export default function TransactionPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [expandedRow, setExpandedRow] = useState<string | null>(null);
+    const [showReviewForm, setShowReviewForm] = useState(false);
+    const [selectedBookId, setSelectedBookId] = useState('');
+    const [userId, setUserId] = useState('');
 
-    const fetchData = async () => {
+    const handleReviewSubmit = async (review: any) => {
+        try {
+            console.log(selectedBookId)
+            // Submit the review using the API
+            await submitReview(selectedBookId, review);
+            toast("Review submitted successfully!");
+            setShowReviewForm(false); // Hide the form after success
+        } catch (err) {
+            console.error("Failed to submit review:", err);
+            toast("Failed to submit review. Please try again.");
+        }
+    };
+
+    const handleShowReviewForm = (bookId: string) => {
+        if (bookId == selectedBookId && showReviewForm) {
+            setShowReviewForm(false);
+        } else {
+            setSelectedBookId(bookId);
+            setShowReviewForm(true);
+        }
+    };
+
+    const fetchData = async (userId: string) => {
         setLoading(true);
         setError(null);
 
@@ -48,6 +76,7 @@ export default function TransactionPage() {
                 search: search,
                 type: type,
                 status: status,
+                userId: userId,
             });
             setTransactions(data);
         } catch (err) {
@@ -63,18 +92,15 @@ export default function TransactionPage() {
     };
 
     useEffect(() => {
-        fetchData();
+        const userId: string = localStorage.getItem("userId") || "";
+        setUserId(userId);
+        fetchData(userId);
     }, [search, type, status]);
 
     return (
         <div className="flex flex-col h-full">
             <div className="space-y-6 mb-6">
-                <div className="flex flex-row gap-2">
-                    <h1 className="text-3xl font-bold">Transaction Management</h1>
-                    <Button variant="ghost" size="icon" onClick={() => fetchData()}>
-                        <RefreshCcw className="h-4 w-4" />
-                    </Button>
-                </div>
+                <h1 className="text-3xl font-bold">Pengembalian</h1>
                 <div className="flex flex-row justify-center items-end gap-4">
                     <div className="flex-1">
                         <Label htmlFor="search">Search</Label>
@@ -84,19 +110,6 @@ export default function TransactionPage() {
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                         />
-                    </div>
-                    <div>
-                        <Label htmlFor="type">Type</Label>
-                        <Select value={type} onValueChange={(value: "all" | "borrow" | "return") => setType(value)}>
-                            <SelectTrigger id="type" className="w-[180px]">
-                                <SelectValue placeholder="Type transactions" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">All</SelectItem>
-                                <SelectItem value="borrow">Borrows</SelectItem>
-                                <SelectItem value="return">Returns</SelectItem>
-                            </SelectContent>
-                        </Select>
                     </div>
                     <div>
                         <Label htmlFor="status">Status</Label>
@@ -138,7 +151,13 @@ export default function TransactionPage() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {transactions.map((transaction) => (
+                            {transactions
+                                .filter((transaction) => {
+                                    const dateIsPast = new Date(transaction.dateRange.to) < new Date();
+                                    const isApprovedBorrow = transaction.status.toLowerCase() === "approved" && transaction.type.toLowerCase() === "borrow";
+                                    const isReturn = transaction.type.toLowerCase() === "return";
+                                    return (dateIsPast && (isApprovedBorrow || isReturn));
+                                }).map((transaction) => (
                                 <React.Fragment key={transaction.id}>
                                     {/* Main Row */}
                                     <TableRow>
@@ -188,15 +207,14 @@ export default function TransactionPage() {
                                                             : "bg-yellow-100 text-yellow-800"
                                                     }`}
                                             >
-                                                {transaction.status}
+                                                {transaction.status.toLowerCase()}
                                             </span>
                                         </TableCell>
                                         <TableCell>{transaction.type.toLowerCase() === "borrow" ? (
                                             <Badge variant="destructive">Borrow</Badge>
                                         ) : (
                                             <Badge>Return</Badge>
-                                        )}
-                                        </TableCell>
+                                        )}</TableCell>
                                         <TableCell>{transaction.paymentMethod}</TableCell>
                                         <TableCell>
                                             <Button
@@ -206,22 +224,33 @@ export default function TransactionPage() {
                                             >
                                                 {expandedRow === transaction.id ? <ChevronUp /> : <ChevronDown />}
                                             </Button>
-
+                                            {(transaction.type.toLowerCase() == "return" && transaction.status.toLowerCase() == "pending") && (
+                                                    <Button size="icon" onClick={async () => {
+                                                        try {
+                                                            // Call API to update status
+                                                            await fetchUpdateStatusTransaction(transaction.invoiceCode, "approved", "return");
+                                                            toast.success(`Status updated to PENDING and RETURN for ${transaction.invoiceCode}`);
+                                                            // Refresh the transaction list
+                                                            await fetchData(userId);
+                                                        } catch (err) {
+                                                            console.error("Failed to update status:", err);
+                                                            toast.error("Failed to update status. Please try again.");
+                                                        }
+                                                    }}>
+                                                        <CircleCheckBigIcon/>
+                                                    </Button>
+                                                )}
                                         </TableCell>
                                     </TableRow>
 
                                     {/* Expanded Row for Items */}
                                     {expandedRow === transaction.id && (
-                                        <TableRow>
+                                        <TableRow className="bg-muted/50">
                                             <TableCell colSpan={8}>
-                                                <div className="p-4">
-                                                    <h3 className="text-lg font-medium mb-4">Transaction Items</h3>
-                                                    <div className="grid grid-cols-2 gap-4 mb-6">
-                                                        {transaction.items.map((item) => (
-                                                            <div
-                                                                key={item.id}
-                                                                className="flex items-center gap-4 p-2 border rounded"
-                                                            >
+                                                <div className="grid grid-cols-2 gap-4 p-4">
+                                                    {transaction.items.map((item) => (
+                                                        <div className="flex flex-col p-2 border rounded bg-white max-h-fit">
+                                                            <div className="flex items-center gap-4">
                                                                 <img
                                                                     src={item.image}
                                                                     alt={item.title}
@@ -229,50 +258,39 @@ export default function TransactionPage() {
                                                                 />
                                                                 <div>
                                                                     <p className="font-medium">{item.title}</p>
-                                                                    <p className="text-sm text-muted-foreground">
-                                                                        by {item.author}
-                                                                    </p>
+                                                                    <p className="text-sm text-muted-foreground">by {item.author}</p>
                                                                 </div>
+                                                                {(transaction.status.toLowerCase() == 'approved' || transaction.status.toLowerCase() == 'overdue') && (
+                                                                    <Button
+                                                                        onClick={() => handleShowReviewForm(item.id)}
+                                                                        type="submit"
+                                                                        className="ml-auto px-4 py-2"
+                                                                    >
+                                                                        Review
+                                                                    </Button>
+                                                                )}
                                                             </div>
-                                                        ))}
-                                                    </div>
+                                                            {showReviewForm && selectedBookId === item.id && (
+                                                                <div className="mt-3">
+                                                                    <Separator className="md:block" />
+                                                                    <div className="m-4">
+                                                                        {/* <h3 className="text-lg font-semibold">Review Form</h3> */}
+                                                                        <BookReviewForm
+                                                                            bookId={selectedBookId}
+                                                                            onSubmit={(reviewData) => {
+                                                                                handleReviewSubmit(reviewData);
+                                                                            }}
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                        </div>
 
-                                                    {/* Dropdown for Changing Status */}
-                                                    <div className="flex items-center gap-4">
-                                                        <Label htmlFor={`status-${transaction.id}`} className="font-medium">
-                                                            Change Status:
-                                                        </Label>
-                                                        <Select
-                                                            value={transaction.status.toLowerCase()}
-                                                            onValueChange={async (newStatus: "pending" | "approved" | "declined" | "overdue") => {
-                                                                try {
-                                                                    // Call API to update status
-                                                                    await fetchUpdateStatusTransaction(transaction.invoiceCode, newStatus);
-                                                                    toast.success(`Status updated to ${newStatus}`);
-                                                                    // Refresh the transaction list
-                                                                    await fetchData();
-                                                                } catch (err) {
-                                                                    console.error("Failed to update status:", err);
-                                                                    toast.error("Failed to update status. Please try again.");
-                                                                }
-                                                            }}
-                                                        >
-                                                            <SelectTrigger id={`status-${transaction.id}`} className="w-[180px]">
-                                                                <SelectValue placeholder="Change Status" />
-                                                            </SelectTrigger>
-                                                            <SelectContent>
-                                                                <SelectItem value="pending">Pending</SelectItem>
-                                                                <SelectItem value="approved">Approved</SelectItem>
-                                                                <SelectItem value="declined">Declined</SelectItem>
-                                                                <SelectItem value="overdue">Overdue</SelectItem>
-                                                            </SelectContent>
-                                                        </Select>
-                                                    </div>
+                                                    ))}
                                                 </div>
                                             </TableCell>
                                         </TableRow>
                                     )}
-
                                 </React.Fragment>
                             ))}
                         </TableBody>

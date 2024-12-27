@@ -13,6 +13,10 @@ const sidebarNavItems = [
     href: "/settings/account",
   },
   {
+    title: "Pengembalian",
+    href: "/settings/return",
+  },
+  {
     title: "Riwayat Transaksi",
     href: "/settings/transaction-history",
   },
